@@ -1,10 +1,10 @@
 # Body Guard
 
-### Fichiers et code source
+### Wiki du jeu
 
-[https://github.com/NathanBrx/Projet_CMI](https://github.com/NathanBrx/Projet_CMI)
+[Body Guard](https://www.notion.so/Body-Guard-f36c7e954eca4bcf88fe181a60d01a31) 
 
-Contient tous les fichiers, pensez à sync régulièrement et pas avancer en local.
+Contient toutes les ressources relatives au jeu : Ressources C++, Concept Art, Inspiration, Référence, etc
 
 ### Gestions des tâches
 
@@ -17,12 +17,6 @@ Contient tout l’avancement du projet, les tâches à faire et la répartition 
 [Overleaf, Online LaTeX Editor](https://www.overleaf.com/)
 
 Éditeur en Latex. Pour écrire les rapports à rendre.
-
-### Wiki du jeu
-
-[Body Guard](https://www.notion.so/Body-Guard-f36c7e954eca4bcf88fe181a60d01a31) 
-
-Contient toutes les ressources relatives au jeu : Ressources C++, Concept Art, Inspiration, Référence, etc
 
 ### Communication
 
