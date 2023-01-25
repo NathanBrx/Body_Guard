@@ -4,7 +4,7 @@ using namespace std;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Body Guard");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
