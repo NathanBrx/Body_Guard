@@ -1,30 +1,31 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 using namespace std;
+using namespace sf;
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height), "Body Guard");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard");
+    CircleShape shape(100.f);
+    shape.setFillColor(Color::Green);
 
     while (window.isOpen())
     {
-        sf::Texture texture;
+        Texture texture;
         if (!texture.loadFromFile("dragon.png")){
             cerr << "failed to load image" << endl;
             exit(1);
         }
         texture.setRepeated(false);
         texture.setSmooth(true);
-        
-        sf::Sprite sprite;
+
+        Sprite sprite;
         sprite.setTexture(texture);
 
-        sf::Event event;
+        Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == sf::Event::Closed)
+            if (event.type == Event::Closed)
                 window.close();
         }
 
