@@ -10,6 +10,17 @@ int main()
 
     while (window.isOpen())
     {
+        sf::Texture texture;
+        if (!texture.loadFromFile("dragon.png")){
+            cerr << "failed to load image" << endl;
+            exit(1);
+        }
+        texture.setRepeated(false);
+        texture.setSmooth(true);
+        
+        sf::Sprite sprite;
+        sprite.setTexture(texture);
+
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -18,7 +29,8 @@ int main()
         }
 
         window.clear();
-        window.draw(shape);
+//        window.draw(shape);
+        window.draw(sprite);
         window.display();
     }
 
