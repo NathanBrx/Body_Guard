@@ -23,11 +23,26 @@ int main()
         sprite.setTexture(texture);
 
         Event event;
+        bool movespriteleft = false;
+        bool movespriteright = false;
         while (window.pollEvent(event))
         {
+            if ((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Left))
+                movespriteleft = true;
+            if ((event.type == Event::KeyPressed) && (event.key.code == Keyboard::Right))
+                movespriteright = true;
             if (event.type == Event::Closed)
                 window.close();
         }
+
+        if (movespriteleft){
+            sprite.move(-10.f,-10.f);
+        }
+        if (movespriteright){
+            sprite.move(10.f,10.f);
+        }
+        // en gros c'est a peu près ça mais plus compliqué.
+        // voir https://lucidar.me/en/sfml/sfml-part-4-moving-a-sprite-with-the-keyboard/
 
         window.clear();
 //        window.draw(shape);
