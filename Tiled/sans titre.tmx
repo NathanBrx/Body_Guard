@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.8" tiledversion="1.8.2" orientation="orthogonal" renderorder="right-down" width="384" height="216" tilewidth="5" tileheight="5" infinite="0" nextlayerid="3" nextobjectid="1">
  <imagelayer id="2" name="Calque d'Images 1">
-  <image source="../Map_artwork_1.jpg" width="1920" height="1080"/>
+  <image source="Map_artwork_1.jpg" width="1920" height="1080"/>
  </imagelayer>
 </map>

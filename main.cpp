@@ -13,16 +13,38 @@ int main()
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
 
-    // Create sprite and apply texture
-    Texture texture;
-        if (!texture.loadFromFile("Spritev1.png")){
+    // background texture
+    Vector2u TextureSize;
+    Vector2u WindowSize;
+    Sprite background;
+    Texture backgroundTexture;
+        if (!backgroundTexture.loadFromFile("Map1.jpg")){
+                cerr << "failed to load image" << endl;
+                exit(1);
+        }
+        else{
+            TextureSize = backgroundTexture.getSize(); //Get size of texture.
+            WindowSize = window.getSize();             //Get size of window.
+
+            float ScaleX = (float) WindowSize.x / TextureSize.x;
+            float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
+
+            background.setTexture(backgroundTexture);
+            background.setScale(ScaleX, ScaleY);    // Set scale
+        }
+    backgroundTexture.setRepeated(false);
+    background.setTexture(backgroundTexture);
+
+    // Create sprite1 and apply texture1
+    Texture texture1;
+        if (!texture1.loadFromFile("Spritev1.png")){
             cerr << "failed to load image" << endl;
             exit(1);
         }
-    texture.setRepeated(false);
-    texture.setSmooth(true);
-    Sprite sprite;
-    sprite.setTexture(texture);
+    texture1.setRepeated(false);
+    texture1.setSmooth(true);
+    Sprite sprite1;
+    sprite1.setTexture(texture1);
     
     // Sprite coordinates
     int x=window.getSize().x/2.;
@@ -84,11 +106,13 @@ int main()
         if (y>(int)window.getSize().y) y=window.getSize().y;
 
         // Clear the window and apply grey background
-        window.clear(sf::Color(127,127,127));
+        window.clear(Color::White);
 
-        // Rotate and draw the sprite
-        sprite.setPosition(x,y);
-        window.draw(sprite);
+        window.draw(background);
+
+        // Rotate and draw the sprite1
+        sprite1.setPosition(x,y);
+        window.draw(sprite1);
 
         window.display();
     }
