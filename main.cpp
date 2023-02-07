@@ -45,6 +45,7 @@ int main()
     texture1.setSmooth(true);
     Sprite sprite1;
     sprite1.setTexture(texture1);
+    sprite1.setOrigin(50.f,50.f);
     
     // Sprite coordinates
     int x=window.getSize().x/2.;
@@ -55,6 +56,7 @@ int main()
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
+    float sprite1Rotation=0.f;
 
     while (window.isOpen())
     {  
@@ -67,13 +69,13 @@ int main()
             if (event.type == Event::KeyPressed){
                 switch (event.key.code){
                 // If escape is pressed, close the application
-                case  sf::Keyboard::Escape : window.close(); break;
+                case  Keyboard::Escape : window.close(); break;
 
                 // up, down, left and right keys
-                case sf::Keyboard::Up :     upFlag=true; break;
-                case sf::Keyboard::Down:    downFlag=true; break;
-                case sf::Keyboard::Left:    leftFlag=true; break;
-                case sf::Keyboard::Right:   rightFlag=true; break;
+                case Keyboard::Up : upFlag=true; sprite1Rotation=270.f; break;
+                case Keyboard::Down : downFlag=true; sprite1Rotation=90.f; break;
+                case Keyboard::Left : leftFlag=true; sprite1Rotation=180.f; break;
+                case Keyboard::Right : rightFlag=true; sprite1Rotation=0.f; break;
                 default : break;
                 }
             }
@@ -84,10 +86,10 @@ int main()
                 switch (event.key.code)
                 {
                 // up, down, left and right keys
-                case sf::Keyboard::Up :     upFlag=false; break;
-                case sf::Keyboard::Down:    downFlag=false; break;
-                case sf::Keyboard::Left:    leftFlag=false; break;
-                case sf::Keyboard::Right:   rightFlag=false; break;
+                case Keyboard::Up : upFlag=false; break;
+                case Keyboard::Down : downFlag=false; break;
+                case Keyboard::Left : leftFlag=false; break;
+                case Keyboard::Right : rightFlag=false; break;
                 default : break;
                 }
             }
@@ -112,8 +114,8 @@ int main()
 
         // Rotate and draw the sprite1
         sprite1.setPosition(x,y);
+        sprite1.setRotation(sprite1Rotation);
         window.draw(sprite1);
-
         window.display();
     }
     return 0;
