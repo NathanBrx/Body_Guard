@@ -13,6 +13,9 @@ int main()
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
 
+    // rectangle
+    Rect r1(0, 0, 300, 300);
+
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
@@ -103,11 +106,15 @@ int main()
 
         // Check screen boundaries
         if (x<0) x=0;
+        if (r1.left+r1.width >= x && r1.top+r1.height >= y){
+            leftFlag = false;
+            upFlag = false;
+        }
         if (x>(int)window.getSize().x) x=window.getSize().x;
         if (y<0) y=0;
         if (y>(int)window.getSize().y) y=window.getSize().y;
 
-        // Clear the window and apply grey background
+        // Clear the window and apply background
         window.clear(Color::White);
 
         window.draw(background);
