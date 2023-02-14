@@ -3,8 +3,7 @@
 #include <math.h>
 using namespace std;
 using namespace sf;
-#include "perso.hpp"
-#define SPRITE_SPEED 5
+#include "perso.h"
 
 int main()
 {
@@ -12,9 +11,6 @@ int main()
     
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
-
-    // rectangle
-    Rect r1(0, 0, 300, 300);
 
     // background texture
     Vector2u TextureSize;
@@ -37,29 +33,23 @@ int main()
         }
     backgroundTexture.setRepeated(false);
     background.setTexture(backgroundTexture);
-
-    // Create sprite1 and apply texture1
-    Texture texture1;
-        if (!texture1.loadFromFile("Spritev1.png")){
+    
+    Texture textureMain;
+        if (!textureMain.loadFromFile("Spritev1.png")){
             cerr << "failed to load image" << endl;
             exit(1);
         }
-    texture1.setRepeated(false);
-    texture1.setSmooth(true);
-    Sprite sprite1;
-    sprite1.setTexture(texture1);
-    sprite1.setOrigin(50.f,50.f);
+    textureMain.setRepeated(false);
+    textureMain.setSmooth(true);
+    Sprite spriteMain;
+    spriteMain.setTexture(textureMain);
     
-    // Sprite coordinates
-    int x=window.getSize().x/2.;
-    int y=window.getSize().y/2.;
-
-    // Flags for key pressed
+    Perso A(window.getSize().x/2.,window.getSize().x/2.,100,5,10,spriteMain);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
-    float sprite1Rotation=0.f;
+    float x = A.GetX(),y = A.GetY();
 
     while (window.isOpen())
     {  
@@ -76,10 +66,10 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Up : upFlag=true; sprite1Rotation=270.f; break;
-                case Keyboard::Down : downFlag=true; sprite1Rotation=90.f; break;
-                case Keyboard::Left : leftFlag=true; sprite1Rotation=180.f; break;
-                case Keyboard::Right : rightFlag=true; sprite1Rotation=0.f; break;
+                case Keyboard::Up : upFlag=true; break;
+                case Keyboard::Down : downFlag=true; break;
+                case Keyboard::Left : leftFlag=true; break;
+                case Keyboard::Right : rightFlag=true; break;
                 default : break;
                 }
             }
@@ -100,17 +90,13 @@ int main()
         }
 
         // Update coordinates
-        if (leftFlag) x-=SPRITE_SPEED;
-        if (rightFlag) x+=SPRITE_SPEED;
-        if (upFlag) y-=SPRITE_SPEED;
-        if (downFlag) y+=SPRITE_SPEED;
+        if (leftFlag) x-=A.GetSpeed();
+        if (rightFlag) x+=A.GetSpeed();
+        if (upFlag) y-=A.GetSpeed();
+        if (downFlag) y+=A.GetSpeed();
 
         // Check screen boundaries
         if (x<0) x=0;
-        if (r1.left+r1.width >= x && r1.top+r1.height >= y){
-            leftFlag = false;
-            upFlag = false;
-        }
         if (x>(int)window.getSize().x) x=window.getSize().x;
         if (y<0) y=0;
         if (y>(int)window.getSize().y) y=window.getSize().y;
@@ -121,10 +107,9 @@ int main()
         window.draw(background);
 
         // Rotate and draw the sprite1
-        sprite1.setPosition(x,y);
-        sprite1.setRotation(sprite1Rotation);
-        window.draw(sprite1);
+        A.SetX(x);
+        A.SetY(y);
+        window.draw(A);
         window.display();
-    }
-    return 0;
+    }    
 }
