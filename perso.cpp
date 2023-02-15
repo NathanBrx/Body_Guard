@@ -3,8 +3,8 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-Perso::Perso(float x,float y,int pvmax,int speed,int atk,Sprite persoSprite) : 
-    x(x), y(y), pvmax(pvmax), speed(speed), atk(atk), persoSprite(persoSprite)
+Perso::Perso(float x,float y,float rotation,int pvmax,int speed,int atk,Sprite persoSprite) : 
+    x(x), y(y), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), persoSprite(persoSprite)
 {}
 
 void Perso::damage_taken(int atk){
@@ -21,6 +21,9 @@ float Perso::GetX(){
 }
 float Perso::GetY(){
     return this->y;
+}
+float Perso::GetRotation(){
+    return this->rotation;
 }
 int Perso::GetSpeed(){
     return this->speed;

@@ -15,11 +15,15 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background;
-    Texture backgroundTexture;
+    Sprite background, spriteMain;
+    Texture backgroundTexture, textureMain;
         if (!backgroundTexture.loadFromFile("Map1.jpg")){
                 cerr << "failed to load image" << endl;
                 exit(1);
+        }
+        if (!textureMain.loadFromFile("Spritev1.png")){
+            cerr << "failed to load image" << endl;
+            exit(1);
         }
         else{
             TextureSize = backgroundTexture.getSize(); //Get size of texture.
@@ -28,28 +32,24 @@ int main()
             float ScaleX = (float) WindowSize.x / TextureSize.x;
             float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
 
-            background.setTexture(backgroundTexture);
-            background.setScale(ScaleX, ScaleY);    // Set scale
+            background.setTexture(backgroundTexture); // Set textures
+            background.setScale(ScaleX, ScaleY);    // Set scales
+            spriteMain.setTexture(textureMain);
+            spriteMain.setScale(ScaleX,ScaleY);
         }
     backgroundTexture.setRepeated(false);
     background.setTexture(backgroundTexture);
-    
-    Texture textureMain;
-        if (!textureMain.loadFromFile("Spritev1.png")){
-            cerr << "failed to load image" << endl;
-            exit(1);
-        }
     textureMain.setRepeated(false);
     textureMain.setSmooth(true);
-    Sprite spriteMain;
-    spriteMain.setTexture(textureMain);
     
-    Perso A(window.getSize().x/2.,window.getSize().x/2.,100,5,10,spriteMain);
+
+    Perso A(window.getSize().x/2.,window.getSize().x/2.,0.,100,5,10,spriteMain);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
     float x = A.GetX(),y = A.GetY();
+    float sprite1Rotation = A.GetRotation();
 
     while (window.isOpen())
     {  
@@ -66,10 +66,10 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Up : upFlag=true; break;
-                case Keyboard::Down : downFlag=true; break;
-                case Keyboard::Left : leftFlag=true; break;
-                case Keyboard::Right : rightFlag=true; break;
+                case Keyboard::Up : upFlag=true; sprite1Rotation=270.f; break;
+                case Keyboard::Down : downFlag=true; sprite1Rotation=90.f; break;
+                case Keyboard::Left : leftFlag=true; sprite1Rotation=180.f; break;
+                case Keyboard::Right : rightFlag=true; sprite1Rotation=0.f; break;
                 default : break;
                 }
             }
@@ -107,9 +107,10 @@ int main()
         window.draw(background);
 
         // Rotate and draw the sprite1
-        A.SetX(x);
-        A.SetY(y);
-        window.draw(A);
+        A.persoSprite.setOrigin(50.,50.);
+        A.persoSprite.setPosition(x,y);
+        A.persoSprite.setRotation(sprite1Rotation);
+        window.draw(A.persoSprite);
         window.display();
-    }    
+    }
 }

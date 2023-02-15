@@ -3,7 +3,6 @@
 #include <math.h>
 using namespace std;
 using namespace sf;
-#include "perso.hpp"
 #define SPRITE_SPEED 5
 
 int main()
