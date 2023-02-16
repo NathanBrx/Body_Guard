@@ -1,4 +1,4 @@
-#include "perso.h"
+#include "perso.hpp"
 #include <iostream> 
 #include <SFML/Graphics.hpp>
 using namespace sf;

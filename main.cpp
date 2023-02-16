@@ -3,7 +3,7 @@
 #include <math.h>
 using namespace std;
 using namespace sf;
-#define SPRITE_SPEED 5
+#include "perso.hpp"
 
 int main()
 {
@@ -12,17 +12,18 @@ int main()
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
 
-    // rectangle
-    Rect r1(0, 0, 300, 300);
-
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background;
-    Texture backgroundTexture;
+    Sprite background, spriteMain;
+    Texture backgroundTexture, textureMain;
         if (!backgroundTexture.loadFromFile("Map1.jpg")){
                 cerr << "failed to load image" << endl;
                 exit(1);
+        }
+        if (!textureMain.loadFromFile("Spritev1.png")){
+            cerr << "failed to load image" << endl;
+            exit(1);
         }
         else{
             TextureSize = backgroundTexture.getSize(); //Get size of texture.
@@ -31,34 +32,24 @@ int main()
             float ScaleX = (float) WindowSize.x / TextureSize.x;
             float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
 
-            background.setTexture(backgroundTexture);
-            background.setScale(ScaleX, ScaleY);    // Set scale
+            background.setTexture(backgroundTexture); // Set textures
+            background.setScale(ScaleX, ScaleY);    // Set scales
+            spriteMain.setTexture(textureMain);
+            spriteMain.setScale(ScaleX,ScaleY);
         }
     backgroundTexture.setRepeated(false);
     background.setTexture(backgroundTexture);
-
-    // Create sprite1 and apply texture1
-    Texture texture1;
-        if (!texture1.loadFromFile("Spritev1.png")){
-            cerr << "failed to load image" << endl;
-            exit(1);
-        }
-    texture1.setRepeated(false);
-    texture1.setSmooth(true);
-    Sprite sprite1;
-    sprite1.setTexture(texture1);
-    sprite1.setOrigin(50.f,50.f);
+    textureMain.setRepeated(false);
+    textureMain.setSmooth(true);
     
-    // Sprite coordinates
-    int x=window.getSize().x/2.;
-    int y=window.getSize().y/2.;
 
-    // Flags for key pressed
+    Perso A(window.getSize().x/2.,window.getSize().x/2.,0.,100,5,10,spriteMain);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
-    float sprite1Rotation=0.f;
+    float x = A.GetX(),y = A.GetY();
+    float sprite1Rotation = A.GetRotation();
 
     while (window.isOpen())
     {  
@@ -99,17 +90,13 @@ int main()
         }
 
         // Update coordinates
-        if (leftFlag) x-=SPRITE_SPEED;
-        if (rightFlag) x+=SPRITE_SPEED;
-        if (upFlag) y-=SPRITE_SPEED;
-        if (downFlag) y+=SPRITE_SPEED;
+        if (leftFlag) x-=A.GetSpeed();
+        if (rightFlag) x+=A.GetSpeed();
+        if (upFlag) y-=A.GetSpeed();
+        if (downFlag) y+=A.GetSpeed();
 
         // Check screen boundaries
         if (x<0) x=0;
-        if (r1.left+r1.width >= x && r1.top+r1.height >= y){
-            leftFlag = false;
-            upFlag = false;
-        }
         if (x>(int)window.getSize().x) x=window.getSize().x;
         if (y<0) y=0;
         if (y>(int)window.getSize().y) y=window.getSize().y;
@@ -120,10 +107,10 @@ int main()
         window.draw(background);
 
         // Rotate and draw the sprite1
-        sprite1.setPosition(x,y);
-        sprite1.setRotation(sprite1Rotation);
-        window.draw(sprite1);
+        A.persoSprite.setOrigin(50.,50.);
+        A.persoSprite.setPosition(x,y);
+        A.persoSprite.setRotation(sprite1Rotation);
+        window.draw(A.persoSprite);
         window.display();
     }
-    return 0;
 }
