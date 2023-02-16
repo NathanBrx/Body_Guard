@@ -27,3 +27,22 @@ class Perso : public Sprite {
         int atk ;
         int alive = 1; // booléen qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
 };
+
+class Projectile : public Sprite {
+    
+    public:
+
+        Projectile(float x,float y,float direction,int vitesse,Sprite projectileSprite);
+        Sprite projectileSprite; // sprite
+
+    private:
+
+        float x,y;
+        float direction;
+        int vitesse; //déplacement pixel par seconde
+//        FloatRect hitbox;
+        int Xlimite;
+        int Ylimite;
+};
+
+void createProjectile(float x,float y,float direction,int vitesse,Sprite projectileSprite);

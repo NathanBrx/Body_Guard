@@ -3,7 +3,7 @@
 #include <math.h>
 using namespace std;
 using namespace sf;
-#include "perso.hpp"
+#include "mainheader.hpp"
 
 int main()
 {
@@ -15,14 +15,18 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background, spriteMain;
-    Texture backgroundTexture, textureMain;
+    Sprite background, spriteMain, projectile1;
+    Texture backgroundTexture, textureMain, textureProjectile;
         if (!backgroundTexture.loadFromFile("Map1.jpg")){
-                cerr << "failed to load image" << endl;
+                cerr << "failed to load map texture" << endl;
                 exit(1);
         }
         if (!textureMain.loadFromFile("Spritev1.png")){
-            cerr << "failed to load image" << endl;
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureProjectile.loadFromFile("projectilev1.png")){
+            cerr << "failed to load projectile texture" << endl;
             exit(1);
         }
         else{
@@ -34,14 +38,20 @@ int main()
 
             background.setTexture(backgroundTexture); // Set textures
             background.setScale(ScaleX, ScaleY);    // Set scales
+            
             spriteMain.setTexture(textureMain);
             spriteMain.setScale(ScaleX,ScaleY);
+
+            projectile1.setTexture(textureProjectile);
+            projectile1.setScale(ScaleX,ScaleY);
         }
     backgroundTexture.setRepeated(false);
-    background.setTexture(backgroundTexture);
+
     textureMain.setRepeated(false);
     textureMain.setSmooth(true);
     
+    textureProjectile.setRepeated(false);
+    textureProjectile.setSmooth(true);
 
     Perso A(window.getSize().x/2.,window.getSize().x/2.,0.,100,5,10,spriteMain);
     bool upFlag=false;
@@ -50,6 +60,7 @@ int main()
     bool rightFlag=false;
     float x = A.GetX(),y = A.GetY();
     float sprite1Rotation = A.GetRotation();
+    Projectile p1(x,y,sprite1Rotation,A.GetSpeed(),projectile1);
 
     while (window.isOpen())
     {  
@@ -96,6 +107,7 @@ int main()
         if (downFlag) y+=A.GetSpeed();
 
         // Check screen boundaries
+
         if (x<0) x=0;
         if (x>(int)window.getSize().x) x=window.getSize().x;
         if (y<0) y=0;
@@ -110,6 +122,12 @@ int main()
         A.persoSprite.setOrigin(50.,50.);
         A.persoSprite.setPosition(x,y);
         A.persoSprite.setRotation(sprite1Rotation);
+
+        p1.projectileSprite.setOrigin(15.,15.);
+        p1.projectileSprite.setPosition(x+200,y+200);
+        p1.projectileSprite.setRotation(sprite1Rotation);
+
+        window.draw(p1.projectileSprite);
         window.draw(A.persoSprite);
         window.display();
     }

@@ -1,4 +1,4 @@
-#include "perso.hpp"
+#include "mainheader.hpp"
 #include <iostream> 
 #include <SFML/Graphics.hpp>
 using namespace sf;
@@ -36,3 +36,7 @@ void Perso::checkAlive(){
 void Perso::speed_modif(int speed){
     this->speed = speed;
 }
+
+Projectile::Projectile(float x,float y,float direction,int vitesse,Sprite projectileSprite):
+    x(x),y(y),direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
+{}
