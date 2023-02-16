@@ -44,5 +44,3 @@ class Projectile : public Sprite {
         int Xlimite;
         int Ylimite;
 };
-
-void createProjectile(float x,float y,float direction,int vitesse,Sprite projectileSprite);
