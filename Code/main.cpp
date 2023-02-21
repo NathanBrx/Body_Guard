@@ -19,15 +19,15 @@ int main()
     Vector2u WindowSize;
     Sprite background, spriteMain, projectile1;
     Texture backgroundTexture, textureMain, textureProjectile;
-        if (!backgroundTexture.loadFromFile("Map1.jpg")){
+        if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
         }
-        if (!textureMain.loadFromFile("Spritev1.png")){
+        if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
             cerr << "failed to load spriteMain texture" << endl;
             exit(1);
         }
-        if (!textureProjectile.loadFromFile("projectilev1.png")){
+        if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
             cerr << "failed to load projectile texture" << endl;
             exit(1);
         }
