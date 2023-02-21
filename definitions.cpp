@@ -37,6 +37,14 @@ void Perso::speed_modif(int speed){
     this->speed = speed;
 }
 
-Projectile::Projectile(float x,float y,float direction,int vitesse,Sprite projectileSprite):
-    x(x),y(y),direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
+Projectile::Projectile(float direction,int vitesse,Sprite projectileSprite):
+   direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
 {}
+/*
+void Projectile::tirer(){
+    this->projectileSprite.move(0.f,5.f);
+}
+Vector2f Projectile::getPos(){
+    return this->projectileSprite.getPosition();
+}
+*/

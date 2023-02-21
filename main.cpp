@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <math.h>
+#include <vector>
 using namespace std;
 using namespace sf;
 #include "mainheader.hpp"
@@ -11,6 +12,7 @@ int main()
     
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
+    window.setFramerateLimit(60);
 
     // background texture
     Vector2u TextureSize;
@@ -60,7 +62,8 @@ int main()
     bool rightFlag=false;
     float x = A.GetX(),y = A.GetY();
     float sprite1Rotation = A.GetRotation();
-    Projectile p1(x,y,sprite1Rotation,A.GetSpeed(),projectile1);
+
+    vector<Projectile*> projectiles;
 
     while (window.isOpen())
     {  
@@ -77,10 +80,11 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Up : upFlag=true; sprite1Rotation=270.f; break;
-                case Keyboard::Down : downFlag=true; sprite1Rotation=90.f; break;
-                case Keyboard::Left : leftFlag=true; sprite1Rotation=180.f; break;
-                case Keyboard::Right : rightFlag=true; sprite1Rotation=0.f; break;
+                case Keyboard::Z : upFlag=true; sprite1Rotation=270.f; break;
+                case Keyboard::S : downFlag=true; sprite1Rotation=90.f; break;
+                case Keyboard::Q : leftFlag=true; sprite1Rotation=180.f; break;
+                case Keyboard::D : rightFlag=true; sprite1Rotation=0.f; break;
+                case Keyboard::Up : projectiles.push_back(new Projectile(270.f,A.GetSpeed(),projectile1)); break;
                 default : break;
                 }
             }
@@ -91,10 +95,10 @@ int main()
                 switch (event.key.code)
                 {
                 // up, down, left and right keys
-                case Keyboard::Up : upFlag=false; break;
-                case Keyboard::Down : downFlag=false; break;
-                case Keyboard::Left : leftFlag=false; break;
-                case Keyboard::Right : rightFlag=false; break;
+                case Keyboard::Z : upFlag=false; break;
+                case Keyboard::S : downFlag=false; break;
+                case Keyboard::Q : leftFlag=false; break;
+                case Keyboard::D : rightFlag=false; break;
                 default : break;
                 }
             }
@@ -113,6 +117,13 @@ int main()
         if (y<0) y=0;
         if (y>(int)window.getSize().y) y=window.getSize().y;
 
+        for (size_t i = 0; i < projectiles.size(); i++){
+            projectiles[i]->projectileSprite.move(0.f,5.f);
+            if (projectiles[i]->projectileSprite.getPosition().y < 0){
+                projectiles.erase(projectiles.begin() + i);
+            }
+        }
+
         // Clear the window and apply background
         window.clear(Color::White);
 
@@ -123,11 +134,10 @@ int main()
         A.persoSprite.setPosition(x,y);
         A.persoSprite.setRotation(sprite1Rotation);
 
-        p1.projectileSprite.setOrigin(15.,15.);
-        p1.projectileSprite.setPosition(x+200,y+200);
-        p1.projectileSprite.setRotation(sprite1Rotation);
+        for (size_t i = 0; i < projectiles.size(); i++){
+            window.draw(projectiles[i]->projectileSprite);
+        }
 
-        window.draw(p1.projectileSprite);
         window.draw(A.persoSprite);
         window.display();
     }
