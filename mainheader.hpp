@@ -32,15 +32,13 @@ class Projectile : public Sprite {
     
     public:
 
-        Projectile(float x,float y,float direction,int vitesse,Sprite projectileSprite);
+        Projectile(float direction,int vitesse,Sprite projectileSprite);
         Sprite projectileSprite; // sprite
+        //void tirer();
+        //Vector2f getPos();
 
     private:
 
-        float x,y;
         float direction;
         int vitesse; //déplacement pixel par seconde
-//        FloatRect hitbox;
-        int Xlimite;
-        int Ylimite;
 };
