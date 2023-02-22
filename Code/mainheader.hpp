@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
+using namespace std;
 
 class Perso : public Sprite {
     
@@ -26,6 +27,7 @@ class Perso : public Sprite {
         float GetY();
         int GetSpeed();
         void checkAlive();
+        void update(float x,float y,RenderWindow& window);
         Sprite persoSprite ; //attribut sprite du personnage
 };
 
@@ -44,6 +46,5 @@ class Projectile : public Sprite {
         float getDirection();
         void setDirection(float direction);
         void setVitesse(int vitesse);
-        //void tirer();
-        //Vector2f getPos();
 };
+void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float rotation);

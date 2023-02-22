@@ -84,10 +84,10 @@ int main()
                 case Keyboard::S : downFlag=true; sprite1Rotation=90.f; break;
                 case Keyboard::Q : leftFlag=true; sprite1Rotation=180.f; break;
                 case Keyboard::D : rightFlag=true; sprite1Rotation=0.f; break;
-                case Keyboard::Up : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),270.f,A.GetSpeed(),projectile1)); break;
-                case Keyboard::Down : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),90.f,A.GetSpeed(),projectile1)); break;
-                case Keyboard::Left : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),180.f,A.GetSpeed(),projectile1)); break;
-                case Keyboard::Right : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),0.f,A.GetSpeed(),projectile1)); break;
+                case Keyboard::Up : tirer(projectiles,A,projectile1,270.f) ; break;
+                case Keyboard::Down : tirer(projectiles,A,projectile1,90.f) ; break;
+                case Keyboard::Left : tirer(projectiles,A,projectile1,180.f) ; break;
+                case Keyboard::Right : tirer(projectiles,A,projectile1,0.f) ; break;
                 default : break;
                 }
             }
@@ -106,19 +106,12 @@ int main()
                 }
             }
         }
-
         // Update coordinates
         if (leftFlag) x-=A.GetSpeed();
         if (rightFlag) x+=A.GetSpeed();
         if (upFlag) y-=A.GetSpeed();
         if (downFlag) y+=A.GetSpeed();
 
-        // Check screen boundaries
-
-        if (x<0) x=0;
-        if (x>(int)window.getSize().x) x=window.getSize().x;
-        if (y<0) y=0;
-        if (y>(int)window.getSize().y) y=window.getSize().y;
 
         for (size_t i = 0; i < projectiles.size(); i++){
             switch ((int)projectiles[i]->getDirection()){
@@ -140,7 +133,7 @@ int main()
 
         // Rotate and draw the sprite1
         A.persoSprite.setOrigin(50.,50.);
-        A.persoSprite.setPosition(x,y);
+        A.update(x,y,window);;
         A.persoSprite.setRotation(sprite1Rotation);
 
         for (size_t i = 0; i < projectiles.size(); i++){
