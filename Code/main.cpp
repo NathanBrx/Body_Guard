@@ -55,7 +55,7 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
-    Perso A(window.getSize().x/2.,window.getSize().x/2.,0.,100,5,10,spriteMain);
+    Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,spriteMain);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
@@ -66,7 +66,7 @@ int main()
     vector<Projectile*> projectiles;
 
     while (window.isOpen())
-    {  
+    {
         Event event;
         while (window.pollEvent(event))
         {
@@ -84,7 +84,10 @@ int main()
                 case Keyboard::S : downFlag=true; sprite1Rotation=90.f; break;
                 case Keyboard::Q : leftFlag=true; sprite1Rotation=180.f; break;
                 case Keyboard::D : rightFlag=true; sprite1Rotation=0.f; break;
-                case Keyboard::Up : projectiles.push_back(new Projectile(270.f,A.GetSpeed(),projectile1)); break;
+                case Keyboard::Up : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),270.f,A.GetSpeed(),projectile1)); break;
+                case Keyboard::Down : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),90.f,A.GetSpeed(),projectile1)); break;
+                case Keyboard::Left : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),180.f,A.GetSpeed(),projectile1)); break;
+                case Keyboard::Right : projectiles.push_back(new Projectile(A.GetX(),A.GetY(),0.f,A.GetSpeed(),projectile1)); break;
                 default : break;
                 }
             }
@@ -118,8 +121,14 @@ int main()
         if (y>(int)window.getSize().y) y=window.getSize().y;
 
         for (size_t i = 0; i < projectiles.size(); i++){
-            projectiles[i]->projectileSprite.move(0.f,5.f);
-            if (projectiles[i]->projectileSprite.getPosition().y < 0){
+            switch ((int)projectiles[i]->getDirection()){
+                case 270 : projectiles[i]->projectileSprite.move(0.f,-(float)A.GetSpeed()); break;
+                case 90 : projectiles[i]->projectileSprite.move(0.f,(float)A.GetSpeed()); break;
+                case 180 : projectiles[i]->projectileSprite.move(-(float)A.GetSpeed(),0.f); break;
+                case 0 : projectiles[i]->projectileSprite.move((float)A.GetSpeed(),0.f); break;
+                default : break;
+            }
+            if (projectiles[i]->projectileSprite.getPosition().y < 0 || projectiles[i]->projectileSprite.getPosition().y > window.getSize().y || projectiles[i]->projectileSprite.getPosition().x < 0 || projectiles[i]->projectileSprite.getPosition().x > window.getSize().x){
                 projectiles.erase(projectiles.begin() + i);
             }
         }
