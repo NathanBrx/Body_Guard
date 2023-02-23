@@ -1,6 +1,4 @@
 #include "mainheader.hpp"
-#include <iostream> 
-#include <SFML/Graphics.hpp>
 using namespace sf;
 
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
