@@ -3,64 +3,122 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-Perso::Perso(float x,float y,float rotation,int pvmax,int speed,int atk,Sprite persoSprite) : 
-    x(x), y(y), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), persoSprite(persoSprite)
+Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
+    xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
 {
-    persoSprite.setPosition(x,y);
+    this->persoSprite.setOrigin(persoSprite.getGlobalBounds().width/2,persoSprite.getGlobalBounds().height/2);
+    this->persoSprite.setPosition(xOrigin,yOrigin);
 }
 
-void Perso::damage_taken(int atk){
-    this-> pv = pv-atk;
-}
-void Perso::SetX(float x){
-    this->x = x;
-}
-void Perso::SetY(float y){
-    this->y = y;
-}
+// Getters
+
 float Perso::GetX(){
-    return this->x;
+    return this->persoSprite.getPosition().x;
 }
 float Perso::GetY(){
-    return this->y;
-}
-float Perso::GetRotation(){
-    return this->rotation;
+    return this->persoSprite.getPosition().y;
 }
 int Perso::GetSpeed(){
     return this->speed;
+}
+int Perso::GetatkSpeed(){
+    return this->atkSpeed;
+}
+float Perso::GetRotation(){
+    return this->persoSprite.getRotation();
+}
+
+// Setters
+
+void Perso::SetX(float x){
+    this->persoSprite.setPosition(x,this->GetY());
+}
+void Perso::SetY(float y){
+    this->persoSprite.setPosition(this->GetX(),y);
+}
+void Perso::SetSpeed(int speed){
+    this->speed = speed;
+}
+void Perso::SetatkSpeed(int atkSpeed){
+    this->atkSpeed = atkSpeed;
+}
+void Perso::SetRotation(float rotation){
+    this->persoSprite.setRotation(rotation);
+}
+
+// Methodes
+
+void Perso::damage_taken(int atk){
+    this-> pv = pv-atk;
 }
 void Perso::checkAlive(){
     if(this->pv <= 0){
         this->alive = 0;
     }
 }
-void Perso::speed_modif(int speed){
-    this->speed = speed;
+void Perso::update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window){
+    float x = this->GetX(), y = this->GetY();
+    speed = this->GetSpeed();
+    if (leftFlag) x-=speed;
+    if (rightFlag) x+=speed;
+    if (upFlag) y-=speed;
+    if (downFlag) y+=speed;
+    this->SetX(x);
+    this->SetY(y);
 }
-void Perso::update(float x,float y,RenderWindow& window){
-    if (x<0) x=0;
-    if (x>(int)window.getSize().x) x=window.getSize().x;
-    if (y<0) y=0;
-    if (y>(int)window.getSize().y) y=window.getSize().y;
-    else this->persoSprite.setPosition(x,y);
+void Perso::isInWindow(RenderWindow& window){
+    if (this->GetX()<0) this->SetX(0);
+    if (this->GetX()>(int)window.getSize().x) this->SetX(window.getSize().x);
+    if (this->GetY()<0) this->SetY(0);
+    if (this->GetY()>(int)window.getSize().y) this->SetY(window.getSize().y);
 }
+
 Projectile::Projectile(float xOrigin,float yOrigin,float direction,int vitesse,Sprite projectileSprite):
    xOrigin(xOrigin),yOrigin(yOrigin),direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
 {
     this->projectileSprite.setPosition(xOrigin,yOrigin);
+    this->projectileSprite.setRotation(direction);
+    this->projectileSprite.setOrigin(this->projectileSprite.getGlobalBounds().width/2,this->projectileSprite.getGlobalBounds().height/2);
 }
-float Projectile::getDirection(){
-    return this->direction;
+
+// Getters
+
+float Projectile::GetDirection(){
+    return this->projectileSprite.getRotation();
 }
-void Projectile::setDirection(float direction){
-    this->direction = direction;
+
+// Setters
+
+void Projectile::SetDirection(float direction){
+    this->projectileSprite.setRotation(direction);
 }
-void Projectile::setVitesse(int vitesse){
+void Projectile::SetVitesse(int vitesse){
     this->vitesse = vitesse;
 }
-void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float rotation){
+
+// Methodes
+
+void Projectile::update(Projectile& projectile,Perso& A,RenderWindow& window,float direction){
+    switch ((int)direction){
+        case 270 : projectile.projectileSprite.move(0.f,-(float)A.GetatkSpeed()); break;
+        case 90 : projectile.projectileSprite.move(0.f,(float)A.GetatkSpeed()); break;
+        case 180 : projectile.projectileSprite.move(-(float)A.GetatkSpeed(),0.f); break;
+        case 0 : projectile.projectileSprite.move((float)A.GetatkSpeed(),0.f); break;
+        default : break;
+    }
+}
+
+bool Projectile::isAlive(Projectile& projectile,RenderWindow& window){
+    if (projectile.projectileSprite.getPosition().y < 0 || projectile.projectileSprite.getPosition().y > window.getSize().y || projectile.projectileSprite.getPosition().x < 0 || projectile.projectileSprite.getPosition().x > window.getSize().x){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction){
     float x = A.GetX();
     float y = A.GetY();
-    projectiles.push_back(new Projectile(x,y,rotation,A.GetSpeed(),projectile1));
+    projectiles.push_back(new Projectile(x,y,direction,A.GetatkSpeed(),projectile1));
 }

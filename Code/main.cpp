@@ -8,7 +8,7 @@ using namespace sf;
 
 int main()
 {
-    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard",Style::Fullscreen);
+    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard"/*,Style::Fullscreen*/);
     
     window.setVerticalSyncEnabled (true);
     window.setKeyRepeatEnabled(false);
@@ -55,13 +55,11 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
-    Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,spriteMain);
+    Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,5,spriteMain);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
-    float x = A.GetX(),y = A.GetY();
-    float sprite1Rotation = A.GetRotation();
 
     vector<Projectile*> projectiles;
 
@@ -80,14 +78,14 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Z : upFlag=true; sprite1Rotation=270.f; break;
-                case Keyboard::S : downFlag=true; sprite1Rotation=90.f; break;
-                case Keyboard::Q : leftFlag=true; sprite1Rotation=180.f; break;
-                case Keyboard::D : rightFlag=true; sprite1Rotation=0.f; break;
-                case Keyboard::Up : tirer(projectiles,A,projectile1,270.f) ; break;
-                case Keyboard::Down : tirer(projectiles,A,projectile1,90.f) ; break;
-                case Keyboard::Left : tirer(projectiles,A,projectile1,180.f) ; break;
-                case Keyboard::Right : tirer(projectiles,A,projectile1,0.f) ; break;
+                case Keyboard::Z : upFlag=true; A.SetRotation(270.f); break;
+                case Keyboard::S : downFlag=true; A.SetRotation(90.f); break;
+                case Keyboard::Q : leftFlag=true; A.SetRotation(180.f); break;
+                case Keyboard::D : rightFlag=true; A.SetRotation(0.f); break;
+                case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
+                case Keyboard::Down : tirer(projectiles,A,projectile1,90.f); break;
+                case Keyboard::Left : tirer(projectiles,A,projectile1,180.f); break;
+                case Keyboard::Right : tirer(projectiles,A,projectile1,0.f); break;
                 default : break;
                 }
             }
@@ -106,41 +104,23 @@ int main()
                 }
             }
         }
-        // Update coordinates
-        if (leftFlag) x-=A.GetSpeed();
-        if (rightFlag) x+=A.GetSpeed();
-        if (upFlag) y-=A.GetSpeed();
-        if (downFlag) y+=A.GetSpeed();
-
-
-        for (size_t i = 0; i < projectiles.size(); i++){
-            switch ((int)projectiles[i]->getDirection()){
-                case 270 : projectiles[i]->projectileSprite.move(0.f,-(float)A.GetSpeed()); break;
-                case 90 : projectiles[i]->projectileSprite.move(0.f,(float)A.GetSpeed()); break;
-                case 180 : projectiles[i]->projectileSprite.move(-(float)A.GetSpeed(),0.f); break;
-                case 0 : projectiles[i]->projectileSprite.move((float)A.GetSpeed(),0.f); break;
-                default : break;
-            }
-            if (projectiles[i]->projectileSprite.getPosition().y < 0 || projectiles[i]->projectileSprite.getPosition().y > window.getSize().y || projectiles[i]->projectileSprite.getPosition().x < 0 || projectiles[i]->projectileSprite.getPosition().x > window.getSize().x){
-                projectiles.erase(projectiles.begin() + i);
-            }
-        }
 
         // Clear the window and apply background
         window.clear(Color::White);
 
         window.draw(background);
 
-        // Rotate and draw the sprite1
-        A.persoSprite.setOrigin(50.,50.);
-        A.update(x,y,window);;
-        A.persoSprite.setRotation(sprite1Rotation);
+        A.isInWindow(window);
+        A.update(upFlag,downFlag,leftFlag,rightFlag,window);
+
+        window.draw(A.persoSprite);
 
         for (size_t i = 0; i < projectiles.size(); i++){
+            projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
+            projectiles[i]->isAlive(*projectiles[i],window);
             window.draw(projectiles[i]->projectileSprite);
         }
 
-        window.draw(A.persoSprite);
         window.display();
     }
 }
