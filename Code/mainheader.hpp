@@ -24,6 +24,8 @@ class Perso : public Sprite {
         float GetX();
         float GetY();
         int GetSpeed();
+        int Getatk();
+        int Getpv();
         int GetatkSpeed();
         float GetRotation();
 
@@ -34,10 +36,11 @@ class Perso : public Sprite {
         void SetSpeed(int speed);
         void SetatkSpeed(int atkSpeed);
         void SetRotation(float rotation);
+        void Setpv(int diffpv);
 
         // Methodes
 
-        void checkAlive();
+        bool checkAlive();
         void update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window);
         void isInWindow(RenderWindow& window);
         Sprite persoSprite ; //attribut sprite du personnage
@@ -70,5 +73,6 @@ class Projectile : public Sprite {
         Sprite projectileSprite; // sprite du projectile
         void update(Projectile& projectile,Perso& A,RenderWindow& window,float direction); // méthode pour déplacer le projectile
         bool isAlive(Projectile& projectile,RenderWindow& window); // méthode pour vérifier si le projectile est toujours dans la fenêtre
+        bool hit(Perso& p1); // méthode pour vérifier si le projectile touche le personnage
 };
 void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction);

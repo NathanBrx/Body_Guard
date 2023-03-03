@@ -16,14 +16,18 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background, spriteMain, projectile1;
-    Texture backgroundTexture, textureMain, textureProjectile;
+    Sprite background, spriteMain, projectile1, spriteEnnemy1;
+    Texture backgroundTexture, textureMain, textureProjectile, textureEnnemy1;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
         }
         if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
             cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1.loadFromFile("../Textures/ennemy1.png")){
+            cerr << "failed to load spriteEnnemy1 texture" << endl;
             exit(1);
         }
         if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
@@ -43,6 +47,9 @@ int main()
             spriteMain.setTexture(textureMain);
             spriteMain.setScale(ScaleX,ScaleY);
 
+            spriteEnnemy1.setTexture(textureEnnemy1);
+            spriteEnnemy1.setScale(ScaleX,ScaleY);
+
             projectile1.setTexture(textureProjectile);
             projectile1.setScale(ScaleX,ScaleY);
         }
@@ -55,6 +62,7 @@ int main()
     textureProjectile.setSmooth(true);
 
     Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,5,spriteMain);
+    Perso ennemy1(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
@@ -115,9 +123,17 @@ int main()
         window.draw(A.persoSprite);
 
         for (size_t i = 0; i < projectiles.size(); i++){
-            projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
-            projectiles[i]->isAlive(*projectiles[i],window);
-            window.draw(projectiles[i]->projectileSprite);
+            if (projectiles[i]->isAlive(*projectiles[i],window)){
+                projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
+                window.draw(projectiles[i]->projectileSprite);
+                if (ennemy1.checkAlive() && projectiles[i]->hit(ennemy1)){
+                    projectiles.erase(projectiles.begin()+i);
+                    ennemy1.Setpv(A.Getatk());
+                }
+            }
+        }
+        if (ennemy1.checkAlive()){
+            window.draw(ennemy1.persoSprite);
         }
 
         window.display();

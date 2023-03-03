@@ -4,7 +4,7 @@ using namespace sf;
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
     xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
 {
-    this->persoSprite.setOrigin(persoSprite.getGlobalBounds().width/2,persoSprite.getGlobalBounds().height/2);
+    this->persoSprite.setOrigin(50,50);
     this->persoSprite.setPosition(xOrigin,yOrigin);
 }
 
@@ -18,6 +18,12 @@ float Perso::GetY(){
 }
 int Perso::GetSpeed(){
     return this->speed;
+}
+int Perso::Getatk(){
+    return this->atk;
+}
+int Perso::Getpv(){
+    return this->pv;
 }
 int Perso::GetatkSpeed(){
     return this->atkSpeed;
@@ -43,16 +49,20 @@ void Perso::SetatkSpeed(int atkSpeed){
 void Perso::SetRotation(float rotation){
     this->persoSprite.setRotation(rotation);
 }
+void Perso::Setpv(int diffpv){
+    this->pv -= diffpv;
+    if (this->pv <= 0){
+        this->alive = 0;
+    }
+}
 
 // Methodes
 
 void Perso::damage_taken(int atk){
     this-> pv = pv-atk;
 }
-void Perso::checkAlive(){
-    if(this->pv <= 0){
-        this->alive = 0;
-    }
+bool Perso::checkAlive(){
+    return this->alive;
 }
 void Perso::update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window){
     float x = this->GetX(), y = this->GetY();
@@ -112,6 +122,15 @@ bool Projectile::isAlive(Projectile& projectile,RenderWindow& window){
     }
     else{
         return true;
+    }
+}
+
+bool Projectile::hit(Perso& p1){
+    if (this->projectileSprite.getGlobalBounds().intersects(p1.persoSprite.getGlobalBounds())){
+        return true;
+    }
+    else{
+        return false;
     }
 }
 
