@@ -32,7 +32,7 @@ int main()
         exit(1);
     }
     else{
-        TextureSize = backgroundTexture.getSize(); //Get size of texture.
+        TextureSize = background.backgroundTexture.getSize(); //Get size of texture.
         WindowSize = window.getSize();             //Get size of window.
 
         float ScaleX = (float) WindowSize.x / TextureSize.x;
