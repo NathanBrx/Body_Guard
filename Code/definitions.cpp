@@ -26,6 +26,14 @@ float Perso::GetRotation(){
     return this->persoSprite.getRotation();
 }
 
+int Perso::GetPV(){
+    return this->pv;
+}
+
+int Perso::GetPVMax(){
+    return this->pvmax;
+}
+
 // Setters
 
 void Perso::SetX(float x){
