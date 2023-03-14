@@ -16,37 +16,36 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background, spriteMain, projectile1;
+    Sprite backgroundSprite, spriteMain, projectile1;
     Texture backgroundTexture, textureMain, textureProjectile;
-        if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
-                cerr << "failed to load map texture" << endl;
-                exit(1);
-        }
-        if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
-            cerr << "failed to load spriteMain texture" << endl;
-            exit(1);
-        }
-        if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
-            cerr << "failed to load projectile texture" << endl;
-            exit(1);
-        }
-        else{
-            TextureSize = backgroundTexture.getSize(); //Get size of texture.
-            WindowSize = window.getSize();             //Get size of window.
 
-            float ScaleX = (float) WindowSize.x / TextureSize.x;
-            float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
+    Background background(backgroundSprite,"../Textures/Map1.jpg",{{0, 414}, {78, 429},{276, 279}, {400, 234},{730, 195}, {882, 66}});
 
-            background.setTexture(backgroundTexture); // Set textures
-            background.setScale(ScaleX, ScaleY);    // Set scales
-            
-            spriteMain.setTexture(textureMain);
-            spriteMain.setScale(ScaleX,ScaleY);
+    background.SetBackground();
 
-            projectile1.setTexture(textureProjectile);
-            projectile1.setScale(ScaleX,ScaleY);
-        }
-    backgroundTexture.setRepeated(false);
+    if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
+        cerr << "failed to load spriteMain texture" << endl;
+        exit(1);
+    }
+    if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
+        cerr << "failed to load projectile texture" << endl;
+        exit(1);
+    }
+    else{
+        TextureSize = backgroundTexture.getSize(); //Get size of texture.
+        WindowSize = window.getSize();             //Get size of window.
+
+        float ScaleX = (float) WindowSize.x / TextureSize.x;
+        float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
+        
+        background.SetTexture(ScaleX,ScaleY);
+
+        spriteMain.setTexture(textureMain);
+        spriteMain.setScale(ScaleX,ScaleY);
+
+        projectile1.setTexture(textureProjectile);
+        projectile1.setScale(ScaleX,ScaleY);
+    }
 
     textureMain.setRepeated(false);
     textureMain.setSmooth(true);
@@ -105,20 +104,46 @@ int main()
         }
 
         // Clear the window and apply background
-        window.clear(Color::White);
 
-        window.draw(background);
+        
+
+
+        // Créer des points pour définir les rectangles
+        std::vector<sf::Vector2f> points = {
+            {0, 414}, {78, 429},{276, 279}, {400, 234},{730, 195}, {882, 66}
+        };
+
+        // Créer un tableau de rectangles
+        std::vector<sf::RectangleShape> rectangles;
+
+        // Itérer sur les points deux par deux et créer un rectangle à chaque itération
+        for (std::size_t i = 0; i < points.size() - 1; i += 1)
+        {
+            sf::Vector2f bottomLeft = points[i];
+            sf::Vector2f bottomRight = points[i + 1];
+            sf::RectangleShape rectangle = background.CreateRectangle(bottomLeft, bottomRight, sf::Color::Red);
+            rectangles.push_back(rectangle);
+        }
+
+        window.clear(Color::White);
+        
+        window.draw(background.backgroundSprite);
+
+        // Dessiner les rectangles
+        for (const auto& rectangle : rectangles)
+        {
+            window.draw(rectangle);
+        }
 
         A.isInWindow(window);
         A.update(upFlag,downFlag,leftFlag,rightFlag,window);
-
-        window.draw(A.persoSprite);
 
         for (size_t i = 0; i < projectiles.size(); i++){
             projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
             projectiles[i]->isAlive(*projectiles[i],window);
             window.draw(projectiles[i]->projectileSprite);
         }
+        window.draw(A.persoSprite);
 
         window.display();
     }

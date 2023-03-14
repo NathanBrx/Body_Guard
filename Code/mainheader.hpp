@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/System/String.hpp>
+#include <cmath>
 using namespace sf;
 using namespace std;
 
@@ -72,3 +74,23 @@ class Projectile : public Sprite {
         bool isAlive(Projectile& projectile,RenderWindow& window); // méthode pour vérifier si le projectile est toujours dans la fenêtre
 };
 void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction);
+
+//Background
+
+class Background {
+    public :
+
+        Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints);
+
+        sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight, sf::Color color);
+        void SetBackground();
+        void SetTexture(float ScaleX, float ScaleY);
+        Sprite backgroundSprite ; //attribut sprite du background
+        Texture backgroundTexture; //attribut texture du background
+        string backgroundImage;
+
+        // Créer des points pour définir les rectangles
+        std::vector<sf::Vector2f> borduresPoints;
+        std::vector<sf::Vector2f> portesPoints;
+
+};

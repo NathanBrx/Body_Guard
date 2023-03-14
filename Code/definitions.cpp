@@ -1,5 +1,8 @@
 #include "mainheader.hpp"
+#include <iostream>
+#include <SFML/System/String.hpp>
 using namespace sf;
+using namespace std;
 
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
     xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
@@ -119,4 +122,41 @@ void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float di
     float x = A.GetX();
     float y = A.GetY();
     projectiles.push_back(new Projectile(x,y,direction,A.GetatkSpeed(),projectile1));
+}
+
+//Background
+
+Background::Background(Sprite backgroundSprite,string backgroundImage ,std::vector<sf::Vector2f> borduresPoints):
+    backgroundSprite(backgroundSprite), backgroundImage(backgroundImage), borduresPoints(borduresPoints)
+{}
+
+sf::RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight, sf::Color color)
+{
+    // Calculer la longueur et l'angle du rectangle
+    float length = std::sqrt(std::pow(bottomRight.x - bottomLeft.x, 2) + std::pow(bottomRight.y - bottomLeft.y, 2));
+    float angle = std::atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
+
+    // Créer le rectangle
+    sf::RectangleShape rectangle;
+    rectangle.setSize(sf::Vector2f(length, 1.f));
+    rectangle.setRotation(angle * 180.f / 3.14159f);
+    rectangle.setFillColor(color);
+
+    // Positionner le rectangle en utilisant le coin inférieur gauche
+    rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
+
+    return rectangle;
+}
+
+void Background::SetBackground(){ // Met l'image de background dans la texture
+    if (!this->backgroundTexture.loadFromFile(this->backgroundImage)){
+        cerr << "failed to load map texture" << endl;
+        exit(1);
+    }
+}
+
+void Background::SetTexture(float ScaleX, float ScaleY){ //Met la texture dans le sprite
+    this->backgroundSprite.setTexture(this->backgroundTexture); // Set textures
+    this->backgroundSprite.setScale(ScaleX, ScaleY);    // Set scales
+    this->backgroundTexture.setRepeated(false);
 }
