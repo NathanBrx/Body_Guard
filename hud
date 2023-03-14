@@ -1,0 +1,16 @@
+idées hud:
+code dans la classe personnage
+appel à une méthode de classe à chaque changement des caractéristiques du perso
+
+
+affichage :
+- barre vie
+- stats
+- boeufs (peut être après)
+
+affichage avec SFML, rectangle shape
+
+cadre 800/100px
+barre pv 600/50px (espace de 100/25px)
+Affichage du nombre de pv à droite de la barre (peut être après)
+
