@@ -17,7 +17,7 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite background, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureMain, textureProjectile, textureEnnemy1;
+    Texture backgroundTexture, textureMain, textureProjectile, textureEnnemy1, textureEnnemy1hit;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
@@ -32,6 +32,10 @@ int main()
         }
         if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
             cerr << "failed to load projectile texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1hit.loadFromFile("../Textures/ennemy1hit.png")){
+            cerr << "failed to load ennemy hit texture" << endl;
             exit(1);
         }
         else{
@@ -127,6 +131,7 @@ int main()
                 projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
                 window.draw(projectiles[i]->projectileSprite);
                 if (ennemy1.checkAlive() && projectiles[i]->hit(ennemy1)){
+                    ennemy1.damage(textureEnnemy1hit,textureEnnemy1,window);
                     projectiles.erase(projectiles.begin()+i);
                     ennemy1.Setpv(A.Getatk());
                 }

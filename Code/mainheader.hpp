@@ -44,7 +44,7 @@ class Perso : public Sprite {
         void update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window);
         void isInWindow(RenderWindow& window);
         Sprite persoSprite ; //attribut sprite du personnage
-        void damage_taken(int atk); //méthode pour réduire les pv du personnage
+        void damage(Texture& texturehit,Texture& texturebase,RenderWindow& window); // méthode pour afficher l'animation de dégats
 };
 
 class Projectile : public Sprite {

@@ -58,9 +58,6 @@ void Perso::Setpv(int diffpv){
 
 // Methodes
 
-void Perso::damage_taken(int atk){
-    this-> pv = pv-atk;
-}
 bool Perso::checkAlive(){
     return this->alive;
 }
@@ -79,6 +76,16 @@ void Perso::isInWindow(RenderWindow& window){
     if (this->GetX()>(int)window.getSize().x) this->SetX(window.getSize().x);
     if (this->GetY()<0) this->SetY(0);
     if (this->GetY()>(int)window.getSize().y) this->SetY(window.getSize().y);
+}
+
+void Perso::damage(Texture& texturehit,Texture& texturebase,RenderWindow& window){
+    int compteur = 0;
+    this->persoSprite.setTexture(texturehit);
+    window.draw(this->persoSprite);
+    while (compteur < 100){
+        compteur++;
+    }
+    this->persoSprite.setTexture(texturebase);
 }
 
 Projectile::Projectile(float xOrigin,float yOrigin,float direction,int vitesse,Sprite projectileSprite):
