@@ -17,12 +17,16 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite background, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureMain, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureProjectile, textureEnnemy1, textureEnnemy1hit;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
         }
-        if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
+        if (!textureSpriteLeft.loadFromFile("../Textures/sprite_left.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteRight.loadFromFile("../Textures/sprite_right.png")){
             cerr << "failed to load spriteMain texture" << endl;
             exit(1);
         }
@@ -48,7 +52,7 @@ int main()
             background.setTexture(backgroundTexture); // Set textures
             background.setScale(ScaleX, ScaleY);    // Set scales
             
-            spriteMain.setTexture(textureMain);
+            spriteMain.setTexture(textureSpriteRight);
             spriteMain.setScale(ScaleX,ScaleY);
 
             spriteEnnemy1.setTexture(textureEnnemy1);
@@ -59,8 +63,8 @@ int main()
         }
     backgroundTexture.setRepeated(false);
 
-    textureMain.setRepeated(false);
-    textureMain.setSmooth(true);
+    textureSpriteRight.setRepeated(false);
+    textureSpriteRight.setSmooth(true);
     
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
@@ -89,10 +93,10 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Z : upFlag=true; A.SetRotation(270.f); break;
-                case Keyboard::S : downFlag=true; A.SetRotation(90.f); break;
-                case Keyboard::Q : leftFlag=true; A.SetRotation(180.f); break;
-                case Keyboard::D : rightFlag=true; A.SetRotation(0.f); break;
+                case Keyboard::Z : upFlag=true; break;
+                case Keyboard::S : downFlag=true; break;
+                case Keyboard::Q : leftFlag=true; A.persoSprite.setTexture(textureSpriteLeft); break;
+                case Keyboard::D : rightFlag=true; A.persoSprite.setTexture(textureSpriteRight);break;
                 case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
                 case Keyboard::Down : tirer(projectiles,A,projectile1,90.f); break;
                 case Keyboard::Left : tirer(projectiles,A,projectile1,180.f); break;
@@ -121,11 +125,9 @@ int main()
 
         window.draw(background);
 
-        A.isInWindow(window);
-        A.update(upFlag,downFlag,leftFlag,rightFlag,window);
-
-        window.draw(A.persoSprite);
-
+        if (A.persoSprite.getGlobalBounds().intersects(ennemy1.persoSprite.getGlobalBounds())){
+            A.Setpv(ennemy1.Getatk());
+        }
         for (size_t i = 0; i < projectiles.size(); i++){
             if (projectiles[i]->isAlive(*projectiles[i],window)){
                 projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
@@ -140,6 +142,11 @@ int main()
         if (ennemy1.checkAlive()){
             window.draw(ennemy1.persoSprite);
         }
+
+        A.isInWindow(window);
+        A.update(upFlag,downFlag,leftFlag,rightFlag,window);
+
+        window.draw(A.persoSprite);
 
         window.display();
     }
