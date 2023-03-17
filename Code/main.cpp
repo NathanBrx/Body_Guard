@@ -16,18 +16,38 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background, spriteMain, projectile1;
-    Texture backgroundTexture, textureMain, textureProjectile;
+    Sprite background, spriteMain, projectile1, spriteEnnemy1;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
         }
-        if (!textureMain.loadFromFile("../Textures/Spritev1.png")){
+        if (!textureSpriteLeft.loadFromFile("../Textures/sprite_left.png")){
             cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteRight.loadFromFile("../Textures/sprite_right.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteUp.loadFromFile("../Textures/sprite_up.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteDown.loadFromFile("../Textures/sprite_down.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1.loadFromFile("../Textures/ennemy1.png")){
+            cerr << "failed to load spriteEnnemy1 texture" << endl;
             exit(1);
         }
         if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
             cerr << "failed to load projectile texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1hit.loadFromFile("../Textures/ennemy1hit.png")){
+            cerr << "failed to load ennemy hit texture" << endl;
             exit(1);
         }
         else{
@@ -40,21 +60,25 @@ int main()
             background.setTexture(backgroundTexture); // Set textures
             background.setScale(ScaleX, ScaleY);    // Set scales
             
-            spriteMain.setTexture(textureMain);
+            spriteMain.setTexture(textureSpriteRight);
             spriteMain.setScale(ScaleX,ScaleY);
+
+            spriteEnnemy1.setTexture(textureEnnemy1);
+            spriteEnnemy1.setScale(ScaleX,ScaleY);
 
             projectile1.setTexture(textureProjectile);
             projectile1.setScale(ScaleX,ScaleY);
         }
     backgroundTexture.setRepeated(false);
 
-    textureMain.setRepeated(false);
-    textureMain.setSmooth(true);
+    textureSpriteRight.setRepeated(false);
+    textureSpriteRight.setSmooth(true);
     
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
     Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,5,spriteMain);
+    Perso ennemy1(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
@@ -77,10 +101,10 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Z : upFlag=true; A.SetRotation(270.f); break;
-                case Keyboard::S : downFlag=true; A.SetRotation(90.f); break;
-                case Keyboard::Q : leftFlag=true; A.SetRotation(180.f); break;
-                case Keyboard::D : rightFlag=true; A.SetRotation(0.f); break;
+                case Keyboard::Z : upFlag=true; A.persoSprite.setTexture(textureSpriteUp); break;
+                case Keyboard::S : downFlag=true; A.persoSprite.setTexture(textureSpriteDown); break;
+                case Keyboard::Q : leftFlag=true; A.persoSprite.setTexture(textureSpriteLeft); break;
+                case Keyboard::D : rightFlag=true; A.persoSprite.setTexture(textureSpriteRight);break;
                 case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
                 case Keyboard::Down : tirer(projectiles,A,projectile1,90.f); break;
                 case Keyboard::Left : tirer(projectiles,A,projectile1,180.f); break;
@@ -109,16 +133,28 @@ int main()
 
         window.draw(background);
 
+        if (A.persoSprite.getGlobalBounds().intersects(ennemy1.persoSprite.getGlobalBounds())){
+            A.Setpv(ennemy1.Getatk());
+        }
+        for (size_t i = 0; i < projectiles.size(); i++){
+            if (projectiles[i]->isAlive(*projectiles[i],window)){
+                projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
+                window.draw(projectiles[i]->projectileSprite);
+                if (ennemy1.checkAlive() && projectiles[i]->hit(ennemy1)){
+                    ennemy1.damage(textureEnnemy1hit,textureEnnemy1,window);
+                    projectiles.erase(projectiles.begin()+i);
+                    ennemy1.Setpv(A.Getatk());
+                }
+            }
+        }
+        if (ennemy1.checkAlive()){
+            window.draw(ennemy1.persoSprite);
+        }
+
         A.isInWindow(window);
         A.update(upFlag,downFlag,leftFlag,rightFlag,window);
 
         window.draw(A.persoSprite);
-
-        for (size_t i = 0; i < projectiles.size(); i++){
-            projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
-            projectiles[i]->isAlive(*projectiles[i],window);
-            window.draw(projectiles[i]->projectileSprite);
-        }
 
         window.display();
     }
