@@ -156,6 +156,39 @@ int main()
 
         window.draw(A.persoSprite);
 
+        RectangleShape rectangle3(Vector2f(600,25));
+        rectangle3.setFillColor(Color::Transparent);
+        rectangle3.setOutlineThickness(5);
+        rectangle3.setOutlineColor(Color(0,0,0));
+        rectangle3.setPosition(25,25);
+        window.draw(rectangle3);
+
+        int couleurs[3];
+        couleurs[0]=100;
+        couleurs[1]=250;
+        couleurs[2]=50;
+
+        //HUD
+        int pvs=A.Getpv();
+        int pvs_max=A.Getpvmax();
+
+        if (pvs<pvs_max*0.33){
+            couleurs[0]=243;
+            couleurs[1]=22;
+            couleurs[2]=22;
+        }
+        else{
+            if (pvs<pvs_max*0.67){
+                couleurs[0]=252;
+                couleurs[1]=255;
+                couleurs[2]=51;
+            }
+        }
+        RectangleShape rectangle2(Vector2f((pvs*600)/(pvs_max),25));
+        rectangle2.setFillColor(Color(couleurs[0],couleurs[1],couleurs[2]));
+        rectangle2.setPosition(25,25);
+        window.draw(rectangle2);
+
         window.display();
     }
 }
