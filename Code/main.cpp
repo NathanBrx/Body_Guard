@@ -17,7 +17,7 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite background, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
                 exit(1);
@@ -27,6 +27,14 @@ int main()
             exit(1);
         }
         if (!textureSpriteRight.loadFromFile("../Textures/sprite_right.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteUp.loadFromFile("../Textures/sprite_up.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteDown.loadFromFile("../Textures/sprite_down.png")){
             cerr << "failed to load spriteMain texture" << endl;
             exit(1);
         }
@@ -93,8 +101,8 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Z : upFlag=true; break;
-                case Keyboard::S : downFlag=true; break;
+                case Keyboard::Z : upFlag=true; A.persoSprite.setTexture(textureSpriteUp); break;
+                case Keyboard::S : downFlag=true; A.persoSprite.setTexture(textureSpriteDown); break;
                 case Keyboard::Q : leftFlag=true; A.persoSprite.setTexture(textureSpriteLeft); break;
                 case Keyboard::D : rightFlag=true; A.persoSprite.setTexture(textureSpriteRight);break;
                 case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
