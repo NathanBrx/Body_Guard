@@ -26,7 +26,8 @@ class Perso : public Sprite {
         int GetSpeed();
         int Getatk();
         int Getpv();
-        int GetatkSpeed();
+	int Getpvmax();
+	int GetatkSpeed();
         float GetRotation();
 
         // Setters

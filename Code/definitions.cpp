@@ -4,7 +4,7 @@ using namespace sf;
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
     xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
 {
-    this->persoSprite.setOrigin(50,50);
+    this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x/2,persoSprite.getTexture()->getSize().y/2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
 }
 
@@ -24,6 +24,9 @@ int Perso::Getatk(){
 }
 int Perso::Getpv(){
     return this->pv;
+}
+int Perso::Getpvmax(){
+	return this->pvmax;
 }
 int Perso::GetatkSpeed(){
     return this->atkSpeed;
