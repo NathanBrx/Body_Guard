@@ -46,6 +46,9 @@ class Perso : public Sprite {
         void isInWindow(RenderWindow& window);
         Sprite persoSprite ; //attribut sprite du personnage
         void damage(Texture& texturehit,Texture& texturebase,RenderWindow& window); // méthode pour afficher l'animation de dégats
+
+        // Destructeur
+        ~Perso();
 };
 
 class Projectile : public Sprite {
