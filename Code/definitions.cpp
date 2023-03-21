@@ -6,7 +6,8 @@ using namespace std;
 
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
     xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
-{
+{   
+    this->hitbox=persoSprite.getGlobalBounds();
     this->persoSprite.setOrigin(persoSprite.getGlobalBounds().width/2,persoSprite.getGlobalBounds().height/2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
 }
@@ -130,7 +131,7 @@ Background::Background(Sprite backgroundSprite,string backgroundImage ,std::vect
     backgroundSprite(backgroundSprite), backgroundImage(backgroundImage), borduresPoints(borduresPoints)
 {}
 
-sf::RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight, sf::Color color)
+sf::RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight)
 {
     // Calculer la longueur et l'angle du rectangle
     float length = std::sqrt(std::pow(bottomRight.x - bottomLeft.x, 2) + std::pow(bottomRight.y - bottomLeft.y, 2));
@@ -140,13 +141,22 @@ sf::RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vect
     sf::RectangleShape rectangle;
     rectangle.setSize(sf::Vector2f(length, 1.f));
     rectangle.setRotation(angle * 180.f / 3.14159f);
-    rectangle.setFillColor(color);
 
     // Positionner le rectangle en utilisant le coin inférieur gauche
     rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
 
     return rectangle;
 }
+
+void Background::MakeRectangles(){
+    for(std::size_t i = 0; i < this->borduresPoints.size() - 1; i += 1){
+        sf::Vector2f bottomLeft = this->borduresPoints[i];
+        sf::Vector2f bottomRight = this->borduresPoints[i + 1];
+        sf::RectangleShape rectangle = this->CreateRectangle(bottomLeft, bottomRight);
+        this->rectangles.push_back(rectangle);
+    }
+}
+
 
 void Background::SetBackground(){ // Met l'image de background dans la texture
     if (!this->backgroundTexture.loadFromFile(this->backgroundImage)){

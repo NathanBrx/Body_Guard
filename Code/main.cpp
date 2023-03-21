@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <SFML/Graphics.hpp>
 #include <vector>
 using namespace std;
@@ -101,41 +102,53 @@ int main()
                 default : break;
                 }
             }
+            
         }
-
-        // Clear the window and apply background
-
-        
-
-
-        // Créer des points pour définir les rectangles
-        std::vector<sf::Vector2f> points = {
-            {0, 414}, {78, 429},{276, 279}, {400, 234},{730, 195}, {882, 66}
-        };
-
-        // Créer un tableau de rectangles
-        std::vector<sf::RectangleShape> rectangles;
-
-        // Itérer sur les points deux par deux et créer un rectangle à chaque itération
-        for (std::size_t i = 0; i < points.size() - 1; i += 1)
-        {
-            sf::Vector2f bottomLeft = points[i];
-            sf::Vector2f bottomRight = points[i + 1];
-            sf::RectangleShape rectangle = background.CreateRectangle(bottomLeft, bottomRight, sf::Color::Red);
-            rectangles.push_back(rectangle);
-        }
-
+        background.MakeRectangles();
         window.clear(Color::White);
         
         window.draw(background.backgroundSprite);
 
         // Dessiner les rectangles
-        for (const auto& rectangle : rectangles)
+        for (const auto& rectangle : background.rectangles)
         {
             window.draw(rectangle);
         }
 
         A.isInWindow(window);
+
+        for(std::size_t i = 0; i < background.borduresPoints.size() - 1; i += 1){
+            sf::Vector2f point_A = background.borduresPoints[i];
+            sf::Vector2f point_B = background.borduresPoints[i + 1];
+
+            float a = sqrt(pow(point_B.x-A.GetX(),2)+pow(point_B.y-A.GetY(),2));
+            float b = sqrt(pow(A.GetX()-point_A.x,2)+pow(A.GetY()-point_A.y,2));
+            float c = sqrt(pow(point_B.x-point_A.x,2)+pow(point_B.y-point_A.y,2));
+
+            float angle = acos((a*a+b*b-c*c)/(2*a*b));
+            
+            cout << angle << endl;
+            if (3<angle && 3.3>angle) {
+                cout << "uzqfhuiezfhuiqzehfuiqzhefuihzqe";
+                if(upFlag){
+                    upFlag=false;
+                    A.SetY(A.GetY()+5);
+                }
+                if(downFlag){
+                    downFlag=false;
+                    A.SetY(A.GetY()-5);
+                }
+                if(leftFlag){
+                    leftFlag=false;
+                    A.SetX(A.GetX()+5);
+                }
+                if(rightFlag){
+                    rightFlag=false;
+                    A.SetX(A.GetX()-5);
+                }
+            }
+        }
+
         A.update(upFlag,downFlag,leftFlag,rightFlag,window);
 
         for (size_t i = 0; i < projectiles.size(); i++){

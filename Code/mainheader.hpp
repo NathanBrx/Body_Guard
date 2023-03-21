@@ -21,6 +21,8 @@ class Perso : public Sprite {
 
         Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite);
 
+        FloatRect hitbox;
+
         // Getters
 
         float GetX();
@@ -82,7 +84,11 @@ class Background {
 
         Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints);
 
-        sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight, sf::Color color);
+        sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight);
+        std::vector<sf::RectangleShape> rectangles;
+        std::vector<sf::FloatRect> hitboxs;
+        void MakeRectangles();
+
         void SetBackground();
         void SetTexture(float ScaleX, float ScaleY);
         Sprite backgroundSprite ; //attribut sprite du background
