@@ -6,6 +6,7 @@ Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int 
 {
     this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x/2,persoSprite.getTexture()->getSize().y/2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
+
 }
 
 // Getters
@@ -90,6 +91,10 @@ void Perso::damage(Texture& texturehit,Texture& texturebase,RenderWindow& window
     }
     this->persoSprite.setTexture(texturebase);
 }
+
+//Destructeur
+Perso::~Perso(){}
+
 
 Projectile::Projectile(float xOrigin,float yOrigin,float direction,int vitesse,Sprite projectileSprite):
    xOrigin(xOrigin),yOrigin(yOrigin),direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
