@@ -78,13 +78,15 @@ int main()
     textureProjectile.setSmooth(true);
 
     Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,5,spriteMain);
-    Perso* ennemy1 = new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1);
     bool upFlag=false;
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
 
     vector<Projectile*> projectiles;
+    vector<Perso*> ennemies;
+
+    ennemies.push_back(new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1));
 
     while (window.isOpen())
     {
@@ -133,24 +135,28 @@ int main()
 
         window.draw(background);
 
-        if (A.persoSprite.getGlobalBounds().intersects(ennemy1->persoSprite.getGlobalBounds())){
-            A.Setpv(ennemy1->Getatk());
-        }
-        for (size_t i = 0; i < projectiles.size(); i++){
-            if (projectiles[i]->isAlive(*projectiles[i],window)){
-                projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
-                window.draw(projectiles[i]->projectileSprite);
-                if (ennemy1->checkAlive() && projectiles[i]->hit(*ennemy1)){
-                    ennemy1->damage(textureEnnemy1hit,textureEnnemy1,window);
-                    projectiles.erase(projectiles.begin()+i);
-                    ennemy1->Setpv(A.Getatk());
+        for (size_t i = 0; i < ennemies.size(); i++){
+            if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())){
+            A.Setpv(ennemies[i]->Getatk());
+            }
+            for (size_t j = 0; j < projectiles.size(); j++){
+                if (projectiles[j]->isAlive(*projectiles[j],window)){
+                    projectiles[j]->update(*projectiles[j],A,window,projectiles[j]->GetDirection());
+                    window.draw(projectiles[j]->projectileSprite);
+                    if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])){
+                        ennemies[i]->damage(textureEnnemy1hit,textureEnnemy1,window);
+                        projectiles.erase(projectiles.begin()+j);
+                        ennemies[i]->Setpv(A.Getatk());
+                    }
                 }
             }
+            if (ennemies[i]->checkAlive()){
+                window.draw(ennemies[i]->persoSprite);
+            }
+            else{
+                ennemies.erase(ennemies.begin()+i);
+            }
         }
-        if (ennemy1->checkAlive()){
-            window.draw(ennemy1->persoSprite);
-        }
-        else {delete &ennemy1;} 
 
         A.isInWindow(window);
         A.update(upFlag,downFlag,leftFlag,rightFlag,window);
