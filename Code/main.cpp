@@ -1,10 +1,13 @@
 #include <iostream>
+
 #include <cmath>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;
 #include "mainheader.hpp"
+#include "generation.hpp"
 
 int main()
 {
@@ -17,8 +20,44 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1;
-    Texture backgroundTexture, textureMain, textureProjectile;
+
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+        if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
+                cerr << "failed to load map texture" << endl;
+                exit(1);
+        }
+        if (!textureSpriteLeft.loadFromFile("../Textures/sprite_left.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteRight.loadFromFile("../Textures/sprite_right.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteUp.loadFromFile("../Textures/sprite_up.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureSpriteDown.loadFromFile("../Textures/sprite_down.png")){
+            cerr << "failed to load spriteMain texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1.loadFromFile("../Textures/ennemy1.png")){
+            cerr << "failed to load spriteEnnemy1 texture" << endl;
+            exit(1);
+        }
+        if (!textureProjectile.loadFromFile("../Textures/projectilev1.png")){
+            cerr << "failed to load projectile texture" << endl;
+            exit(1);
+        }
+        if (!textureEnnemy1hit.loadFromFile("../Textures/ennemy1hit.png")){
+            cerr << "failed to load ennemy hit texture" << endl;
+            exit(1);
+        }
+        else{
+            TextureSize = backgroundTexture.getSize(); //Get size of texture.
+            WindowSize = window.getSize();             //Get size of window.
 
     Background background(backgroundSprite,"../Textures/Map1.jpg",{{0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678}});
 
@@ -48,8 +87,8 @@ int main()
         projectile1.setScale(ScaleX,ScaleY);
     }
 
-    textureMain.setRepeated(false);
-    textureMain.setSmooth(true);
+    textureSpriteRight.setRepeated(false);
+    textureSpriteRight.setSmooth(true);
     
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
@@ -61,7 +100,14 @@ int main()
     bool rightFlag=false;
 
     vector<Projectile*> projectiles;
+
     background.MakeRectangles();
+    vector<Perso*> ennemies;
+
+    ennemies.push_back(new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1));
+
+    int mat[9][8] = {0}; // Initialisation de la carte à 0
+    generation(mat);
 
     while (window.isOpen())
     {
@@ -78,10 +124,10 @@ int main()
 
                 // up, down, left and right keys
                 
-                case Keyboard::Z : upFlag=true; A.SetRotation(270.f); break;
-                case Keyboard::S : downFlag=true; A.SetRotation(90.f); break;
-                case Keyboard::Q : leftFlag=true; A.SetRotation(180.f); break;
-                case Keyboard::D : rightFlag=true; A.SetRotation(0.f); break;
+                case Keyboard::Z : upFlag=true; A.persoSprite.setTexture(textureSpriteUp); break;
+                case Keyboard::S : downFlag=true; A.persoSprite.setTexture(textureSpriteDown); break;
+                case Keyboard::Q : leftFlag=true; A.persoSprite.setTexture(textureSpriteLeft); break;
+                case Keyboard::D : rightFlag=true; A.persoSprite.setTexture(textureSpriteRight);break;
                 case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
                 case Keyboard::Down : tirer(projectiles,A,projectile1,90.f); break;
                 case Keyboard::Left : tirer(projectiles,A,projectile1,180.f); break;
@@ -113,6 +159,29 @@ int main()
         for (const auto& rectangle : background.rectangles)
         {
             //window.draw(rectangle);
+        }
+
+        for (size_t i = 0; i < ennemies.size(); i++){
+            if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())){
+            A.Setpv(ennemies[i]->Getatk());
+            }
+            for (size_t j = 0; j < projectiles.size(); j++){
+                if (projectiles[j]->isAlive(*projectiles[j],window)){
+                    projectiles[j]->update(*projectiles[j],A,window,projectiles[j]->GetDirection());
+                    window.draw(projectiles[j]->projectileSprite);
+                    if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])){
+                        ennemies[i]->damage(textureEnnemy1hit,textureEnnemy1,window);
+                        projectiles.erase(projectiles.begin()+j);
+                        ennemies[i]->Setpv(A.Getatk());
+                    }
+                }
+            }
+            if (ennemies[i]->checkAlive()){
+                window.draw(ennemies[i]->persoSprite);
+            }
+            else{
+                ennemies.erase(ennemies.begin()+i);
+            }
         }
 
         A.isInWindow(window);
@@ -151,11 +220,38 @@ int main()
 
         A.update(upFlag,downFlag,leftFlag,rightFlag,window);
 
-        for (size_t i = 0; i < projectiles.size(); i++){
-            projectiles[i]->update(*projectiles[i],A,window,projectiles[i]->GetDirection());
-            projectiles[i]->isAlive(*projectiles[i],window);
-            window.draw(projectiles[i]->projectileSprite);
+        RectangleShape rectangle3(Vector2f(600,25));
+        rectangle3.setFillColor(Color::Transparent);
+        rectangle3.setOutlineThickness(5);
+        rectangle3.setOutlineColor(Color(0,0,0));
+        rectangle3.setPosition(25,25);
+        window.draw(rectangle3);
+
+        int couleurs[3];
+        couleurs[0]=100;
+        couleurs[1]=250;
+        couleurs[2]=50;
+
+        //HUD
+        int pvs=A.Getpv();
+        int pvs_max=A.Getpvmax();
+
+        if (pvs<pvs_max*0.33){
+            couleurs[0]=243;
+            couleurs[1]=22;
+            couleurs[2]=22;
         }
+        else{
+            if (pvs<pvs_max*0.67){
+                couleurs[0]=252;
+                couleurs[1]=255;
+                couleurs[2]=51;
+            }
+        }
+        RectangleShape rectangle2(Vector2f((pvs*600)/(pvs_max),25));
+        rectangle2.setFillColor(Color(couleurs[0],couleurs[1],couleurs[2]));
+        rectangle2.setPosition(25,25);
+        window.draw(rectangle2);
 
         window.draw(A.persoSprite);
 

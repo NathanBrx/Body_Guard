@@ -6,10 +6,11 @@ using namespace std;
 
 Perso::Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite) : 
     xOrigin(xOrigin),yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed),persoSprite(persoSprite)
-{   
-    this->hitbox=persoSprite.getGlobalBounds();
-    this->persoSprite.setOrigin(persoSprite.getGlobalBounds().width/2,persoSprite.getGlobalBounds().height/2);
+
+{
+    this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x/2,persoSprite.getTexture()->getSize().y/2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
+
 }
 
 // Getters
@@ -22,6 +23,15 @@ float Perso::GetY(){
 }
 int Perso::GetSpeed(){
     return this->speed;
+}
+int Perso::Getatk(){
+    return this->atk;
+}
+int Perso::Getpv(){
+    return this->pv;
+}
+int Perso::Getpvmax(){
+	return this->pvmax;
 }
 int Perso::GetatkSpeed(){
     return this->atkSpeed;
@@ -47,16 +57,17 @@ void Perso::SetatkSpeed(int atkSpeed){
 void Perso::SetRotation(float rotation){
     this->persoSprite.setRotation(rotation);
 }
+void Perso::Setpv(int diffpv){
+    this->pv -= diffpv;
+    if (this->pv <= 0){
+        this->alive = 0;
+    }
+}
 
 // Methodes
 
-void Perso::damage_taken(int atk){
-    this-> pv = pv-atk;
-}
-void Perso::checkAlive(){
-    if(this->pv <= 0){
-        this->alive = 0;
-    }
+bool Perso::checkAlive(){
+    return this->alive;
 }
 void Perso::update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window){
     float x = this->GetX(), y = this->GetY();
@@ -66,7 +77,7 @@ void Perso::update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,Render
     if (upFlag) y-=speed;
     if (downFlag) y+=speed;
     this->SetX(x);
-    this->SetY(y);
+    this->SetY(y);svg files
 }
 void Perso::isInWindow(RenderWindow& window){
     if (this->GetX()<0) this->SetX(0);
@@ -74,6 +85,20 @@ void Perso::isInWindow(RenderWindow& window){
     if (this->GetY()<0) this->SetY(0);
     if (this->GetY()>(int)window.getSize().y) this->SetY(window.getSize().y);
 }
+
+void Perso::damage(Texture& texturehit,Texture& texturebase,RenderWindow& window){
+    int compteur = 0;
+    this->persoSprite.setTexture(texturehit);
+    window.draw(this->persoSprite);
+    while (compteur < 100){
+        compteur++;
+    }
+    this->persoSprite.setTexture(texturebase);
+}
+
+//Destructeur
+Perso::~Perso(){}
+
 
 Projectile::Projectile(float xOrigin,float yOrigin,float direction,int vitesse,Sprite projectileSprite):
    xOrigin(xOrigin),yOrigin(yOrigin),direction(direction),vitesse(vitesse),projectileSprite(projectileSprite)
@@ -119,12 +144,20 @@ bool Projectile::isAlive(Projectile& projectile,RenderWindow& window){
     }
 }
 
+bool Projectile::hit(Perso& p1){
+    if (this->projectileSprite.getGlobalBounds().intersects(p1.persoSprite.getGlobalBounds())){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
 void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction){
     float x = A.GetX();
     float y = A.GetY();
     projectiles.push_back(new Projectile(x,y,direction,A.GetatkSpeed(),projectile1));
 }
-
 //Background
 
 Background::Background(Sprite backgroundSprite,string backgroundImage ,std::vector<sf::Vector2f> borduresPoints):

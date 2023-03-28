@@ -28,7 +28,10 @@ class Perso : public Sprite {
         float GetX();
         float GetY();
         int GetSpeed();
-        int GetatkSpeed();
+        int Getatk();
+        int Getpv();
+	int Getpvmax();
+	int GetatkSpeed();
         float GetRotation();
 
         // Setters
@@ -38,14 +41,18 @@ class Perso : public Sprite {
         void SetSpeed(int speed);
         void SetatkSpeed(int atkSpeed);
         void SetRotation(float rotation);
+        void Setpv(int diffpv);
 
         // Methodes
 
-        void checkAlive();
+        bool checkAlive();
         void update(bool upFlag,bool downFlag,bool leftFlag,bool rightFlag,RenderWindow& window);
         void isInWindow(RenderWindow& window);
         Sprite persoSprite ; //attribut sprite du personnage
-        void damage_taken(int atk); //méthode pour réduire les pv du personnage
+        void damage(Texture& texturehit,Texture& texturebase,RenderWindow& window); // méthode pour afficher l'animation de dégats
+
+        // Destructeur
+        ~Perso();
 };
 
 class Projectile : public Sprite {
@@ -74,6 +81,7 @@ class Projectile : public Sprite {
         Sprite projectileSprite; // sprite du projectile
         void update(Projectile& projectile,Perso& A,RenderWindow& window,float direction); // méthode pour déplacer le projectile
         bool isAlive(Projectile& projectile,RenderWindow& window); // méthode pour vérifier si le projectile est toujours dans la fenêtre
+        bool hit(Perso& p1); // méthode pour vérifier si le projectile touche le personnage
 };
 void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction);
 
@@ -100,3 +108,4 @@ class Background {
         std::vector<sf::Vector2f> portesPoints;
 
 };
+
