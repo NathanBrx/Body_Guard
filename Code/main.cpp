@@ -102,6 +102,7 @@ int main()
         couleurs[2]=50;
 
     ennemies.push_back(new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1));
+    
 
     int mat[9][8] = {0}; // Initialisation de la carte à 0
     generation(mat);
@@ -191,6 +192,22 @@ int main()
             }
             for (size_t j = 0; j < projectiles.size(); j++){
                 if (projectiles[j]->isAlive(*projectiles[j],window)){
+
+                    for(size_t i = 0; i < background.borduresPoints.size() - 1; i += 1){
+                        Vector2f point_A = background.borduresPoints[i];
+                        Vector2f point_B = background.borduresPoints[i + 1];
+
+                        float a = sqrt(pow(point_B.x-projectiles[j]->projectileSprite.getPosition().x,2)+pow(point_B.y-projectiles[j]->projectileSprite.getPosition().y,2));
+                        float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x-point_A.x,2)+pow(projectiles[j]->projectileSprite.getPosition().y-point_A.y,2));
+                        float c = sqrt(pow(point_B.x-point_A.x,2)+pow(point_B.y-point_A.y,2));
+
+                        float angle = acos((a*a+b*b-c*c)/(2*a*b));
+                        bool touchBorder = (3<angle && 3.3>angle);
+                        if(touchBorder){
+                            projectiles.erase(projectiles.begin()+j);
+                        }
+                    }
+
                     projectiles[j]->update(*projectiles[j],A,window,projectiles[j]->GetDirection());
                     window.draw(projectiles[j]->projectileSprite);
                     if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])){
