@@ -1,9 +1,6 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <vector>
-#include<cstdlib>
-#include <ctime>
-#include <cmath>
+#include <SFML/Graphics.hpp>
 using namespace std;
 using namespace sf;
 #include "mainheader.hpp"
@@ -91,6 +88,9 @@ int main()
     vector<Perso*> ennemies;
 
     ennemies.push_back(new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1));
+
+    int mat[9][8] = {0}; // Initialisation de la carte à 0
+    generation(mat);
 
     while (window.isOpen())
     {

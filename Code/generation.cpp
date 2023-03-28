@@ -46,9 +46,8 @@ void bossRoom(int mat[][8]){
     mat[maxx][maxy] = 2;
 }
 
-int generation(){
+void generation(int mat[][8]){
     int nb_salles = 6;
-    int mat[9][8] = {0}; // Initialisation de la carte à 0
     srand(time(0));
     mat[3][5] = 1 ; // Position de départ
     while(nb_salles>0){
@@ -64,5 +63,4 @@ int generation(){
         }
         cout << endl;
     }
-    return mat;
 }
