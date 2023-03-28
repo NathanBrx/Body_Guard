@@ -20,7 +20,7 @@ int main()
     Sprite backgroundSprite, spriteMain, projectile1;
     Texture backgroundTexture, textureMain, textureProjectile;
 
-    Background background(backgroundSprite,"../Textures/Map1.jpg",{{0, 414}, {78, 429},{276, 279}, {400, 234},{730, 195}, {882, 66}});
+    Background background(backgroundSprite,"../Textures/Map1.jpg",{{0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678}});
 
     background.SetBackground();
 
@@ -61,6 +61,7 @@ int main()
     bool rightFlag=false;
 
     vector<Projectile*> projectiles;
+    background.MakeRectangles();
 
     while (window.isOpen())
     {
@@ -104,7 +105,6 @@ int main()
             }
             
         }
-        background.MakeRectangles();
         window.clear(Color::White);
         
         window.draw(background.backgroundSprite);
@@ -112,7 +112,7 @@ int main()
         // Dessiner les rectangles
         for (const auto& rectangle : background.rectangles)
         {
-            window.draw(rectangle);
+            //window.draw(rectangle);
         }
 
         A.isInWindow(window);
@@ -126,10 +126,10 @@ int main()
             float c = sqrt(pow(point_B.x-point_A.x,2)+pow(point_B.y-point_A.y,2));
 
             float angle = acos((a*a+b*b-c*c)/(2*a*b));
-            
-            cout << angle << endl;
-            if (3<angle && 3.3>angle) {
-                cout << "uzqfhuiezfhuiqzehfuiqzhefuihzqe";
+
+            bool touchBorder = b<30 || a<30 || (3<angle && 3.3>angle);
+
+            if (touchBorder) {
                 if(upFlag){
                     upFlag=false;
                     A.SetY(A.GetY()+5);
@@ -156,6 +156,7 @@ int main()
             projectiles[i]->isAlive(*projectiles[i],window);
             window.draw(projectiles[i]->projectileSprite);
         }
+
         window.draw(A.persoSprite);
 
         window.display();
