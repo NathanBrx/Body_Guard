@@ -1,7 +1,4 @@
-#include <iostream>
-#include<cstdlib>
-#include <ctime>
-#include <cmath>
+#include "generation.hpp"
 using namespace std;
 
 // Fonction récursive pour remplir la carte
@@ -32,6 +29,7 @@ void fill_map(int x, int y, int* nb_salles, int mat[][8]){
 }
 
 void bossRoom(int mat[][8]){
+    //trouve la salle la plus éloignée de la salle de départ et y place la salle de boss
     int maxx = 0;
     int maxy = 0;
     float max_dist = 0;
@@ -48,7 +46,7 @@ void bossRoom(int mat[][8]){
     mat[maxx][maxy] = 2;
 }
 
-int main(){
+int generation(){
     int nb_salles = 6;
     int mat[9][8] = {0}; // Initialisation de la carte à 0
     srand(time(0));
@@ -66,5 +64,5 @@ int main(){
         }
         cout << endl;
     }
-    return 0;
+    return mat;
 }

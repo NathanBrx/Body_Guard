@@ -1,9 +1,13 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include<cstdlib>
+#include <ctime>
+#include <cmath>
 using namespace std;
 using namespace sf;
 #include "mainheader.hpp"
+#include "generation.hpp"
 
 int main()
 {
