@@ -1,4 +1,6 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
+#include <cmath>
 using namespace sf;
 using namespace std;
 
@@ -26,8 +28,8 @@ class Perso : public Sprite {
         int GetSpeed();
         int Getatk();
         int Getpv();
-	int Getpvmax();
-	int GetatkSpeed();
+        int Getpvmax();
+        int GetatkSpeed();
         float GetRotation();
 
         // Setters
@@ -80,3 +82,25 @@ class Projectile : public Sprite {
         bool hit(Perso& p1); // méthode pour vérifier si le projectile touche le personnage
 };
 void tirer(vector<Projectile*>& projectiles,Perso& A,Sprite projectile1,float direction);
+
+class Background {
+    public :
+
+        Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints);
+
+        sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight);
+        std::vector<sf::RectangleShape> rectangles;
+        std::vector<sf::FloatRect> hitboxs;
+        void MakeRectangles();
+
+        void SetBackground();
+        void SetTexture(float ScaleX, float ScaleY);
+        Sprite backgroundSprite ; //attribut sprite du background
+        Texture backgroundTexture; //attribut texture du background
+        string backgroundImage;
+
+        // Créer des points pour définir les rectangles
+        std::vector<sf::Vector2f> borduresPoints;
+        std::vector<sf::Vector2f> portesPoints;
+
+};

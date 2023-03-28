@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 #include <SFML/Graphics.hpp>
 using namespace std;
@@ -17,7 +16,7 @@ int main()
     // background texture
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite background, spriteMain, projectile1, spriteEnnemy1;
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
     Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
         if (!backgroundTexture.loadFromFile("../Textures/Map1.jpg")){
                 cerr << "failed to load map texture" << endl;
@@ -58,8 +57,8 @@ int main()
             float ScaleX = (float) WindowSize.x / TextureSize.x;
             float ScaleY = (float) WindowSize.y / TextureSize.y;    // Calculate scale
 
-            background.setTexture(backgroundTexture); // Set textures
-            background.setScale(ScaleX, ScaleY);    // Set scales
+            backgroundSprite.setTexture(backgroundTexture); // Set textures
+            backgroundSprite.setScale(ScaleX, ScaleY);    // Set scales
             
             spriteMain.setTexture(textureSpriteRight);
             spriteMain.setScale(ScaleX,ScaleY);
@@ -77,6 +76,10 @@ int main()
     
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
+
+    Background background(backgroundSprite,"../Textures/Map1.jpg",{{0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678}});
+
+    background.SetBackground();
 
     Perso A(window.getSize().x/2.,window.getSize().y/2.,0.,100,5,10,5,spriteMain);
     bool upFlag=false;
@@ -97,8 +100,6 @@ int main()
         couleurs[0]=100;
         couleurs[1]=250;
         couleurs[2]=50;
-
-    RectangleShape rectangle2(Vector2f((A.Getpv()*600)/(A.Getpvmax()),25));
 
     ennemies.push_back(new Perso(window.getSize().x/3.,window.getSize().y/2.,0.,50,5,5,5,spriteEnnemy1));
 
@@ -150,7 +151,39 @@ int main()
         // Clear the window and apply background
         window.clear(Color::White);
 
-        window.draw(background);
+        for(size_t i = 0; i < background.borduresPoints.size() - 1; i += 1){
+            Vector2f point_A = background.borduresPoints[i];
+            Vector2f point_B = background.borduresPoints[i + 1];
+
+            float a = sqrt(pow(point_B.x-A.GetX(),2)+pow(point_B.y-A.GetY(),2));
+            float b = sqrt(pow(A.GetX()-point_A.x,2)+pow(A.GetY()-point_A.y,2));
+            float c = sqrt(pow(point_B.x-point_A.x,2)+pow(point_B.y-point_A.y,2));
+
+            float angle = acos((a*a+b*b-c*c)/(2*a*b));
+
+            bool touchBorder = b<30 || a<30 || (3<angle && 3.3>angle);
+
+            if (touchBorder) {
+                if(upFlag){
+                    upFlag=false;
+                    A.SetY(A.GetY()+5);
+                }
+                if(downFlag){
+                    downFlag=false;
+                    A.SetY(A.GetY()-5);
+                }
+                if(leftFlag){
+                    leftFlag=false;
+                    A.SetX(A.GetX()+5);
+                }
+                if(rightFlag){
+                    rightFlag=false;
+                    A.SetX(A.GetX()-5);
+                }
+            }
+        }
+
+        window.draw(background.backgroundSprite);
 
         for (size_t i = 0; i < ennemies.size(); i++){
             if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())){
@@ -196,6 +229,8 @@ int main()
                 couleurs[2]=51;
             }
         }
+
+        RectangleShape rectangle2(Vector2f((A.Getpv()*600)/(A.Getpvmax()),25));
 
         rectangle2.setFillColor(Color(couleurs[0],couleurs[1],couleurs[2]));
         rectangle2.setPosition(25,25);
