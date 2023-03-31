@@ -11,7 +11,10 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+    Texture backgroundTexture;
+    Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown;
+    Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
+    Texture textureEnnemy1, textureEnnemy1hit;
 
     string texturesPath = "../Textures/"; // Linux
     //string texturesPath = "Textures\\"; // Windows
@@ -30,7 +33,10 @@ int main()
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
 
     // Projectiles
-    loadFile(textureProjectile, texturesPath + "projectilev1.png");
+    loadFile(textureProjectileUp, texturesPath + "projectile_up.jpg");
+    loadFile(textureProjectileDown, texturesPath + "projectile_down.jpg");
+    loadFile(textureProjectileLeft, texturesPath + "projectile_left.jpg");
+    loadFile(textureProjectileRight, texturesPath + "projectile_right.jpg");
 
     WindowSize = window.getSize();             //Get size of window.
 
@@ -46,7 +52,7 @@ int main()
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
 
-    projectile1.setTexture(textureProjectile);
+    projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
 
     backgroundTexture.setRepeated(false);
@@ -54,10 +60,10 @@ int main()
     textureSpriteRight.setRepeated(false);
     textureSpriteRight.setSmooth(true);
 
-    textureProjectile.setRepeated(false);
-    textureProjectile.setSmooth(true);
+    textureProjectileRight.setRepeated(false);
+    textureProjectileRight.setSmooth(true);
 
-    Background background(backgroundSprite, "../Textures/Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
+    Background background(backgroundSprite, texturesPath + "Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
 
     background.SetBackground();
 
@@ -106,10 +112,10 @@ int main()
                 case Keyboard::S: downFlag = true; A.persoSprite.setTexture(textureSpriteDown); break;
                 case Keyboard::Q: leftFlag = true; A.persoSprite.setTexture(textureSpriteLeft); break;
                 case Keyboard::D: rightFlag = true; A.persoSprite.setTexture(textureSpriteRight); break;
-                case Keyboard::Up: tirer(projectiles, A, projectile1, 270.f); break;
-                case Keyboard::Down: tirer(projectiles, A, projectile1, 90.f); break;
-                case Keyboard::Left: tirer(projectiles, A, projectile1, 180.f); break;
-                case Keyboard::Right: tirer(projectiles, A, projectile1, 0.f); break;
+                case Keyboard::Up: projectile1.setTexture(textureProjectileUp); tirer(projectiles, A, projectile1, 270.f); break;
+                case Keyboard::Down: projectile1.setTexture(textureProjectileDown); tirer(projectiles, A, projectile1, 90.f); break;
+                case Keyboard::Left: projectile1.setTexture(textureProjectileLeft); tirer(projectiles, A, projectile1, 180.f); break;
+                case Keyboard::Right: projectile1.setTexture(textureProjectileRight); tirer(projectiles, A, projectile1, 0.f); break;
                 default: break;
                 }
             }
