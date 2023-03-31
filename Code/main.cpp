@@ -57,7 +57,7 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
-    Background background(backgroundSprite, "Textures\\Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
+    Background background(backgroundSprite, "../Textures/Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
 
     background.SetBackground();
 
@@ -166,36 +166,40 @@ int main()
 
         window.draw(background.backgroundSprite);
 
+        for (size_t j = 0; j < projectiles.size(); j++) {
+            if (projectiles[j]->isAlive(*projectiles[j], window)) {
+
+                bool touchBorder = false;
+                for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
+                    Vector2f point_A = background.borduresPoints[i];
+                    Vector2f point_B = background.borduresPoints[i + 1];
+
+                    float a = sqrt(pow(point_B.x - projectiles[j]->projectileSprite.getPosition().x, 2) + pow(point_B.y - projectiles[j]->projectileSprite.getPosition().y, 2));
+                    float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x - point_A.x, 2) + pow(projectiles[j]->projectileSprite.getPosition().y - point_A.y, 2));
+                    float c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
+
+                    float angle = acos((a * a + b * b - c * c) / (2 * a * b));
+                    touchBorder = touchBorder || (3 < angle && 3.3 > angle);
+                    
+                }
+
+                projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
+                window.draw(projectiles[j]->projectileSprite);
+                if (touchBorder) {
+                    projectiles.erase(projectiles.begin() + j);
+                }
+            }
+        }
         for (size_t i = 0; i < ennemies.size(); i++) {
             if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
                 A.Setpv(ennemies[i]->Getatk());
             }
             for (size_t j = 0; j < projectiles.size(); j++) {
                 if (projectiles[j]->isAlive(*projectiles[j], window)) {
-
-                    bool touchBorder = false;
-                    for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                        Vector2f point_A = background.borduresPoints[i];
-                        Vector2f point_B = background.borduresPoints[i + 1];
-
-                        float a = sqrt(pow(point_B.x - projectiles[j]->projectileSprite.getPosition().x, 2) + pow(point_B.y - projectiles[j]->projectileSprite.getPosition().y, 2));
-                        float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x - point_A.x, 2) + pow(projectiles[j]->projectileSprite.getPosition().y - point_A.y, 2));
-                        float c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
-
-                        float angle = acos((a * a + b * b - c * c) / (2 * a * b));
-                        touchBorder = touchBorder || (3 < angle && 3.3 > angle);
-                        
-                    }
-
-                    projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
-                    window.draw(projectiles[j]->projectileSprite);
                     if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
                         ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
                         projectiles.erase(projectiles.begin() + j);
                         ennemies[i]->Setpv(A.Getatk());
-                    }
-                    else if (touchBorder) {
-                        projectiles.erase(projectiles.begin() + j);
                     }
                 }
             }
