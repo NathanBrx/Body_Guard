@@ -10,8 +10,8 @@ int main()
 
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture;
+    Sprite backgroundSprite, playButton, spriteMain, projectile1, spriteEnnemy1;
+    Texture backgroundTexture, textureStart, texturePlayButtonOn, texturePlayButtonOff;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -21,6 +21,9 @@ int main()
 
     // Arri�re-plan
     loadFile(backgroundTexture, texturesPath + "Map1.jpg");
+    loadFile(textureStart, texturesPath + "Accueil.jpeg");
+    loadFile(texturePlayButtonOn, texturesPath + "play-button-on.png");
+    loadFile(texturePlayButtonOff, texturesPath + "play-button-off.png");
 
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
@@ -43,8 +46,11 @@ int main()
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;    // Calculate scale
 
-    backgroundSprite.setTexture(backgroundTexture); // Set textures
+    backgroundSprite.setTexture(textureStart); // Set textures
     backgroundSprite.setScale(ScaleX, ScaleY);    // Set scales
+
+    playButton.setTexture(texturePlayButtonOff);
+    playButton.setScale(ScaleX, ScaleY);
 
     spriteMain.setTexture(textureSpriteRight);
     spriteMain.setScale(ScaleX, ScaleY);
@@ -65,7 +71,7 @@ int main()
 
     Background background(backgroundSprite, texturesPath + "Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
 
-    background.SetBackground();
+//    background.SetBackground();
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
     bool upFlag = false;
@@ -89,163 +95,207 @@ int main()
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
 
+    bool start = false;
+    bool close = false;
 
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
 
     while (window.isOpen())
     {
-        Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == Event::Closed) window.close();
-
-            // If a key is pressed
-            if (event.type == Event::KeyPressed) {
-                switch (event.key.code) {
-                    // If escape is pressed, close the application
-                case  Keyboard::Escape: window.close(); break;
-
-                    // up, down, left and right keys
-
-                case Keyboard::Z: upFlag = true; A.persoSprite.setTexture(textureSpriteUp); break;
-                case Keyboard::S: downFlag = true; A.persoSprite.setTexture(textureSpriteDown); break;
-                case Keyboard::Q: leftFlag = true; A.persoSprite.setTexture(textureSpriteLeft); break;
-                case Keyboard::D: rightFlag = true; A.persoSprite.setTexture(textureSpriteRight); break;
-                case Keyboard::Up: projectile1.setTexture(textureProjectileUp); tirer(projectiles, A, projectile1, 270.f); break;
-                case Keyboard::Down: projectile1.setTexture(textureProjectileDown); tirer(projectiles, A, projectile1, 90.f); break;
-                case Keyboard::Left: projectile1.setTexture(textureProjectileLeft); tirer(projectiles, A, projectile1, 180.f); break;
-                case Keyboard::Right: projectile1.setTexture(textureProjectileRight); tirer(projectiles, A, projectile1, 0.f); break;
-                default: break;
+        while (!start && !close){
+            Event event1;
+            while(window.pollEvent(event1)){
+                switch (event1.type){
+                    case Event::Closed:
+                        close = true;
+                        window.close();
+                        break;
+                    case Event::KeyPressed:
+                        if (event1.key.code == Keyboard::Escape){
+                            close = true;
+                            window.close();
+                        }
+                        break;
+                    case Event::MouseMoved:
+                        {
+                        Vector2i mousePos = Mouse::getPosition( window );
+                        Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (playButton.getGlobalBounds().contains(mousePosF)){
+                            playButton.setTexture(texturePlayButtonOn);
+                        }else{
+                            playButton.setTexture(texturePlayButtonOff);
+                        }
+                        }break;
+                    case sf::Event::MouseButtonPressed:
+                        {
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        Vector2f mousePosF( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (playButton.getGlobalBounds().contains(mousePosF)){
+                            start = true;
+                        }
+                        }break;
                 }
             }
-
-            // If a key is released
-            if (event.type == Event::KeyReleased)
+            window.clear(Color::Black);
+            window.draw(backgroundSprite);
+            window.draw(playButton);
+            window.display();
+        }
+        if (start && !close){
+            Event event;
+            while (window.pollEvent(event))
             {
-                switch (event.key.code)
-                {
-                    // up, down, left and right keys
-                    case Keyboard::Z: upFlag = false; break;
-                    case Keyboard::S: downFlag = false; break;
-                    case Keyboard::Q: leftFlag = false; break;
-                    case Keyboard::D: rightFlag = false; break;
+                if (event.type == Event::Closed) window.close();
+
+                // If a key is pressed
+                if (event.type == Event::KeyPressed) {
+                    switch (event.key.code) {
+                        // If escape is pressed, close the application
+                    case  Keyboard::Escape: window.close(); break;
+
+                        // up, down, left and right keys
+
+                    case Keyboard::Z: upFlag = true; A.persoSprite.setTexture(textureSpriteUp); break;
+                    case Keyboard::S: downFlag = true; A.persoSprite.setTexture(textureSpriteDown); break;
+                    case Keyboard::Q: leftFlag = true; A.persoSprite.setTexture(textureSpriteLeft); break;
+                    case Keyboard::D: rightFlag = true; A.persoSprite.setTexture(textureSpriteRight); break;
+                    case Keyboard::Up: projectile1.setTexture(textureProjectileUp); tirer(projectiles, A, projectile1, 270.f); break;
+                    case Keyboard::Down: projectile1.setTexture(textureProjectileDown); tirer(projectiles, A, projectile1, 90.f); break;
+                    case Keyboard::Left: projectile1.setTexture(textureProjectileLeft); tirer(projectiles, A, projectile1, 180.f); break;
+                    case Keyboard::Right: projectile1.setTexture(textureProjectileRight); tirer(projectiles, A, projectile1, 0.f); break;
                     default: break;
-                }
-            }
-        }
-
-        // Clear the window and apply background
-        window.clear(Color::White);
-
-        for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-            Vector2f point_A = background.borduresPoints[i];
-            Vector2f point_B = background.borduresPoints[i + 1];
-
-            double a = sqrt(pow(point_B.x - A.GetX(), 2) + pow(point_B.y - A.GetY(), 2));
-            double b = sqrt(pow(A.GetX() - point_A.x, 2) + pow(A.GetY() - point_A.y, 2));
-            double c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
-
-            double angle = acos((a * a + b * b - c * c) / (2 * a * b));
-
-            bool touchBorder = b < 30 || a < 30 || (3 < angle && 3.3 > angle);
-
-            if (touchBorder) {
-                if (upFlag) {
-                    upFlag = false;
-                    A.SetY(A.GetY() + 5);
-                }
-                if (downFlag) {
-                    downFlag = false;
-                    A.SetY(A.GetY() - 5);
-                }
-                if (leftFlag) {
-                    leftFlag = false;
-                    A.SetX(A.GetX() + 5);
-                }
-                if (rightFlag) {
-                    rightFlag = false;
-                    A.SetX(A.GetX() - 5);
-                }
-            }
-        }
-
-        window.draw(background.backgroundSprite);
-
-        for (size_t j = 0; j < projectiles.size(); j++) {
-            if (projectiles[j]->isAlive(*projectiles[j], window)) {
-
-                bool touchBorder = false;
-                for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                    Vector2f point_A = background.borduresPoints[i];
-                    Vector2f point_B = background.borduresPoints[i + 1];
-
-                    float a = sqrt(pow(point_B.x - projectiles[j]->projectileSprite.getPosition().x, 2) + pow(point_B.y - projectiles[j]->projectileSprite.getPosition().y, 2));
-                    float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x - point_A.x, 2) + pow(projectiles[j]->projectileSprite.getPosition().y - point_A.y, 2));
-                    float c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
-
-                    float angle = acos((a * a + b * b - c * c) / (2 * a * b));
-                    touchBorder = touchBorder || (3 < angle && 3.3 > angle);
-                    
+                    }
                 }
 
-                projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
-                window.draw(projectiles[j]->projectileSprite);
-                if (touchBorder) {
-                    projectiles.erase(projectiles.begin() + j);
-                }
-            }
-        }
-        for (size_t i = 0; i < ennemies.size(); i++) {
-            if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
-                A.Setpv(ennemies[i]->Getatk());
-            }
-            for (size_t j = 0; j < projectiles.size(); j++) {
-                if (projectiles[j]->isAlive(*projectiles[j], window)) {
-                    if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                        ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
-                        projectiles.erase(projectiles.begin() + j);
-                        ennemies[i]->Setpv(A.Getatk());
+                // If a key is released
+                if (event.type == Event::KeyReleased)
+                {
+                    switch (event.key.code)
+                    {
+                        // up, down, left and right keys
+                        case Keyboard::Z: upFlag = false; break;
+                        case Keyboard::S: downFlag = false; break;
+                        case Keyboard::Q: leftFlag = false; break;
+                        case Keyboard::D: rightFlag = false; break;
+                        default: break;
                     }
                 }
             }
-            if (ennemies[i]->checkAlive()) {
-                window.draw(ennemies[i]->persoSprite);
+
+            // Clear the window and apply background
+            window.clear(Color::White);
+
+            for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
+                Vector2f point_A = background.borduresPoints[i];
+                Vector2f point_B = background.borduresPoints[i + 1];
+
+                double a = sqrt(pow(point_B.x - A.GetX(), 2) + pow(point_B.y - A.GetY(), 2));
+                double b = sqrt(pow(A.GetX() - point_A.x, 2) + pow(A.GetY() - point_A.y, 2));
+                double c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
+
+                double angle = acos((a * a + b * b - c * c) / (2 * a * b));
+
+                bool touchBorder = b < 30 || a < 30 || (3 < angle && 3.3 > angle);
+
+                if (touchBorder) {
+                    if (upFlag) {
+                        upFlag = false;
+                        A.SetY(A.GetY() + 5);
+                    }
+                    if (downFlag) {
+                        downFlag = false;
+                        A.SetY(A.GetY() - 5);
+                    }
+                    if (leftFlag) {
+                        leftFlag = false;
+                        A.SetX(A.GetX() + 5);
+                    }
+                    if (rightFlag) {
+                        rightFlag = false;
+                        A.SetX(A.GetX() - 5);
+                    }
+                }
+            }
+
+            window.draw(background.backgroundSprite);
+
+            for (size_t j = 0; j < projectiles.size(); j++) {
+                if (projectiles[j]->isAlive(*projectiles[j], window)) {
+
+                    bool touchBorder = false;
+                    for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
+                        Vector2f point_A = background.borduresPoints[i];
+                        Vector2f point_B = background.borduresPoints[i + 1];
+
+                        float a = sqrt(pow(point_B.x - projectiles[j]->projectileSprite.getPosition().x, 2) + pow(point_B.y - projectiles[j]->projectileSprite.getPosition().y, 2));
+                        float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x - point_A.x, 2) + pow(projectiles[j]->projectileSprite.getPosition().y - point_A.y, 2));
+                        float c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
+
+                        float angle = acos((a * a + b * b - c * c) / (2 * a * b));
+                        touchBorder = touchBorder || (3 < angle && 3.3 > angle);
+                        
+                    }
+
+                    projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
+                    window.draw(projectiles[j]->projectileSprite);
+                    if (touchBorder) {
+                        projectiles.erase(projectiles.begin() + j);
+                    }
+                }
+            }
+            for (size_t i = 0; i < ennemies.size(); i++) {
+                if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
+                    A.Setpv(ennemies[i]->Getatk());
+                }
+                for (size_t j = 0; j < projectiles.size(); j++) {
+                    if (projectiles[j]->isAlive(*projectiles[j], window)) {
+                        if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
+                            ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
+                            projectiles.erase(projectiles.begin() + j);
+                            ennemies[i]->Setpv(A.Getatk());
+                        }
+                    }
+                }
+                if (ennemies[i]->checkAlive()) {
+                    window.draw(ennemies[i]->persoSprite);
+                }
+                else {
+                    ennemies.erase(ennemies.begin() + i);
+                }
+            }
+
+            A.isInWindow(window);
+            A.update(upFlag, downFlag, leftFlag, rightFlag, window);
+
+            window.draw(A.persoSprite);
+
+            window.draw(rectangle3);
+
+            //HUD
+
+            if (A.Getpv() < A.Getpvmax() * 0.33) {
+                couleurs[0] = 243;
+                couleurs[1] = 22;
+                couleurs[2] = 22;
             }
             else {
-                ennemies.erase(ennemies.begin() + i);
+                if (A.Getpv() < A.Getpvmax() * 0.67) {
+                    couleurs[0] = 252;
+                    couleurs[1] = 255;
+                    couleurs[2] = 51;
+                }
             }
+
+            RectangleShape rectangle2(Vector2f((A.Getpv() * 600) / (A.Getpvmax()), 25));
+
+            rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
+            rectangle2.setPosition(25, 25);
+
+            window.draw(rectangle2);
+
+            window.display();
         }
-
-        A.isInWindow(window);
-        A.update(upFlag, downFlag, leftFlag, rightFlag, window);
-
-        window.draw(A.persoSprite);
-
-        window.draw(rectangle3);
-
-        //HUD
-
-        if (A.Getpv() < A.Getpvmax() * 0.33) {
-            couleurs[0] = 243;
-            couleurs[1] = 22;
-            couleurs[2] = 22;
-        }
-        else {
-            if (A.Getpv() < A.Getpvmax() * 0.67) {
-                couleurs[0] = 252;
-                couleurs[1] = 255;
-                couleurs[2] = 51;
-            }
-        }
-
-        RectangleShape rectangle2(Vector2f((A.Getpv() * 600) / (A.Getpvmax()), 25));
-
-        rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-        rectangle2.setPosition(25, 25);
-
-        window.draw(rectangle2);
-
-        window.display();
     }
+    return 0;
 }
