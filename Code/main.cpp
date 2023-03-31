@@ -33,10 +33,10 @@ int main()
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
 
     // Projectiles
-    loadFile(textureProjectileUp, texturesPath + "projectile_up.jpg");
-    loadFile(textureProjectileDown, texturesPath + "projectile_down.jpg");
-    loadFile(textureProjectileLeft, texturesPath + "projectile_left.jpg");
-    loadFile(textureProjectileRight, texturesPath + "projectile_right.jpg");
+    loadFile(textureProjectileUp, texturesPath + "projectile_up.png");
+    loadFile(textureProjectileDown, texturesPath + "projectile_down.png");
+    loadFile(textureProjectileLeft, texturesPath + "projectile_left.png");
+    loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
 
     WindowSize = window.getSize();             //Get size of window.
 
