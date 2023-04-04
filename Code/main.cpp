@@ -11,7 +11,7 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureStart;
+    Texture backgroundTexture, textureEnd;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -21,6 +21,7 @@ int main()
 
     // Arri�re-plan
     loadFile(backgroundTexture, texturesPath + "Map1.jpg");
+    loadFile(textureEnd, texturesPath + "Game_over.jpg");
 
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
@@ -94,6 +95,7 @@ int main()
     Text text2("Jouer",font2);
     Text text3("Credits",font2);
     Text text4("Quitter",font2);
+    Text text5("Recommencer",font2);
 
     text1.setCharacterSize(200);
     text1.setOrigin(text1.getGlobalBounds().width/2.,text1.getGlobalBounds().height/2.);
@@ -123,17 +125,23 @@ int main()
     text4.setOutlineThickness(3);
     text4.setOutlineColor(color1);
 
+    text5.setCharacterSize(50);
+    text5.setOrigin(text5.getGlobalBounds().width/2.,text5.getGlobalBounds().height/2.);
+    text5.setPosition(window.getSize().x / 2., 2.7*(window.getSize().y / 3.));
+    text5.setFillColor(Color::White);
+
     Text* texts[3] = {&text2,&text3,&text4};
 
     bool start = false;
     bool close = false;
+    bool restart = false;
 
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
 
     while (window.isOpen())
     {
-        while (!start && !close){
+        while (!restart && !start && !close){
             Event event1;
             while(window.pollEvent(event1)){
                 switch (event1.type){
@@ -179,7 +187,7 @@ int main()
             window.draw(text4);
             window.display();
         }
-        if (start && !close){
+        if (!restart && start && !close){
             Event event;
             while (window.pollEvent(event))
             {
@@ -285,14 +293,14 @@ int main()
             }
             for (size_t i = 0; i < ennemies.size(); i++) {
                 if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
-                    A.Setpv(ennemies[i]->Getatk());
+                    A.Setpvdamage(ennemies[i]->Getatk());
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(*projectiles[j], window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
                             ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
                             projectiles.erase(projectiles.begin() + j);
-                            ennemies[i]->Setpv(A.Getatk());
+                            ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
@@ -304,6 +312,9 @@ int main()
                 }
             }
 
+            if (!A.checkAlive()){
+                restart = true;
+            }
             A.isInWindow(window);
             A.update(upFlag, downFlag, leftFlag, rightFlag, window);
 
@@ -334,6 +345,52 @@ int main()
             window.draw(rectangle2);
 
             window.display();
+
+        }else if (restart && !close){
+            background.backgroundTexture = textureEnd;
+            background.SetTexture(ScaleX,ScaleY);
+            while (restart){
+                Event event2;
+                while(window.pollEvent(event2)){
+                    switch (event2.type){
+                        case Event::Closed:
+                            close = true;
+                            restart = false;
+                            break;
+                        case Event::KeyPressed:
+                            if (event2.key.code == Keyboard::Escape){
+                                close = true;
+                                restart = false;
+                            }
+                            break;
+                        case Event::MouseMoved:
+                            {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text5.getGlobalBounds().contains(mousePosF)){
+                                text5.setCharacterSize(55);
+                            }else{
+                                text5.setCharacterSize(50);
+                            }
+                            }break;
+                        case Event::MouseButtonPressed:
+                            {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text5.getGlobalBounds().contains(mousePosF)){
+                                A.Setpv(A.Getpvmax());
+                                A.resetPosition();
+                                restart = false;
+                            }
+                            }break;
+                        default: break;
+                    }
+                }
+                window.clear(Color::Black);
+                window.draw(background.backgroundSprite);
+                window.draw(text5);
+                window.display();
+            }
         }else{
             window.close();
         }

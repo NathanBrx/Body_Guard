@@ -4,14 +4,14 @@ class Perso : public Sprite {
 
 private:
 
-    float  xOrigin, yOrigin; // position d'origine de l'entité
+    float  xOrigin, yOrigin; // position d'origine de l'entitï¿½
     float rotation;
     int pvmax; // pv max du perso 
-    int pv = pvmax; // pv de l'entité
-    int speed; // vitesse de l'entité 
+    int pv = pvmax; // pv de l'entitï¿½
+    int speed; // vitesse de l'entitï¿½ 
     int atk;
     int atkSpeed; // vitesse d'attaque
-    int alive = 1; // booléen qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
+    int alive = 1; // boolï¿½en qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
 
 public:
 
@@ -30,12 +30,14 @@ public:
 
     // Setters
 
+    void resetPosition();
     void SetX(float x);
     void SetY(float y);
     void SetSpeed(int speed);
     void SetatkSpeed(int atkSpeed);
     void SetRotation(float rotation);
-    void Setpv(int diffpv);
+    void Setpvdamage(int diffpv);
+    void Setpv(int pv);
 
     // Methodes
 
@@ -43,7 +45,7 @@ public:
     void update(bool upFlag, bool downFlag, bool leftFlag, bool rightFlag, RenderWindow& window);
     void isInWindow(RenderWindow& window);
     Sprite persoSprite; //attribut sprite du personnage
-    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // méthode pour afficher l'animation de dégats
+    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // mï¿½thode pour afficher l'animation de dï¿½gats
 
     // Destructeur
     ~Perso();
