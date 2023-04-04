@@ -4,15 +4,15 @@ class Perso : public Sprite {
 
 private:
 
-    float  xOrigin, yOrigin; // position d'origine de l'entité
+    float  xOrigin, yOrigin; // position d'origine de l'entitï¿½
     float rotation;
     int pvmax; // pv max du perso 
-    int pv = pvmax; // pv de l'entité
-    int speed; // vitesse de l'entité 
+    int pv = pvmax; // pv de l'entitï¿½
+    int speed; // vitesse de l'entitï¿½ 
     int atk;
     int atkSpeed; // vitesse d'attaque
-    int alive = 1; // booléen qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
-
+    int alive = 1; // boolï¿½en qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
+    sf::Time shoot_delay; //dÃ©lai entre les tirs
 public:
 
     Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite);
@@ -27,6 +27,7 @@ public:
     int Getpvmax();
     int GetatkSpeed();
     float GetRotation();
+    sf::Time GetDelay();
 
     // Setters
 
@@ -36,6 +37,7 @@ public:
     void SetatkSpeed(int atkSpeed);
     void SetRotation(float rotation);
     void Setpv(int diffpv);
+    void SetDelay(sf::Time shoot_delay);
 
     // Methodes
 
@@ -43,7 +45,7 @@ public:
     void update(bool upFlag, bool downFlag, bool leftFlag, bool rightFlag, RenderWindow& window);
     void isInWindow(RenderWindow& window);
     Sprite persoSprite; //attribut sprite du personnage
-    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // méthode pour afficher l'animation de dégats
+    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // mï¿½thode pour afficher l'animation de dï¿½gats
 
     // Destructeur
     ~Perso();
