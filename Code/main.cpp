@@ -59,7 +59,7 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
-    Background background(backgroundSprite);
+    Background background(backgroundSprite, ScaleX, ScaleY);
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
     bool upFlag = false;
@@ -166,8 +166,7 @@ int main()
 
         for (size_t i = 0; i < background.portes.size(); i += 1) {
             if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && portesActives){
-                portesActives = false;
-                background.ChangeMap(i,A,window,ScaleX,ScaleY);
+                background.ChangeMap(i,A,window);
             }
         }
         window.draw(background.backgroundSprite);
