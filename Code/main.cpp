@@ -132,6 +132,8 @@ int main()
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
 
+    //test projectile ennemi
+    Projectile_ennemi projectile(0, 0, 860,540, 10, projectile1);
 
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
@@ -267,11 +269,16 @@ int main()
             }
         }
 
+        //test projectile ennemi
+        projectile.update(window);
+        window.draw(projectile.projectileSprite);
+        
+
         A.isInWindow(window);
         A.update(upFlag, downFlag, leftFlag, rightFlag, window);
 
         window.draw(A.persoSprite);
-
+        
         
 
        //HUD vie
@@ -322,5 +329,6 @@ int main()
         window.draw(vitesseTir);
 
         window.display();
+        
     }
 }
