@@ -11,7 +11,7 @@ int main()
     Vector2u TextureSize;
     Vector2u WindowSize;
     Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv,textureSpriteLeftInv,textureSpriteRightInv,textureSpriteUpInv,textureProjectile, textureEnnemy1, textureEnnemy1hit;
 
     string texturesPath = "../Textures/"; // Linux
     //string texturesPath = "Textures\\"; // Windows
@@ -24,7 +24,10 @@ int main()
     loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
     loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
     loadFile(textureSpriteDown, texturesPath + "sprite_down.png");
-
+    loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
+    loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
+    loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
+    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
@@ -102,6 +105,10 @@ int main()
             sf::Time time2 = clockiframes.getElapsedTime();
             if(time2 >=sf::milliseconds(500)){
                 invincible = false;
+                if(A.GetRotation() == 0.){A.persoSprite.setTexture(textureSpriteRight);}
+                if(A.GetRotation() == 90.){A.persoSprite.setTexture(textureSpriteUp);}
+                if(A.GetRotation() == 180.){A.persoSprite.setTexture(textureSpriteLeft);}
+                if(A.GetRotation() == 270.){A.persoSprite.setTexture(textureSpriteDown);}
             }
         }
 
@@ -118,10 +125,10 @@ int main()
 
                     // up, down, left and right keys
 
-                case Keyboard::Z: upFlag = true; A.persoSprite.setTexture(textureSpriteUp); break;
-                case Keyboard::S: downFlag = true; A.persoSprite.setTexture(textureSpriteDown); break;
-                case Keyboard::Q: leftFlag = true; A.persoSprite.setTexture(textureSpriteLeft); break;
-                case Keyboard::D: rightFlag = true; A.persoSprite.setTexture(textureSpriteRight); break;
+                case Keyboard::Z: upFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteUpInv);}else {A.persoSprite.setTexture(textureSpriteUp);};A.SetRotation(90.f) ;break;
+                case Keyboard::S: downFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteDownInv);}else {A.persoSprite.setTexture(textureSpriteDown);};A.SetRotation(270.f) ;break;
+                case Keyboard::Q: leftFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteLeftInv);}else{A.persoSprite.setTexture(textureSpriteLeft);};A.SetRotation(180.f) ;break;
+                case Keyboard::D: rightFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteRightInv);}else{A.persoSprite.setTexture(textureSpriteRight);};A.SetRotation(0.f) ;break;
                 case Keyboard::Up : if(shoot_ready){tirer(projectiles,A,projectile1,270.f);clock.restart();shoot_ready = false; break;}
                 case Keyboard::Down : if(shoot_ready){tirer(projectiles,A,projectile1,90.f);clock.restart();shoot_ready = false; break;}
                 case Keyboard::Left : if(shoot_ready){tirer(projectiles,A,projectile1,180.f);clock.restart();shoot_ready = false; break;}
@@ -211,6 +218,10 @@ int main()
                 A.Setpv(ennemies[i]->Getatk());
                 invincible = true;
                 clockiframes.restart();
+                if(A.GetRotation() == 0.){A.persoSprite.setTexture(textureSpriteRightInv);}
+                if(A.GetRotation() == 90.){A.persoSprite.setTexture(textureSpriteUpInv);}
+                if(A.GetRotation() == 180.){A.persoSprite.setTexture(textureSpriteLeftInv);}
+                if(A.GetRotation() == 270.){A.persoSprite.setTexture(textureSpriteDownInv);}
 
             }
             for (size_t j = 0; j < projectiles.size(); j++) {
