@@ -125,10 +125,12 @@ int main()
     text4.setOutlineThickness(3);
     text4.setOutlineColor(color1);
 
-    text5.setCharacterSize(50);
+    text5.setCharacterSize(70);
     text5.setOrigin(text5.getGlobalBounds().width/2.,text5.getGlobalBounds().height/2.);
-    text5.setPosition(window.getSize().x / 2., 2.7*(window.getSize().y / 3.));
+    text5.setPosition(window.getSize().x / 2., 2.25*(window.getSize().y / 3.));
     text5.setFillColor(Color::White);
+    text5.setOutlineThickness(5);
+    text5.setOutlineColor(Color::Black);
 
     Text* texts[3] = {&text2,&text3,&text4};
 
@@ -335,6 +337,11 @@ int main()
                     couleurs[1] = 255;
                     couleurs[2] = 51;
                 }
+                else{
+                    couleurs[0] = 100;
+                    couleurs[1] = 250;
+                    couleurs[2] = 50;
+                }
             }
 
             RectangleShape rectangle2(Vector2f((A.Getpv() * 600) / (A.Getpvmax()), 25));
@@ -347,8 +354,16 @@ int main()
             window.display();
 
         }else if (restart && !close){
+            
             background.backgroundTexture = textureEnd;
             background.SetTexture(ScaleX,ScaleY);
+            text4.setCharacterSize(50);
+            text4.setOrigin(text4.getGlobalBounds().width/2.,text4.getGlobalBounds().height/2.);
+            text4.setPosition(window.getSize().x / 2., 2.75*(window.getSize().y / 3.));
+            text4.setFillColor(Color::Black);
+            text4.setOutlineThickness(5);
+            text4.setOutlineColor(Color::White);
+
             while (restart){
                 Event event2;
                 while(window.pollEvent(event2)){
@@ -368,9 +383,14 @@ int main()
                             Vector2i mousePos = Mouse::getPosition(window);
                             Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                             if (text5.getGlobalBounds().contains(mousePosF)){
-                                text5.setCharacterSize(55);
+                                text5.setOutlineThickness(8);
                             }else{
-                                text5.setCharacterSize(50);
+                                text5.setOutlineThickness(5);
+                            }
+                            if (text4.getGlobalBounds().contains(mousePosF)){
+                                text4.setOutlineThickness(8);
+                            }else{
+                                text4.setOutlineThickness(5);
                             }
                             }break;
                         case Event::MouseButtonPressed:
@@ -378,9 +398,12 @@ int main()
                             Vector2i mousePos = Mouse::getPosition(window);
                             Vector2f mousePosF( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                             if (text5.getGlobalBounds().contains(mousePosF)){
-                                A.Setpv(A.Getpvmax());
-                                A.resetPosition();
+                                A.Reset();
                                 restart = false;
+                            }
+                            if (text4.getGlobalBounds().contains(mousePosF)){
+                                restart = false;
+                                close = true;
                             }
                             }break;
                         default: break;
@@ -388,6 +411,7 @@ int main()
                 }
                 window.clear(Color::Black);
                 window.draw(background.backgroundSprite);
+                window.draw(text4);
                 window.draw(text5);
                 window.display();
             }

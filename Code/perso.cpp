@@ -4,7 +4,7 @@ Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed,
     xOrigin(xOrigin), yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed), persoSprite(persoSprite)
 {
     this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
-    resetPosition();
+    this->persoSprite.setPosition(xOrigin,yOrigin);
 }
 
 // Getters
@@ -36,8 +36,10 @@ float Perso::GetRotation() {
 
 // Setters
 
-void Perso::resetPosition(){
+void Perso::Reset(){
+    this->pv = pvmax;
     this->persoSprite.setPosition(xOrigin, yOrigin);
+    this->alive = 1;
 }
 void Perso::SetX(float x) {
     this->persoSprite.setPosition(x, this->GetY());
@@ -53,9 +55,6 @@ void Perso::SetatkSpeed(int atkSpeed) {
 }
 void Perso::SetRotation(float rotation) {
     this->persoSprite.setRotation(rotation);
-}
-void Perso::Setpv(int pv){
-    this->pv = pv;
 }
 void Perso::Setpvdamage(int diffpv) {
     this->pv -= diffpv;

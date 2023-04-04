@@ -30,14 +30,13 @@ public:
 
     // Setters
 
-    void resetPosition();
+    void Reset();
     void SetX(float x);
     void SetY(float y);
     void SetSpeed(int speed);
     void SetatkSpeed(int atkSpeed);
     void SetRotation(float rotation);
     void Setpvdamage(int diffpv);
-    void Setpv(int pv);
 
     // Methodes
 
