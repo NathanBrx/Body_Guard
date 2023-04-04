@@ -27,6 +27,7 @@ public:
     int Getpvmax();
     int GetatkSpeed();
     float GetRotation();
+    sf::Time GetDelay();
 
     // Setters
 
@@ -37,6 +38,7 @@ public:
     void SetatkSpeed(int atkSpeed);
     void SetRotation(float rotation);
     void Setpvdamage(int diffpv);
+    void SetDelay(sf::Time shoot_delay);
 
     // Methodes
 

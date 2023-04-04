@@ -12,9 +12,11 @@ int main()
     Vector2u WindowSize;
     Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
     Texture backgroundTexture, textureEnd;
-    Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown;
+    Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
+    Text vitesseDeplacement, vitesseTir, attaque;
+    Font policeStats;
 
     string texturesPath = "../Textures/"; // Linux
     //string texturesPath = "Textures\\"; // Windows
@@ -28,6 +30,10 @@ int main()
     loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
     loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
     loadFile(textureSpriteDown, texturesPath + "sprite_down.png");
+    loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
+    loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
+    loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
+    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
 
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
@@ -38,6 +44,16 @@ int main()
     loadFile(textureProjectileDown, texturesPath + "projectile_down.png");
     loadFile(textureProjectileLeft, texturesPath + "projectile_left.png");
     loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
+    loadFile(textureSpeed, texturesPath + "speed.png");
+    loadFile(textureSword, texturesPath + "sword.png");
+    loadFile(textureArrows, texturesPath + "arrows.png");
+    loadFile(textureHeart, texturesPath + "heart.png");
+
+    //Police
+    if (!policeStats.loadFromFile("../Textures/Nabla-Regular.ttf")) {
+        cerr << "Failed to load font" << endl;
+        exit(1);
+    }
 
     WindowSize = window.getSize();             //Get size of window.
 
@@ -58,6 +74,42 @@ int main()
 
     textureProjectileRight.setRepeated(false);
     textureProjectileRight.setSmooth(true);
+
+    //Textures HUD
+    heart.setTexture(textureHeart);
+    heart.setScale(Vector2f(0.08f,0.08f));
+    heart.setPosition(25, 10);
+
+    speed.setTexture(textureSpeed);
+    speed.setScale(Vector2f(0.1f,0.1));            
+    speed.setPosition(25,70); 
+
+    sword.setTexture(textureSword);
+    sword.setScale(Vector2f(0.08f,0.08f));
+    sword.setPosition(25,130);
+
+    arrows.setTexture(textureArrows);
+    arrows.setScale(Vector2f(0.08f,0.08f));
+    arrows.setPosition(25,190);
+
+    //-------------------
+
+    vitesseDeplacement.setFont(policeStats);
+    vitesseDeplacement.setCharacterSize(35);
+    vitesseDeplacement.setFillColor(Color::White);
+    vitesseDeplacement.setPosition(80,70);
+
+    vitesseTir.setFont(policeStats);
+    vitesseTir.setCharacterSize(35);
+    vitesseTir.setFillColor(Color::White);
+    vitesseTir.setPosition(80,190);
+
+    attaque.setFont(policeStats);
+    attaque.setCharacterSize(35);
+    attaque.setFillColor(Color::White);
+    attaque.setPosition(80,130);
+
+    //----------------------
 
     Background background(backgroundSprite, texturesPath + "Accueil.jpeg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
     background.SetBackground();
@@ -141,9 +193,15 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
 
+    bool shoot_ready = true;
+    sf::Clock clock;
+    sf::Clock clockiframes;
+    bool invincible = false;
+
     while (window.isOpen())
     {
         while (!restart && !start && !close){
+
             Event event1;
             while(window.pollEvent(event1)){
                 switch (event1.type){
@@ -190,6 +248,24 @@ int main()
             window.display();
         }
         if (!restart && start && !close){
+
+            if(!shoot_ready){
+                sf::Time time1 = clock.getElapsedTime();
+                if(time1 >= A.GetDelay()){
+                    shoot_ready = true;
+                }
+            }
+            if(invincible){
+                sf::Time time2 = clockiframes.getElapsedTime();
+                if(time2 >=sf::milliseconds(500)){
+                    invincible = false;
+                    if(A.GetRotation() == 0.){A.persoSprite.setTexture(textureSpriteRight);}
+                    if(A.GetRotation() == 90.){A.persoSprite.setTexture(textureSpriteUp);}
+                    if(A.GetRotation() == 180.){A.persoSprite.setTexture(textureSpriteLeft);}
+                    if(A.GetRotation() == 270.){A.persoSprite.setTexture(textureSpriteDown);}
+                }
+            }
+
             Event event;
             while (window.pollEvent(event))
             {
@@ -203,14 +279,14 @@ int main()
 
                         // up, down, left and right keys
 
-                    case Keyboard::Z: upFlag = true; A.persoSprite.setTexture(textureSpriteUp); break;
-                    case Keyboard::S: downFlag = true; A.persoSprite.setTexture(textureSpriteDown); break;
-                    case Keyboard::Q: leftFlag = true; A.persoSprite.setTexture(textureSpriteLeft); break;
-                    case Keyboard::D: rightFlag = true; A.persoSprite.setTexture(textureSpriteRight); break;
-                    case Keyboard::Up: projectile1.setTexture(textureProjectileUp); tirer(projectiles, A, projectile1, 270.f); break;
-                    case Keyboard::Down: projectile1.setTexture(textureProjectileDown); tirer(projectiles, A, projectile1, 90.f); break;
-                    case Keyboard::Left: projectile1.setTexture(textureProjectileLeft); tirer(projectiles, A, projectile1, 180.f); break;
-                    case Keyboard::Right: projectile1.setTexture(textureProjectileRight); tirer(projectiles, A, projectile1, 0.f); break;
+                    case Keyboard::Z: upFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteUpInv);}else {A.persoSprite.setTexture(textureSpriteUp);};A.SetRotation(90.f) ;break;
+                    case Keyboard::S: downFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteDownInv);}else {A.persoSprite.setTexture(textureSpriteDown);};A.SetRotation(270.f) ;break;
+                    case Keyboard::Q: leftFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteLeftInv);}else{A.persoSprite.setTexture(textureSpriteLeft);};A.SetRotation(180.f) ;break;
+                    case Keyboard::D: rightFlag = true; if(invincible){A.persoSprite.setTexture(textureSpriteRightInv);}else{A.persoSprite.setTexture(textureSpriteRight);};A.SetRotation(0.f) ;break;
+                    case Keyboard::Up : if(shoot_ready){tirer(projectiles,A,projectile1,270.f);clock.restart();shoot_ready = false; break;}
+                    case Keyboard::Down : if(shoot_ready){tirer(projectiles,A,projectile1,90.f);clock.restart();shoot_ready = false; break;}
+                    case Keyboard::Left : if(shoot_ready){tirer(projectiles,A,projectile1,180.f);clock.restart();shoot_ready = false; break;}
+                    case Keyboard::Right : if(shoot_ready){tirer(projectiles,A,projectile1,0.f);clock.restart();shoot_ready = false; break;}
                     default: break;
                     }
                 }
@@ -294,15 +370,22 @@ int main()
                 }
             }
             for (size_t i = 0; i < ennemies.size(); i++) {
-                if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
-                    A.Setpvdamage(ennemies[i]->Getatk());
+                if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())&& !invincible) {
+                    A.Setpv(ennemies[i]->Getatk());
+                    invincible = true;
+                    clockiframes.restart();
+                    if(A.GetRotation() == 0.){A.persoSprite.setTexture(textureSpriteRightInv);}
+                    if(A.GetRotation() == 90.){A.persoSprite.setTexture(textureSpriteUpInv);}
+                    if(A.GetRotation() == 180.){A.persoSprite.setTexture(textureSpriteLeftInv);}
+                    if(A.GetRotation() == 270.){A.persoSprite.setTexture(textureSpriteDownInv);}
+
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(*projectiles[j], window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
                             ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
                             projectiles.erase(projectiles.begin() + j);
-                            ennemies[i]->Setpvdamage(A.Getatk());
+                            ennemies[i]->Setpv(A.Getatk());
                         }
                     }
                 }
@@ -325,6 +408,9 @@ int main()
             window.draw(rectangle3);
 
             //HUD
+
+            window.draw(heart);
+            window.draw(rectangle3);
 
             if (A.Getpv() < A.Getpvmax() * 0.33) {
                 couleurs[0] = 243;
@@ -350,6 +436,27 @@ int main()
             rectangle2.setPosition(25, 25);
 
             window.draw(rectangle2);
+
+            //HUD attaque
+            window.draw(sword);
+            int atk=A.Getatk();
+            string string_atk=to_string(atk);
+            attaque.setString(string_atk);
+            window.draw(attaque);
+
+            //HUD vitesse de déplacement
+            window.draw(speed);
+            int spd=A.GetSpeed();
+            string string_speed=to_string(spd);
+            vitesseDeplacement.setString(string_speed);
+            window.draw(vitesseDeplacement);
+
+            //HUD vitesse de tir
+            window.draw(arrows);
+            int atkSpd=A.GetatkSpeed();
+            string string_atkspeed=to_string(atkSpd);
+            vitesseTir.setString(string_atkspeed);
+            window.draw(vitesseTir);
 
             window.display();
 
