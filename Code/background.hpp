@@ -3,7 +3,7 @@
 class Background {
 public:
 
-    Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints);
+    Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints, std::vector<sf::IntRect> portes);
 
     sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight);
     std::vector<sf::RectangleShape> rectangles;
@@ -16,8 +16,8 @@ public:
     Texture backgroundTexture; //attribut texture du background
     string backgroundImage;
 
-    // Créer des points pour définir les rectangles
+    // Crï¿½er des points pour dï¿½finir les rectangles
     std::vector<sf::Vector2f> borduresPoints;
-    std::vector<sf::Vector2f> portesPoints;
+    std::vector<sf::IntRect> portes;
 
 };

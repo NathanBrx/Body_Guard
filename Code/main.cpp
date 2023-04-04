@@ -1,7 +1,10 @@
 #include "mainheader.hpp"
+#include <unistd.h>
 
 int main()
 {
+    bool portesActives = true;
+
     RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard"/*,Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
@@ -57,7 +60,13 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
-    Background background(backgroundSprite, "../Textures/Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
+    Background background(backgroundSprite, "../Textures/Map1.jpg",{ {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} },
+    {
+        sf::IntRect(890, 0, 180, 20),
+        sf::IntRect(1900, 455, 20, 175),
+        sf::IntRect(890, 1010, 235, 20),
+        sf::IntRect(0, 400, 20, 240)
+    });
 
     background.SetBackground();
 
@@ -163,7 +172,39 @@ int main()
                 }
             }
         }
-
+        for (size_t i = 0; i < background.portes.size(); i += 1) {
+            if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && portesActives){
+                portesActives = false;
+                int j = 0;
+                switch (i)
+                {
+                    case 2:
+                        j = 0;
+                        break;
+                    case 3:
+                        j = 1;
+                        break;
+                    default:
+                        j = i+2;
+                        break;
+                }
+                A.SetX(background.portes[j].left + background.portes[j].width/2);
+                A.SetY(background.portes[j].top + background.portes[j].height/2);
+                for(int k; k<36;k+=1){
+                    window.clear();
+                    background.backgroundSprite.move(sf::Vector2f(0, 30));
+                    window.draw(background.backgroundSprite);
+                    background.backgroundSprite.setScale({ -ScaleX, ScaleY });
+                    //background.backgroundSprite.move(sf::Vector2f(1920, 0));
+                    window.draw(background.backgroundSprite);
+                    //background.backgroundSprite.move(sf::Vector2f(-1920, 0));
+                    background.backgroundSprite.setScale({ ScaleX, ScaleY });
+                    window.display();
+                    usleep(10);
+                }
+                background.backgroundSprite.move(sf::Vector2f(0, -1080));
+            }
+        }
         window.draw(background.backgroundSprite);
 
         for (size_t j = 0; j < projectiles.size(); j++) {
@@ -239,6 +280,18 @@ int main()
         rectangle2.setPosition(25, 25);
 
         window.draw(rectangle2);
+
+        std::vector<sf::RectangleShape> rectangles;
+        for (const auto& rect : background.portes) {
+        sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
+        shape.setPosition(sf::Vector2f(rect.left, rect.top));
+        shape.setFillColor(sf::Color::Green);
+        rectangles.push_back(shape);
+        }
+
+        for (const auto& shape : rectangles) {
+            window.draw(shape);
+        }
 
         window.display();
     }

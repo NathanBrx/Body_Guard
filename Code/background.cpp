@@ -1,7 +1,7 @@
 #include "mainheader.hpp"
 
-Background::Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints) :
-    backgroundSprite(backgroundSprite), backgroundImage(backgroundImage), borduresPoints(borduresPoints)
+Background::Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints, std::vector<sf::IntRect> portes) :
+    backgroundSprite(backgroundSprite), backgroundImage(backgroundImage), borduresPoints(borduresPoints), portes(portes)
 {}
 
 RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight)
@@ -10,12 +10,12 @@ RectangleShape Background::CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f
     float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
     float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
 
-    // Créer le rectangle
+    // Crï¿½er le rectangle
     RectangleShape rectangle;
     rectangle.setSize(Vector2f(length, 1.f));
     rectangle.setRotation(angle * 180.f / 3.14159f);
 
-    // Positionner le rectangle en utilisant le coin inférieur gauche
+    // Positionner le rectangle en utilisant le coin infï¿½rieur gauche
     rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
 
     return rectangle;
