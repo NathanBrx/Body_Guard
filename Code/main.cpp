@@ -10,11 +10,12 @@ int main()
 
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart;
     Texture backgroundTexture, textureEnd;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
+    Texture textureSpeed, textureSword, textureArrows, textureHeart;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
@@ -128,7 +129,7 @@ int main()
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
     rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(25, 25);
+    rectangle3.setPosition(80,20);
 
     int couleurs[3];
     couleurs[0] = 100;
