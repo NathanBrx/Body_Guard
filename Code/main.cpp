@@ -88,14 +88,23 @@ int main()
     generation(mat);
     bool shoot_ready = true;
     sf::Clock clock;
+    sf::Clock clockiframes;
+    bool invincible = false;
     while (window.isOpen())
     {
-         if(!shoot_ready){
+        if(!shoot_ready){
             sf::Time time1 = clock.getElapsedTime();
             if(time1 >= A.GetDelay()){
                 shoot_ready = true;
             }
         }
+        if(invincible){
+            sf::Time time2 = clockiframes.getElapsedTime();
+            if(time2 >=sf::milliseconds(500)){
+                invincible = false;
+            }
+        }
+
         Event event;
         while (window.pollEvent(event))
         {
@@ -198,8 +207,11 @@ int main()
             }
         }
         for (size_t i = 0; i < ennemies.size(); i++) {
-            if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())) {
+            if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())&& !invincible) {
                 A.Setpv(ennemies[i]->Getatk());
+                invincible = true;
+                clockiframes.restart();
+
             }
             for (size_t j = 0; j < projectiles.size(); j++) {
                 if (projectiles[j]->isAlive(*projectiles[j], window)) {
