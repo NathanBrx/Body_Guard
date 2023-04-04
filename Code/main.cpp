@@ -123,6 +123,8 @@ int main()
     text4.setOutlineThickness(3);
     text4.setOutlineColor(color1);
 
+    Text* texts[3] = {&text2,&text3,&text4};
+
     bool start = false;
     bool close = false;
 
@@ -137,33 +139,35 @@ int main()
                 switch (event1.type){
                     case Event::Closed:
                         close = true;
-                        window.close();
                         break;
                     case Event::KeyPressed:
                         if (event1.key.code == Keyboard::Escape){
                             close = true;
-                            window.close();
                         }
                         break;
-                    /*
                     case Event::MouseMoved:
                         {
-                        Vector2i mousePos = Mouse::getPosition( window );
+                        Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-                        if (playButton.getGlobalBounds().contains(mousePosF)){
-                            playButton.setTexture(texturePlayButtonOn);
-                        }else{
-                            playButton.setTexture(texturePlayButtonOff);
+                        for (int i = 0;i <= 2;i++){
+                            if (texts[i]->getGlobalBounds().contains(mousePosF)){
+                                texts[i]->setOutlineThickness(6);
+                            }else{
+                                texts[i]->setOutlineThickness(3);
+                            }
                         }
                         }break;
                     case Event::MouseButtonPressed:
                         {
                         Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-                        if (playButton.getGlobalBounds().contains(mousePosF)){
+                        if (text2.getGlobalBounds().contains(mousePosF)){
                             start = true;
                         }
-                        }break;*/
+                        if (text4.getGlobalBounds().contains(mousePosF)){
+                            close = true;
+                        }
+                        }break;
                     default: break;
                 }
             }
@@ -179,13 +183,13 @@ int main()
             Event event;
             while (window.pollEvent(event))
             {
-                if (event.type == Event::Closed) window.close();
+                if (event.type == Event::Closed) close = true;
 
                 // If a key is pressed
                 if (event.type == Event::KeyPressed) {
                     switch (event.key.code) {
                         // If escape is pressed, close the application
-                    case  Keyboard::Escape: window.close(); break;
+                    case  Keyboard::Escape: close = true; break;
 
                         // up, down, left and right keys
 
@@ -330,6 +334,8 @@ int main()
             window.draw(rectangle2);
 
             window.display();
+        }else{
+            window.close();
         }
     }
     return 0;
