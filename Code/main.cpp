@@ -405,8 +405,6 @@ int main()
 
             window.draw(A.persoSprite);
 
-            window.draw(rectangle3);
-
             //HUD vie
             window.draw(heart);
             window.draw(rectangle3);
