@@ -10,8 +10,11 @@ int main()
 
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv,textureSpriteLeftInv,textureSpriteRightInv,textureSpriteUpInv,textureProjectile, textureEnnemy1, textureEnnemy1hit;
+
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv,textureSpriteLeftInv,textureSpriteRightInv,textureSpriteUpInv, textureProjectile, textureEnnemy1, textureEnnemy1hit, textureSpeed, textureSword, textureArrows, textureHeart;
+    Text vitesseDeplacement, vitesseTir, attaque;
+    Font policeStats;
 
     string texturesPath = "../Textures/"; // Linux
     //string texturesPath = "Textures\\"; // Windows
@@ -35,6 +38,18 @@ int main()
     // Projectiles
     loadFile(textureProjectile, texturesPath + "projectilev1.png");
 
+    //Icônes HUD
+    loadFile(textureSpeed, texturesPath + "speed.png");
+    loadFile(textureSword, texturesPath + "sword.png");
+    loadFile(textureArrows, texturesPath + "arrows.png");
+    loadFile(textureHeart, texturesPath + "heart.png");
+
+    //Police
+    if (!policeStats.loadFromFile("../Textures/Nabla-Regular.ttf")) {
+        cerr << "Failed to load font" << endl;
+        exit(1);
+    }
+    
     WindowSize = window.getSize();             //Get size of window.
 
     float ScaleX = (float)WindowSize.x / 1920;
@@ -60,6 +75,40 @@ int main()
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
 
+    //Textures HUD
+    heart.setTexture(textureHeart);
+    heart.setScale(Vector2f(0.08f,0.08f));
+    heart.setPosition(25, 10);
+
+    speed.setTexture(textureSpeed);
+    speed.setScale(Vector2f(0.1f,0.1));            
+    speed.setPosition(25,70); 
+
+    sword.setTexture(textureSword);
+    sword.setScale(Vector2f(0.08f,0.08f));
+    sword.setPosition(25,130);
+
+    arrows.setTexture(textureArrows);
+    arrows.setScale(Vector2f(0.08f,0.08f));
+    arrows.setPosition(25,190);
+
+
+
+    vitesseDeplacement.setFont(policeStats);
+    vitesseDeplacement.setCharacterSize(35);
+    vitesseDeplacement.setFillColor(Color::White);
+    vitesseDeplacement.setPosition(80,70);
+
+    vitesseTir.setFont(policeStats);
+    vitesseTir.setCharacterSize(35);
+    vitesseTir.setFillColor(Color::White);
+    vitesseTir.setPosition(80,190);
+
+    attaque.setFont(policeStats);
+    attaque.setCharacterSize(35);
+    attaque.setFillColor(Color::White);
+    attaque.setPosition(80,130);
+
     Background background(backgroundSprite, "../Textures/Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
 
     background.SetBackground();
@@ -73,11 +122,12 @@ int main()
     vector<Projectile*> projectiles;
     vector<Perso*> ennemies;
 
-    RectangleShape rectangle3(Vector2f(600, 25));
+    RectangleShape rectangle3(Vector2f(600,25));
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
-    rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(25, 25);
+    rectangle3.setOutlineColor(Color(0,0,0));
+    rectangle3.setPosition(80,20);
+    window.draw(rectangle3);
 
     int couleurs[3];
     couleurs[0] = 100;
@@ -246,29 +296,54 @@ int main()
 
         window.draw(A.persoSprite);
 
+        
+
+       //HUD vie
+        window.draw(heart);
         window.draw(rectangle3);
 
-        //HUD
+        int pvs=A.Getpv();
+        int pvs_max=A.Getpvmax();
 
-        if (A.Getpv() < A.Getpvmax() * 0.33) {
-            couleurs[0] = 243;
-            couleurs[1] = 22;
-            couleurs[2] = 22;
+        if (pvs<pvs_max*0.33){
+            couleurs[0]=243;
+            couleurs[1]=22;
+            couleurs[2]=22;
         }
-        else {
-            if (A.Getpv() < A.Getpvmax() * 0.67) {
-                couleurs[0] = 252;
-                couleurs[1] = 255;
-                couleurs[2] = 51;
+        else{
+            if (pvs<pvs_max*0.67){
+                couleurs[0]=252;
+                couleurs[1]=255;
+                couleurs[2]=51;
             }
         }
-
-        RectangleShape rectangle2(Vector2f((A.Getpv() * 600) / (A.Getpvmax()), 25));
-
-        rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-        rectangle2.setPosition(25, 25);
-
+        RectangleShape rectangle2(Vector2f((pvs*600)/(pvs_max),25));
+        rectangle2.setFillColor(Color(couleurs[0],couleurs[1],couleurs[2]));
+        rectangle2.setPosition(80,20);
         window.draw(rectangle2);
+
+        //HUD attaque
+        window.draw(sword);
+        int atk=A.Getatk();
+        string string_atk=to_string(atk);
+        attaque.setString(string_atk);
+        window.draw(attaque);
+
+        
+
+        //HUD vitesse de déplacement
+        window.draw(speed);
+        int spd=A.GetSpeed();
+        string string_speed=to_string(spd);
+        vitesseDeplacement.setString(string_speed);
+        window.draw(vitesseDeplacement);
+
+        //HUD vitesse de tir
+        window.draw(arrows);
+        int atkSpd=A.GetatkSpeed();
+        string string_atkspeed=to_string(atkSpd);
+        vitesseTir.setString(string_atkspeed);
+        window.draw(vitesseTir);
 
         window.display();
     }
