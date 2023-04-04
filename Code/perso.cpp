@@ -5,10 +5,14 @@ Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed,
 {
     this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
     this->persoSprite.setPosition(xOrigin, yOrigin);
-
+    this->shoot_delay = sf::milliseconds(500);
 }
 
 // Getters
+
+sf::Time Perso::GetDelay(){
+   return this->shoot_delay;
+}
 
 float Perso::GetX() {
     return this->persoSprite.getPosition().x;
@@ -57,6 +61,9 @@ void Perso::Setpv(int diffpv) {
     if (this->pv <= 0) {
         this->alive = 0;
     }
+}
+void Perso::SetDelay(sf::Time shoot_delay){
+    this->shoot_delay = shoot_delay;
 }
 
 // Methodes
