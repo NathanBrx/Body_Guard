@@ -35,7 +35,7 @@ int Perso::GetatkSpeed() {
     return this->atkSpeed;
 }
 float Perso::GetRotation() {
-    return this->persoSprite.getRotation();
+    return this->rotation;
 }
 
 // Setters
@@ -58,7 +58,7 @@ void Perso::SetatkSpeed(int atkSpeed) {
     this->atkSpeed = atkSpeed;
 }
 void Perso::SetRotation(float rotation) {
-    this->persoSprite.setRotation(rotation);
+    this->rotation = rotation;
 }
 void Perso::Setpvdamage(int diffpv) {
     this->pv -= diffpv;
