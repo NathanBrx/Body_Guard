@@ -7,6 +7,7 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <unistd.h>
 
 using namespace sf;
 using namespace std;
