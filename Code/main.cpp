@@ -92,7 +92,7 @@ int main()
     font2.loadFromFile("../Textures/Exo-SemiBoldItalic.ttf");
     Text text1("BODY GUARD",font1);
     Text text2("Jouer",font2);
-    Text text3("Crédits",font2);
+    Text text3("Credits",font2);
     Text text4("Quitter",font2);
 
     text1.setCharacterSize(200);
@@ -118,7 +118,7 @@ int main()
 
     text4.setCharacterSize(100);
     text4.setOrigin(text4.getGlobalBounds().width/2.,text4.getGlobalBounds().height/2.);
-    text4.setPosition(window.getSize().x / 2., 3*(window.getSize().y / 3.));
+    text4.setPosition(window.getSize().x / 2., 2.55*(window.getSize().y / 3.));
     text4.setFillColor(color2);
     text4.setOutlineThickness(3);
     text4.setOutlineColor(color1);
