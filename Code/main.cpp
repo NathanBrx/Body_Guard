@@ -83,7 +83,8 @@ int main()
     bool downFlag=false;
     bool leftFlag=false;
     bool rightFlag=false;
-
+    bool shoot_ready = true;
+    sf::Clock clock;
     vector<Projectile*> projectiles;
     vector<Perso*> ennemies;
 
@@ -94,6 +95,12 @@ int main()
 
     while (window.isOpen())
     {
+        if(!shoot_ready){
+            sf::Time time1 = clock.getElapsedTime();
+            if(time1 >= A.GetDelay()){
+                shoot_ready = true;
+            }
+        }
         Event event;
         while (window.pollEvent(event))
         {
@@ -111,10 +118,10 @@ int main()
                 case Keyboard::S : downFlag=true; A.persoSprite.setTexture(textureSpriteDown); break;
                 case Keyboard::Q : leftFlag=true; A.persoSprite.setTexture(textureSpriteLeft); break;
                 case Keyboard::D : rightFlag=true; A.persoSprite.setTexture(textureSpriteRight);break;
-                case Keyboard::Up : tirer(projectiles,A,projectile1,270.f); break;
-                case Keyboard::Down : tirer(projectiles,A,projectile1,90.f); break;
-                case Keyboard::Left : tirer(projectiles,A,projectile1,180.f); break;
-                case Keyboard::Right : tirer(projectiles,A,projectile1,0.f); break;
+                case Keyboard::Up : if(shoot_ready){tirer(projectiles,A,projectile1,270.f);clock.restart();shoot_ready = false; break;}
+                case Keyboard::Down : if(shoot_ready){tirer(projectiles,A,projectile1,90.f);clock.restart();shoot_ready = false; break;}
+                case Keyboard::Left : if(shoot_ready){tirer(projectiles,A,projectile1,180.f);clock.restart();shoot_ready = false; break;}
+                case Keyboard::Right : if(shoot_ready){tirer(projectiles,A,projectile1,0.f);clock.restart();shoot_ready = false; break;}
                 default : break;
                 }
             }

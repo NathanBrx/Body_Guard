@@ -8,19 +8,20 @@ class Perso : public Sprite {
 
         float  xOrigin,yOrigin ; // position d'origine de l'entité
         float rotation;
-        int pvmax; // pv max du perso 
+        int pvmax; // pv max du perso
         int pv = pvmax ; // pv de l'entité
-        int speed ; // vitesse de l'entité 
+        int speed ; // vitesse de l'entité
+        sf::Time shoot_delay; //délai entre les tirs
         int atk ;
         int atkSpeed ; // vitesse d'attaque
         int alive = 1; // booléen qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
-    
+
     public :
 
         Perso(float xOrigin,float yOrigin,float rotation,int pvmax,int speed,int atk,int atkSpeed,Sprite persoSprite);
 
         // Getters
-
+        sf::Time GetDelay();
         float GetX();
         float GetY();
         int GetSpeed();
@@ -31,7 +32,7 @@ class Perso : public Sprite {
         float GetRotation();
 
         // Setters
-        
+        void SetDelay(sf::Time shoot_delay);
         void SetX(float x);
         void SetY(float y);
         void SetSpeed(int speed);
