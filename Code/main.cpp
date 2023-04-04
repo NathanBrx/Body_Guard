@@ -407,10 +407,13 @@ int main()
 
             window.draw(rectangle3);
 
-            //HUD
-
+            //HUD vie
             window.draw(heart);
             window.draw(rectangle3);
+
+            //HUD
+            int pvs=A.Getpv();
+            int pvs_max=A.Getpvmax();
 
             if (A.Getpv() < A.Getpvmax() * 0.33) {
                 couleurs[0] = 243;
@@ -430,10 +433,9 @@ int main()
                 }
             }
 
-            RectangleShape rectangle2(Vector2f((A.Getpv() * 600) / (A.Getpvmax()), 25));
-
-            rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(25, 25);
+            RectangleShape rectangle2(Vector2f((pvs*600)/(pvs_max),25));
+            rectangle2.setFillColor(Color(couleurs[0],couleurs[1],couleurs[2]));
+            rectangle2.setPosition(80,20);
 
             window.draw(rectangle2);
 
