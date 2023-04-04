@@ -10,8 +10,8 @@ int main()
 
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, playButton, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureStart, texturePlayButtonOn, texturePlayButtonOff;
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
+    Texture backgroundTexture, textureStart;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -21,9 +21,6 @@ int main()
 
     // Arri�re-plan
     loadFile(backgroundTexture, texturesPath + "Map1.jpg");
-    loadFile(textureStart, texturesPath + "Accueil.jpeg");
-    loadFile(texturePlayButtonOn, texturesPath + "play-button-on.png");
-    loadFile(texturePlayButtonOff, texturesPath + "play-button-off.png");
 
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
@@ -46,12 +43,6 @@ int main()
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;    // Calculate scale
 
-    backgroundSprite.setTexture(textureStart); // Set textures
-    backgroundSprite.setScale(ScaleX, ScaleY);    // Set scales
-
-    playButton.setTexture(texturePlayButtonOff);
-    playButton.setScale(ScaleX, ScaleY);
-
     spriteMain.setTexture(textureSpriteRight);
     spriteMain.setScale(ScaleX, ScaleY);
 
@@ -61,17 +52,15 @@ int main()
     projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
 
-    backgroundTexture.setRepeated(false);
-
     textureSpriteRight.setRepeated(false);
     textureSpriteRight.setSmooth(true);
 
     textureProjectileRight.setRepeated(false);
     textureProjectileRight.setSmooth(true);
 
-    Background background(backgroundSprite, texturesPath + "Map1.jpg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
-
-//    background.SetBackground();
+    Background background(backgroundSprite, texturesPath + "Accueil.jpeg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
+    background.SetBackground();
+    background.SetTexture(ScaleX,ScaleY);
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
     bool upFlag = false;
@@ -95,6 +84,45 @@ int main()
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
 
+    Color color1(225.6,161.3,120.8);
+    Color color2(213.9,146.1,113.6);
+    Font font1;
+    Font font2;
+    font1.loadFromFile("../Textures/Orbitron-ExtraBold.ttf");
+    font2.loadFromFile("../Textures/Exo-SemiBoldItalic.ttf");
+    Text text1("BODY GUARD",font1);
+    Text text2("Jouer",font2);
+    Text text3("Crédits",font2);
+    Text text4("Quitter",font2);
+
+    text1.setCharacterSize(200);
+    text1.setOrigin(text1.getGlobalBounds().width/2.,text1.getGlobalBounds().height/2.);
+    text1.setPosition(window.getSize().x / 2., window.getSize().y / 5.);
+    text1.setFillColor(color1);
+    text1.setOutlineThickness(5);
+    text1.setOutlineColor(color2);
+
+    text2.setCharacterSize(100);
+    text2.setOrigin(text2.getGlobalBounds().width/2.,text2.getGlobalBounds().height/2.);
+    text2.setPosition(window.getSize().x / 2., window.getSize().y / 2.);
+    text2.setFillColor(color2);
+    text2.setOutlineThickness(3);
+    text2.setOutlineColor(color1);
+
+    text3.setCharacterSize(100);
+    text3.setOrigin(text3.getGlobalBounds().width/2.,text3.getGlobalBounds().height/2.);
+    text3.setPosition(window.getSize().x / 2., 2*(window.getSize().y / 3.));
+    text3.setFillColor(color2);
+    text3.setOutlineThickness(3);
+    text3.setOutlineColor(color1);
+
+    text4.setCharacterSize(100);
+    text4.setOrigin(text4.getGlobalBounds().width/2.,text4.getGlobalBounds().height/2.);
+    text4.setPosition(window.getSize().x / 2., 3*(window.getSize().y / 3.));
+    text4.setFillColor(color2);
+    text4.setOutlineThickness(3);
+    text4.setOutlineColor(color1);
+
     bool start = false;
     bool close = false;
 
@@ -117,6 +145,7 @@ int main()
                             window.close();
                         }
                         break;
+                    /*
                     case Event::MouseMoved:
                         {
                         Vector2i mousePos = Mouse::getPosition( window );
@@ -127,19 +156,23 @@ int main()
                             playButton.setTexture(texturePlayButtonOff);
                         }
                         }break;
-                    case sf::Event::MouseButtonPressed:
+                    case Event::MouseButtonPressed:
                         {
                         Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF( static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                         if (playButton.getGlobalBounds().contains(mousePosF)){
                             start = true;
                         }
-                        }break;
+                        }break;*/
+                    default: break;
                 }
             }
             window.clear(Color::Black);
-            window.draw(backgroundSprite);
-            window.draw(playButton);
+            window.draw(background.backgroundSprite);
+            window.draw(text1);
+            window.draw(text2);
+            window.draw(text3);
+            window.draw(text4);
             window.display();
         }
         if (start && !close){
@@ -218,6 +251,8 @@ int main()
                 }
             }
 
+            background.backgroundTexture = backgroundTexture;
+            background.SetTexture(ScaleX,ScaleY);
             window.draw(background.backgroundSprite);
 
             for (size_t j = 0; j < projectiles.size(); j++) {
