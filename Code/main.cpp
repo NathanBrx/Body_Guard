@@ -371,7 +371,7 @@ int main()
             }
             for (size_t i = 0; i < ennemies.size(); i++) {
                 if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds())&& !invincible) {
-                    A.Setpv(ennemies[i]->Getatk());
+                    A.Setpvdamage(ennemies[i]->Getatk());
                     invincible = true;
                     clockiframes.restart();
                     if(A.GetRotation() == 0.){A.persoSprite.setTexture(textureSpriteRightInv);}
@@ -385,7 +385,7 @@ int main()
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
                             ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
                             projectiles.erase(projectiles.begin() + j);
-                            ennemies[i]->Setpv(A.Getatk());
+                            ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
