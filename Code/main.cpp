@@ -112,7 +112,7 @@ int main()
 
     //----------------------
 
-    Background background(backgroundSprite, texturesPath + "Accueil.jpeg", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
+    Background background(backgroundSprite, texturesPath + "Accueil.png", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
     background.SetBackground();
     background.SetTexture(ScaleX,ScaleY);
 
