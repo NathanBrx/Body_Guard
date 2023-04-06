@@ -13,12 +13,27 @@ public:
     Sprite backgroundSprite;
     float ScaleX;
     float ScaleY;
-    std::vector<sf::Vector2f> borduresPoints_notScaled;
+    std::vector<sf::Vector2f> borduresPoints_sansPortes_notScaled;
+    std::vector<sf::Vector2f> borduresPoints_sansPortes;
     std::vector<sf::Vector2f> borduresPoints;
+
+    std::vector<sf::Vector2f> bordures_gauche_notScaled;
+    std::vector<sf::Vector2f> bordures_gauche;
+    std::vector<sf::Vector2f> bordures_droite_notScaled;
+    std::vector<sf::Vector2f> bordures_droite;
+    std::vector<sf::Vector2f> bordures_haut_notScaled;
+    std::vector<sf::Vector2f> bordures_haut;
+    std::vector<sf::Vector2f> bordures_bas_notScaled;
+    std::vector<sf::Vector2f> bordures_bas;
     std::vector<sf::IntRect> portes;
     bool isFlipX;
     bool isFlipY;
     bool portesActives;
+
+    bool porte_bas;
+    bool porte_droite;
+    bool porte_gauche;
+    bool porte_haut;
 
     int row;
     int col;
