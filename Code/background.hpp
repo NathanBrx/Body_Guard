@@ -19,5 +19,6 @@ public:
     std::vector<sf::IntRect> portes;
     bool isFlipX;
     bool isFlipY;
+    bool portesActives;
 
 };

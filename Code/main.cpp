@@ -2,9 +2,7 @@
 
 int main()
 {
-    bool portesActives = true;
-
-    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard",Style::Fullscreen);
+    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard"/*, Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -165,10 +163,11 @@ int main()
         }
 
         for (size_t i = 0; i < background.portes.size(); i += 1) {
-            if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && portesActives){
+            if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives){
                 background.ChangeMap(i,A,window);
             }
         }
+
         window.draw(background.backgroundSprite);
 
         for (size_t j = 0; j < projectiles.size(); j++) {
@@ -247,6 +246,7 @@ int main()
 
         // Code Temporaire affichage des bordures et des portes
         //Portes
+        /*
         std::vector<sf::RectangleShape> rectangles;
         for (const auto& rect : background.portes) {
             sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
@@ -257,7 +257,7 @@ int main()
         for (const auto& shape : rectangles) {
             window.draw(shape);
         }
-
+        */
         window.display();
     }
 }
