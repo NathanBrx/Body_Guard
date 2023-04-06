@@ -14,6 +14,7 @@ public:
     Sprite backgroundSprite;
     float ScaleX;
     float ScaleY;
+    std::vector<sf::Vector2f> borduresPoints_notScaled;
     std::vector<sf::Vector2f> borduresPoints;
     std::vector<sf::IntRect> portes;
     bool isFlipX;

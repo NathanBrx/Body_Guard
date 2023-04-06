@@ -15,8 +15,8 @@ int main()
     Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
     Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "Textures\\"; // Windows
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "..\\Textures\\"; // Windows
 
     // Arri�re-plan
     loadFile(backgroundTexture, texturesPath + "Map1.jpg");
@@ -245,14 +245,15 @@ int main()
 
         window.draw(rectangle2);
 
+        // Code Temporaire affichage des bordures et des portes
+        //Portes
         std::vector<sf::RectangleShape> rectangles;
         for (const auto& rect : background.portes) {
-        sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
-        shape.setPosition(sf::Vector2f(rect.left, rect.top));
-        shape.setFillColor(sf::Color::Green);
-        rectangles.push_back(shape);
+            sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
+            shape.setPosition(sf::Vector2f(rect.left, rect.top));
+            shape.setFillColor(sf::Color::Green);
+            rectangles.push_back(shape);
         }
-
         for (const auto& shape : rectangles) {
             window.draw(shape);
         }
