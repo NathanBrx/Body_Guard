@@ -7,7 +7,7 @@ Background::Background(Sprite backgroundSprite,float ScaleX,float ScaleY) :
     {
     sf::IntRect(0, 0, 1920*this->ScaleX, 20*this->ScaleY),
     sf::IntRect(1900*this->ScaleX, 0, 20*this->ScaleX, 1080*this->ScaleY),
-    sf::IntRect(0, 1060*this->ScaleY, 1920*this->ScaleX, 20*this->ScaleY),
+    sf::IntRect(0, 1070*this->ScaleY, 1920*this->ScaleX, 10*this->ScaleY),
     sf::IntRect(0, 0, 20*this->ScaleX, 1080*this->ScaleY)
     };
 
@@ -21,9 +21,13 @@ Background::Background(Sprite backgroundSprite,float ScaleX,float ScaleY) :
     this->isFlipX = false;
     this->isFlipY = false;
     this->portesActives = true;
+
+    this->row = 3;
+    this->col = 5;
+
 }
 
-void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
+void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Sprite& porte_haut, Sprite& porte_bas, Sprite& porte_gauche, Sprite& porte_droite){
 
     this->portesActives = false;
 
@@ -58,7 +62,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             newOriginX = this->backgroundSprite.getOrigin().x;
 
 
-            moveYPerso = ((this->portes[2].top - 35*this->ScaleY )-A.GetY())/36;
+            moveYPerso = ((1025*this->ScaleY)-A.GetY())/36;
 
             for(int i=0; i<36;i+=1){
                 window.clear();
@@ -77,12 +81,41 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
+
+            porte_haut.setScale(newScaleX, newScaleY);
+            porte_haut.setOrigin({newOriginX, newOriginY});
+            porte_haut.setPosition(0, 0);
+
+            porte_bas.setScale(newScaleX, newScaleY);
+            porte_bas.setOrigin({ newOriginX, newOriginY });
+            if (this->isFlipY) {
+                porte_bas.setPosition(0, 898 * ScaleY);
+            }
+            else {
+                porte_bas.setPosition(0, -898 * ScaleY);
+            }
+
+            porte_droite.setScale(newScaleX, newScaleY);
+            porte_droite.setOrigin({ newOriginX, newOriginY });
+            porte_droite.setPosition(1855 * ScaleX, 0);
+            if (this->isFlipX) {
+                porte_droite.setPosition(-1855 * ScaleX, 0);
+            }
+            else {
+                porte_droite.setPosition(1855 * ScaleX, 0);
+            }
+
+            porte_gauche.setScale(newScaleX, newScaleY);
+            porte_gauche.setOrigin({ newOriginX, newOriginY });
+            porte_gauche.setPosition(0, 0);
+
             this->isFlipY = !(this->isFlipY);
+            this->row -= 1;
 
             break;
 
         case 1: // Droite
-
+            
             if (this->isFlipY) {
                 newScaleY = -(this->ScaleY);
             }
@@ -121,12 +154,41 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
+
+            porte_haut.setScale(newScaleX, newScaleY);
+            porte_haut.setOrigin({ newOriginX, newOriginY });
+            porte_haut.setPosition(0, 0);
+
+            porte_bas.setScale(newScaleX, newScaleY);
+            porte_bas.setOrigin({ newOriginX, newOriginY });
+            if (this->isFlipY) {
+                porte_bas.setPosition(0, -898 * ScaleY);
+            }
+            else {
+                porte_bas.setPosition(0, 898 * ScaleY);
+            }
+
+            porte_droite.setScale(newScaleX, newScaleY);
+            porte_droite.setOrigin({ newOriginX, newOriginY });
+            porte_droite.setPosition(1855 * ScaleX, 0);
+            if (this->isFlipX) {
+                porte_droite.setPosition(1855 * ScaleX, 0);
+            }
+            else {
+                porte_droite.setPosition(-1855 * ScaleX, 0);
+            }
+
+            porte_gauche.setScale(newScaleX, newScaleY);
+            porte_gauche.setOrigin({ newOriginX, newOriginY });
+            porte_gauche.setPosition(0, 0);
+
             this->isFlipX = !(this->isFlipX);
+            this->col += 1;
 
             break;
 
         case 2: // Bas
-
+            cerr << "bas";
             if (!(this->isFlipY)) {
                 newScaleY = -(this->ScaleY);
                 newOriginY = this->backgroundSprite.getLocalBounds().height;
@@ -166,7 +228,36 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
+
+            porte_haut.setScale(newScaleX, newScaleY);
+            porte_haut.setOrigin({ newOriginX, newOriginY });
+            porte_haut.setPosition(0, 0);
+
+            porte_bas.setScale(newScaleX, newScaleY);
+            porte_bas.setOrigin({ newOriginX, newOriginY });
+            if (this->isFlipY) {
+                porte_bas.setPosition(0, 898 * ScaleY);
+            }
+            else {
+                porte_bas.setPosition(0, -898 * ScaleY);
+            }
+
+            porte_droite.setScale(newScaleX, newScaleY);
+            porte_droite.setOrigin({ newOriginX, newOriginY });
+            porte_droite.setPosition(1855 * ScaleX, 0);
+            if (this->isFlipX) {
+                porte_droite.setPosition(-1855 * ScaleX, 0);
+            }
+            else {
+                porte_droite.setPosition(1855 * ScaleX, 0);
+            }
+
+            porte_gauche.setScale(newScaleX, newScaleY);
+            porte_gauche.setOrigin({ newOriginX, newOriginY });
+            porte_gauche.setPosition(0, 0);
+
             this->isFlipY = !(this->isFlipY);
+            this->row += 1;
 
             break;
 
@@ -208,7 +299,36 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
+
+            porte_haut.setScale(newScaleX, newScaleY);
+            porte_haut.setOrigin({ newOriginX, newOriginY });
+            porte_haut.setPosition(0, 0);
+
+            porte_bas.setScale(newScaleX, newScaleY);
+            porte_bas.setOrigin({ newOriginX, newOriginY });
+            if (this->isFlipY) {
+                porte_bas.setPosition(0, -898 * ScaleY);
+            }
+            else {
+                porte_bas.setPosition(0, 898 * ScaleY);
+            }
+
+            porte_droite.setScale(newScaleX, newScaleY);
+            porte_droite.setOrigin({ newOriginX, newOriginY });
+            porte_droite.setPosition(1855 * ScaleX, 0);
+            if (this->isFlipX) {
+                porte_droite.setPosition(1855 * ScaleX, 0);
+            }
+            else {
+                porte_droite.setPosition(-1855 * ScaleX, 0);
+            }
+
+            porte_gauche.setScale(newScaleX, newScaleY);
+            porte_gauche.setOrigin({ newOriginX, newOriginY });
+            porte_gauche.setPosition(0, 0);
+
             this->isFlipX = !(this->isFlipX);
+            this->col -= 1;
 
             break;
 
@@ -217,4 +337,51 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window){
             break;
     }
     this->portesActives = true;
+}
+
+void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite) {
+
+    const int ROWS = 8; // nombre de rangées dans le tableau
+    const int COLS = 7; // nombre de colonnes dans le tableau
+
+    // Vérifier s'il y a une case vide adjacente en haut
+    if (this->row == 0 || mat[this->row - 1][this->col] == 0) {
+        if (!(this->isFlipY)) {
+            window.draw(porte_haut);
+        }
+        else {
+            window.draw(porte_bas);
+        }
+    }
+
+    // Vérifier s'il y a une case vide adjacente en bas
+    if (this->row == ROWS || mat[this->row + 1][this->col] == 0) {
+        if (this->isFlipY) {
+            window.draw(porte_haut);
+        }
+        else {
+            window.draw(porte_bas);
+        }
+    }
+
+    // Vérifier s'il y a une case vide adjacente à gauche
+    if (this->col == 0 || mat[this->row][this->col - 1] == 0) {
+        if (!(this->isFlipX)) {
+            window.draw(porte_gauche);
+        }
+        else {
+            window.draw(porte_droite);
+        }
+        
+    }
+
+    // Vérifier s'il y a une case vide adjacente à droite
+    if (this->col == COLS || mat[row][this->col + 1] == 0) {
+        if (this->isFlipX) {
+            window.draw(porte_gauche);
+        }
+        else {
+            window.draw(porte_droite);
+        }
+    }
 }

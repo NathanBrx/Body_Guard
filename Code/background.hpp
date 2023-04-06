@@ -5,11 +5,10 @@ public:
 
     Background(Sprite backgroundSprite,float ScaleX,float ScaleY);
 
-    sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight);
     std::vector<sf::RectangleShape> rectangles;
     std::vector<sf::FloatRect> hitboxs;
-    void MakeRectangles();
-    void ChangeMap(int porteTouchee, Perso& A,RenderWindow& window);
+    void ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Sprite& porte_haut, Sprite& porte_bas, Sprite& porte_gauche, Sprite& porte_droite);
+    void BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite);
 
     Sprite backgroundSprite;
     float ScaleX;
@@ -20,5 +19,8 @@ public:
     bool isFlipX;
     bool isFlipY;
     bool portesActives;
+
+    int row;
+    int col;
 
 };

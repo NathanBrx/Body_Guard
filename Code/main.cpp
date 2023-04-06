@@ -10,8 +10,8 @@ int main()
 
     Vector2u TextureSize;
     Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1;
-    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit;
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Texture backgroundTexture, textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureProjectile, textureEnnemy1, textureEnnemy1hit, porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
     //string texturesPath = "../Textures/"; // Linux
     string texturesPath = "..\\Textures\\"; // Windows
@@ -31,6 +31,12 @@ int main()
 
     // Projectiles
     loadFile(textureProjectile, texturesPath + "projectilev1.png");
+
+    //Portes
+    loadFile(porte_haut_tx, texturesPath + "porte_haut.png");
+    loadFile(porte_bas_tx, texturesPath + "porte_bas.png");
+    loadFile(porte_droite_tx, texturesPath + "porte_droite.png");
+    loadFile(porte_gauche_tx, texturesPath + "porte_gauche.png");
 
     WindowSize = window.getSize();             //Get size of window.
 
@@ -56,6 +62,20 @@ int main()
 
     textureProjectile.setRepeated(false);
     textureProjectile.setSmooth(true);
+
+    porte_haut_sp.setTexture(porte_haut_tx);
+    porte_haut_sp.setScale(ScaleX, ScaleY);
+
+    porte_bas_sp.setTexture(porte_bas_tx);
+    porte_bas_sp.setScale(ScaleX, ScaleY);
+    porte_bas_sp.setPosition(0,WindowSize.y-182*ScaleY);
+
+    porte_droite_sp.setTexture(porte_droite_tx);
+    porte_droite_sp.setScale(ScaleX, ScaleY);
+    porte_droite_sp.setPosition(WindowSize.x - 65*ScaleX, 0);
+
+    porte_gauche_sp.setTexture(porte_gauche_tx);
+    porte_gauche_sp.setScale(ScaleX, ScaleY);
 
     Background background(backgroundSprite, ScaleX, ScaleY);
 
@@ -164,11 +184,13 @@ int main()
 
         for (size_t i = 0; i < background.portes.size(); i += 1) {
             if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives){
-                background.ChangeMap(i,A,window);
+                background.ChangeMap(i,A,window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
             }
         }
 
         window.draw(background.backgroundSprite);
+
+        background.BoucheTrou(window, mat, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
 
         for (size_t j = 0; j < projectiles.size(); j++) {
             if (projectiles[j]->isAlive(*projectiles[j], window)) {
