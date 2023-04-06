@@ -56,11 +56,4 @@ void generation(int mat[][8]) {
         fill_map(3, 5, &nb_salles, mat);
     }
     bossRoom(mat);
-    // Affichage de la carte
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 8; j++) {
-            cout << mat[i][j] << " ";
-        }
-        cout << endl;
-    }
 }

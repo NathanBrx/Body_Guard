@@ -2,7 +2,7 @@
 
 int main()
 {
-    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard"/*, Style::Fullscreen*/);
+    RenderWindow window(VideoMode(/*VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height*/1920,1080), "Body Guard"/*, Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -105,6 +105,8 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
 
+    Color couleur(0, 0, 0);
+
     while (window.isOpen())
     {
         Event event;
@@ -114,6 +116,7 @@ int main()
 
             // If a key is pressed
             if (event.type == Event::KeyPressed) {
+                couleur.r = 0;
                 switch (event.key.code) {
                     // If escape is pressed, close the application
                 case  Keyboard::Escape: window.close(); break;
@@ -150,34 +153,50 @@ int main()
         // Clear the window and apply background
         window.clear(Color::White);
 
-        for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-            Vector2f point_A = background.borduresPoints[i];
-            Vector2f point_B = background.borduresPoints[i + 1];
+        for (const auto& point : background.borduresPoints) {
+            //Vector2f point_A = background.borduresPoints[i];
+            //Vector2f point_B = background.borduresPoints[i + 1];
 
-            double a = sqrt(pow(point_B.x - A.GetX(), 2) + pow(point_B.y - A.GetY(), 2));
-            double b = sqrt(pow(A.GetX() - point_A.x, 2) + pow(A.GetY() - point_A.y, 2));
-            double c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
+            //double a = sqrt(pow(point_B.x - A.GetX(), 2) + pow(point_B.y - A.GetY(), 2));
+            //double b = sqrt(pow(A.GetX() - point_A.x, 2) + pow(A.GetY() - point_A.y, 2));
+            //double c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
 
-            double angle = acos((a * a + b * b - c * c) / (2 * a * b));
+            //double angle = acos((a * a + b * b - c * c) / (2 * a * b));
 
-            bool touchBorder = b < 30 || a < 30 || (3 < angle && 3.3 > angle);
-
-            if (touchBorder) {
+            //bool touchBorder = b < 30 || a < 30 || (3 < angle && 3.3 > angle);
+            
+            if (A.persoSprite.getGlobalBounds().contains(point)) {
                 if (upFlag) {
                     upFlag = false;
-                    A.SetY(A.GetY() + 5);
+                    A.SetY(A.GetY() + 5*ScaleY);
                 }
                 if (downFlag) {
                     downFlag = false;
-                    A.SetY(A.GetY() - 5);
+                    A.SetY(A.GetY() - 5*ScaleY);
                 }
                 if (leftFlag) {
                     leftFlag = false;
-                    A.SetX(A.GetX() + 5);
+                    A.SetX(A.GetX() + 5*ScaleX);
                 }
                 if (rightFlag) {
                     rightFlag = false;
-                    A.SetX(A.GetX() - 5);
+                    A.SetX(A.GetX() - 5 * ScaleX);
+                }
+                couleur.r = 255;
+            }
+            while (A.persoSprite.getGlobalBounds().contains(point))
+            {
+                if (A.GetY() > 540 * ScaleY) {
+                    A.SetY(A.GetY() - 5 * ScaleY);
+                }
+                else {
+                    A.SetY(A.GetY() + 5 * ScaleY);
+                }
+                if (A.GetX() > 960 * ScaleX) {
+                    A.SetX(A.GetX() - 5 * ScaleX);
+                }
+                else {
+                    A.SetX(A.GetX() + 5 * ScaleX);
                 }
             }
         }
@@ -190,7 +209,7 @@ int main()
 
         window.draw(background.backgroundSprite);
 
-        background.BoucheTrou(window, mat, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
+        //background.BoucheTrou(window, mat, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
 
         for (size_t j = 0; j < projectiles.size(); j++) {
             if (projectiles[j]->isAlive(*projectiles[j], window)) {
@@ -280,6 +299,36 @@ int main()
             window.draw(shape);
         }
         */
+
+        //Bordures
+        RectangleShape rectangle;
+        std::vector<sf::RectangleShape> bords;
+        for (size_t i = 0; i <background.borduresPoints.size() - 1; i += 1) {
+            Vector2f bottomLeft = background.borduresPoints[i];
+            Vector2f bottomRight = background.borduresPoints[i + 1];
+            // Calculer la longueur et l'angle du rectangle
+            float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
+            float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
+
+            // Cr�er le rectangle
+
+            rectangle.setSize(Vector2f(length, 1.f));
+            rectangle.setRotation(angle * 180.f / 3.14159f);
+            rectangle.setOutlineThickness(1);
+            rectangle.setFillColor(couleur);
+            rectangle.setOutlineColor(couleur);
+
+            // Positionner le rectangle en utilisant le coin inf�rieur gauche
+            rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
+
+            bords.push_back(rectangle);
+        }
+        for (const auto& shape : bords) {
+            window.draw(shape);
+        }
+
         window.display();
+
+
     }
 }
