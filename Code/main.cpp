@@ -133,7 +133,7 @@ int main()
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
 
     //test projectile ennemi
-    Projectile_ennemi projectile(0, 0, 860,540, 10, projectile1);
+    Projectile_ennemi projectile(0, 0, 1920 ,1080, 5, projectile1);
 
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
