@@ -2,16 +2,18 @@
 
 int main()
 {
-    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height), "Body Guard"/*,Style::Fullscreen*/);
+
+    RenderWindow window(VideoMode(/*VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height*/1920, 1080), "Body Guard"/*, Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
-    Vector2u TextureSize;
-    Vector2u WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart;
-    Texture backgroundTexture, textureEnd;
+    Vector2u TextureSize, WindowSize;
+    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Texture backgroundTexture, porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
+    
+    Texture textureEnd;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -19,10 +21,11 @@ int main()
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "Textures\\"; // Windows
 
-    // Arri�re-plan
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "..\\Textures\\"; // Windows
+
+    // Arriere-plan
     loadFile(backgroundTexture, texturesPath + "Map1.jpg");
     loadFile(textureEnd, texturesPath + "Game_over.jpg");
 
@@ -56,11 +59,22 @@ int main()
         exit(1);
     }
 
-    WindowSize = window.getSize();             //Get size of window.
+    //Portes
+    loadFile(porte_haut_tx, texturesPath + "porte_haut.png");
+    loadFile(porte_bas_tx, texturesPath + "porte_bas.png");
+    loadFile(porte_droite_tx, texturesPath + "porte_droite.png");
+    loadFile(porte_gauche_tx, texturesPath + "porte_gauche.png");
 
+    // Taille de la fenetre
+    WindowSize = window.getSize();
+
+    // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
-    float ScaleY = (float)WindowSize.y / 1080;    // Calculate scale
+    float ScaleY = (float)WindowSize.y / 1080;
 
+    backgroundSprite.setTexture(backgroundTexture);
+    backgroundSprite.setScale(ScaleX, ScaleY);
+    
     spriteMain.setTexture(textureSpriteRight);
     spriteMain.setScale(ScaleX, ScaleY);
 
@@ -112,9 +126,22 @@ int main()
 
     //----------------------
 
-    Background background(backgroundSprite, texturesPath + "Accueil.png", { {0, 390}, {78, 415}, {276, 279}, {400, 234},{730, 195},{815, 160}, {882, 66}, {890, 0}, {1070, 0}, {1280, 220},{1720, 148},{1840,400},{1920, 480},{1920, 660},{1136, 1080},{886, 1080},{0, 678} });
-    background.SetBackground();
-    background.SetTexture(ScaleX,ScaleY);
+    porte_haut_sp.setTexture(porte_haut_tx);
+    porte_haut_sp.setScale(ScaleX, ScaleY);
+
+    porte_bas_sp.setTexture(porte_bas_tx);
+    porte_bas_sp.setScale(ScaleX, ScaleY);
+    porte_bas_sp.setPosition(0, WindowSize.y - 182 * ScaleY);
+
+    porte_droite_sp.setTexture(porte_droite_tx);
+    porte_droite_sp.setScale(ScaleX, ScaleY);
+    porte_droite_sp.setPosition(WindowSize.x - 65 * ScaleX, 0);
+
+    porte_gauche_sp.setTexture(porte_gauche_tx);
+    porte_gauche_sp.setScale(ScaleX, ScaleY);
+
+    Background background(backgroundSprite, ScaleX, ScaleY);
+    
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
     bool upFlag = false;
@@ -191,18 +218,22 @@ int main()
     bool close = false;
     bool restart = false;
 
-    int mat[9][8] = { 0 }; // Initialisation de la carte � 0
+    int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
 
     bool shoot_ready = true;
     sf::Clock clock;
     sf::Clock clockiframes;
     bool invincible = false;
+    
+    //affichage des bordures
+    Color couleur(255, 0, 0);
+    int counter = 0;
 
     while (window.isOpen())
     {
         while (!restart && !start && !close){
-
+            
             Event event1;
             while(window.pollEvent(event1)){
                 switch (event1.type){
@@ -270,6 +301,17 @@ int main()
             Event event;
             while (window.pollEvent(event))
             {
+            
+                 if (counter == 10) {
+                     couleur.r = rand() % 255;
+                     couleur.g = rand() % 255;
+                     couleur.b = rand() % 255;
+                     counter = 0;
+                 }
+                  else {
+                   counter++;
+                  }
+                
                 if (event.type == Event::Closed) close = true;
 
                 // If a key is pressed
@@ -304,43 +346,54 @@ int main()
                         case Keyboard::D: rightFlag = false; break;
                         default: break;
                     }
+                    
+        for (const auto& point : background.borduresPoints) {
+
+            if (A.persoSprite.getGlobalBounds().contains(point)) {
+                if (upFlag) {
+                    upFlag = false;
+                    A.SetY(A.GetY() + 5 * ScaleY);
                 }
+                if (downFlag) {
+                    downFlag = false;
+                    A.SetY(A.GetY() - 5 * ScaleY);
+                }
+                if (leftFlag) {
+                    leftFlag = false;
+                    A.SetX(A.GetX() + 5 * ScaleX);
+                }
+                if (rightFlag) {
+                    rightFlag = false;
+                    A.SetX(A.GetX() - 5 * ScaleX);
+                }
+                couleur.r = 255;
+            }
+            while (A.persoSprite.getGlobalBounds().contains(point))
+            {
+                if (A.GetY() > 540 * ScaleY) {
+                    A.SetY(A.GetY() - 5 * ScaleY);
+                }
+                else {
+                    A.SetY(A.GetY() + 5 * ScaleY);
+                }
+                if (A.GetX() > 960 * ScaleX) {
+                    A.SetX(A.GetX() - 5 * ScaleX);
+                }
+                else {
+                    A.SetX(A.GetX() + 5 * ScaleX);
+                }
+            }
+        }
+
+        for (size_t i = 0; i < background.portes.size(); i += 1) {
+            if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
+                background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
             }
 
             // Clear the window and apply background
             window.clear(Color::White);
-
-            for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                Vector2f point_A = background.borduresPoints[i];
-                Vector2f point_B = background.borduresPoints[i + 1];
-
-                double a = sqrt(pow(point_B.x - A.GetX(), 2) + pow(point_B.y - A.GetY(), 2));
-                double b = sqrt(pow(A.GetX() - point_A.x, 2) + pow(A.GetY() - point_A.y, 2));
-                double c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
-
-                double angle = acos((a * a + b * b - c * c) / (2 * a * b));
-
-                bool touchBorder = b < 30 || a < 30 || (3 < angle && 3.3 > angle);
-
-                if (touchBorder) {
-                    if (upFlag) {
-                        upFlag = false;
-                        A.SetY(A.GetY() + 5);
-                    }
-                    if (downFlag) {
-                        downFlag = false;
-                        A.SetY(A.GetY() - 5);
-                    }
-                    if (leftFlag) {
-                        leftFlag = false;
-                        A.SetX(A.GetX() + 5);
-                    }
-                    if (rightFlag) {
-                        rightFlag = false;
-                        A.SetX(A.GetX() - 5);
-                    }
-                }
-            }
+            
+            background.BoucheTrou(window, mat, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
 
             background.backgroundTexture = backgroundTexture;
             background.SetTexture(ScaleX,ScaleY);
@@ -350,17 +403,9 @@ int main()
                 if (projectiles[j]->isAlive(*projectiles[j], window)) {
 
                     bool touchBorder = false;
-                    for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                        Vector2f point_A = background.borduresPoints[i];
-                        Vector2f point_B = background.borduresPoints[i + 1];
 
-                        float a = sqrt(pow(point_B.x - projectiles[j]->projectileSprite.getPosition().x, 2) + pow(point_B.y - projectiles[j]->projectileSprite.getPosition().y, 2));
-                        float b = sqrt(pow(projectiles[j]->projectileSprite.getPosition().x - point_A.x, 2) + pow(projectiles[j]->projectileSprite.getPosition().y - point_A.y, 2));
-                        float c = sqrt(pow(point_B.x - point_A.x, 2) + pow(point_B.y - point_A.y, 2));
-
-                        float angle = acos((a * a + b * b - c * c) / (2 * a * b));
-                        touchBorder = touchBorder || (3 < angle && 3.3 > angle);
-                        
+                    for (const auto& point : background.borduresPoints) {
+                        touchBorder = touchBorder || projectiles[j]->projectileSprite.getGlobalBounds().contains(point);
                     }
 
                     projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
@@ -521,11 +566,60 @@ int main()
                 window.draw(background.backgroundSprite);
                 window.draw(text4);
                 window.draw(text5);
+                
+                //***** Affichage des bordures et des portes *****//
+        //Portes
+        /*
+        std::vector<sf::RectangleShape> rectangles;
+        for (const auto& rect : background.portes) {
+            sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
+            shape.setPosition(sf::Vector2f(rect.left, rect.top));
+            shape.setFillColor(sf::Color::Green);
+            rectangles.push_back(shape);
+        }
+        for (const auto& shape : rectangles) {
+            window.draw(shape);
+        }
+        */
+
+        //Bordures
+        RectangleShape rectangle;
+        std::vector<sf::RectangleShape> bords;
+        for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
+            Vector2f bottomLeft = background.borduresPoints[i];
+            Vector2f bottomRight = background.borduresPoints[i + 1];
+            // Calculer la longueur et l'angle du rectangle
+            float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
+            float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
+
+            // Cr�er le rectangle
+
+            rectangle.setSize(Vector2f(length, 1.f));
+            rectangle.setRotation(angle * 180.f / 3.14159f);
+            rectangle.setOutlineThickness(100);
+            rectangle.setFillColor(couleur);
+            rectangle.setOutlineColor(couleur);
+
+            // Positionner le rectangle en utilisant le coin inf�rieur gauche
+            rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
+
+            double distance = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
+            if (distance < 50) {
+                bords.push_back(rectangle);
+            }
+            
+        }
+        for (const auto& shape : bords) {
+            window.draw(shape);
+        }
+
+                
+                
                 window.display();
             }
         }else{
             window.close();
-        }
+        }   
     }
     return 0;
 }

@@ -3,21 +3,39 @@
 class Background {
 public:
 
-    Background(Sprite backgroundSprite, string backgroundImage, std::vector<sf::Vector2f> borduresPoints);
+    Background(Sprite backgroundSprite,float ScaleX,float ScaleY);
 
-    sf::RectangleShape CreateRectangle(sf::Vector2f bottomLeft, sf::Vector2f bottomRight);
     std::vector<sf::RectangleShape> rectangles;
     std::vector<sf::FloatRect> hitboxs;
-    void MakeRectangles();
+    void ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Sprite& porte_haut, Sprite& porte_bas, Sprite& porte_gauche, Sprite& porte_droite);
+    void BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite);
 
-    void SetBackground();
-    void SetTexture(float ScaleX, float ScaleY);
-    Sprite backgroundSprite; //attribut sprite du background
-    Texture backgroundTexture; //attribut texture du background
-    string backgroundImage;
-
-    // Créer des points pour définir les rectangles
+    Sprite backgroundSprite;
+    float ScaleX;
+    float ScaleY;
+    std::vector<sf::Vector2f> borduresPoints_sansPortes_notScaled;
+    std::vector<sf::Vector2f> borduresPoints_sansPortes;
     std::vector<sf::Vector2f> borduresPoints;
-    std::vector<sf::Vector2f> portesPoints;
+
+    std::vector<sf::Vector2f> bordures_gauche_notScaled;
+    std::vector<sf::Vector2f> bordures_gauche;
+    std::vector<sf::Vector2f> bordures_droite_notScaled;
+    std::vector<sf::Vector2f> bordures_droite;
+    std::vector<sf::Vector2f> bordures_haut_notScaled;
+    std::vector<sf::Vector2f> bordures_haut;
+    std::vector<sf::Vector2f> bordures_bas_notScaled;
+    std::vector<sf::Vector2f> bordures_bas;
+    std::vector<sf::IntRect> portes;
+    bool isFlipX;
+    bool isFlipY;
+    bool portesActives;
+
+    bool porte_bas;
+    bool porte_droite;
+    bool porte_gauche;
+    bool porte_haut;
+
+    int row;
+    int col;
 
 };
