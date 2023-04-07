@@ -107,10 +107,24 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
 
-    Color couleur(0, 0, 0);
+    Color couleur(255, 0, 0);
+    int counter = 0;
 
     while (window.isOpen())
     {
+        
+        if (counter == 10) {
+            couleur.r = rand() % 255;
+            couleur.g = rand() % 255;
+            couleur.b = rand() % 255;
+            counter = 0;
+        }
+        else {
+            counter++;
+        }
+
+
+
         Event event;
         while (window.pollEvent(event))
         {
@@ -297,7 +311,7 @@ int main()
 
             rectangle.setSize(Vector2f(length, 1.f));
             rectangle.setRotation(angle * 180.f / 3.14159f);
-            rectangle.setOutlineThickness(1);
+            rectangle.setOutlineThickness(100);
             rectangle.setFillColor(couleur);
             rectangle.setOutlineColor(couleur);
 

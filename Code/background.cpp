@@ -70,6 +70,15 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
     float newOriginX;
     float newOriginY;
 
+    std::vector<sf::Vector2f> new_bordures_haut;
+    std::vector<sf::Vector2f> new_bordures_bas;
+    std::vector<sf::Vector2f> new_bordures_gauche;
+    std::vector<sf::Vector2f> new_bordures_droite;
+
+    std::vector<sf::Vector2f> new_borduresPoints_sansPortes;
+
+
+
     switch (porteTouchee)
     {
         case 0: // Haut
@@ -138,6 +147,23 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             porte_gauche.setScale(newScaleX, newScaleY);
             porte_gauche.setOrigin({ newOriginX, newOriginY });
             porte_gauche.setPosition(0, 0);
+
+            //flip des bordures
+            for (const auto& point : this->borduresPoints_sansPortes) {
+                new_borduresPoints_sansPortes.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_bas) {
+                new_bordures_bas.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_haut) {
+                new_bordures_haut.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_gauche) {
+                new_bordures_gauche.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_droite) {
+                new_bordures_droite.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
 
             this->isFlipY = !(this->isFlipY);
             this->row -= 1;
@@ -211,6 +237,23 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             porte_gauche.setScale(newScaleX, newScaleY);
             porte_gauche.setOrigin({ newOriginX, newOriginY });
             porte_gauche.setPosition(0, 0);
+
+            //flip des bordures
+            for (const auto& point : this->borduresPoints_sansPortes) {
+                new_borduresPoints_sansPortes.push_back({ (1920 * this->ScaleX)-point.x , point.y });
+            }
+            for (const auto& point : this->bordures_bas) {
+                new_bordures_bas.push_back({ (1920 * this->ScaleX) - point.x ,point.y });
+            }
+            for (const auto& point : this->bordures_haut) {
+                new_bordures_haut.push_back({ (1920 * this->ScaleX) - point.x ,point.y });
+            }
+            for (const auto& point : this->bordures_gauche) {
+                new_bordures_gauche.push_back({ (1920 * this->ScaleX) - point.x , point.y });
+            }
+            for (const auto& point : this->bordures_droite) {
+                new_bordures_droite.push_back({ (1920 * this->ScaleX) - point.x , point.y });
+            }
 
             this->isFlipX = !(this->isFlipX);
             this->col += 1;
@@ -286,6 +329,23 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             porte_gauche.setOrigin({ newOriginX, newOriginY });
             porte_gauche.setPosition(0, 0);
 
+            //flip des bordures
+            for (const auto& point : this->borduresPoints_sansPortes) {
+                new_borduresPoints_sansPortes.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_bas) {
+                new_bordures_bas.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_haut) {
+                new_bordures_haut.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_gauche) {
+                new_bordures_gauche.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+            for (const auto& point : this->bordures_droite) {
+                new_bordures_droite.push_back({ point.x , (1080 * this->ScaleY) - point.y });
+            }
+
             this->isFlipY = !(this->isFlipY);
             this->row += 1;
 
@@ -357,6 +417,23 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             porte_gauche.setOrigin({ newOriginX, newOriginY });
             porte_gauche.setPosition(0, 0);
 
+            //flip des bordures
+            for (const auto& point : this->borduresPoints_sansPortes) {
+                new_borduresPoints_sansPortes.push_back({ (1920 * this->ScaleX) - point.x , point.y });
+            }
+            for (const auto& point : this->bordures_bas) {
+                new_bordures_bas.push_back({ (1920 * this->ScaleX) - point.x ,point.y });
+            }
+            for (const auto& point : this->bordures_haut) {
+                new_bordures_haut.push_back({ (1920 * this->ScaleX) - point.x ,point.y });
+            }
+            for (const auto& point : this->bordures_gauche) {
+                new_bordures_gauche.push_back({ (1920 * this->ScaleX) - point.x , point.y });
+            }
+            for (const auto& point : this->bordures_droite) {
+                new_bordures_droite.push_back({ (1920 * this->ScaleX) - point.x , point.y });
+            }
+
             this->isFlipX = !(this->isFlipX);
             this->col -= 1;
 
@@ -367,9 +444,21 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             break;
     }
     this->portesActives = true;
+    this->bordures_bas = new_bordures_bas;
+    this->bordures_haut = new_bordures_haut;
+    this->bordures_droite = new_bordures_droite;
+    this->bordures_gauche = new_bordures_gauche;
+
+    this->borduresPoints_sansPortes = new_borduresPoints_sansPortes;
+
 }
 
 void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite) {
+
+    this->porte_bas = false;
+    this->porte_droite = false;
+    this->porte_gauche = false;
+    this->porte_haut = false;
 
     const int ROWS = 8; // nombre de rangées dans le tableau
     const int COLS = 7; // nombre de colonnes dans le tableau
@@ -377,65 +466,57 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
     // Vérifier s'il y a une case vide adjacente en haut
     if (this->row == 0 || mat[this->row - 1][this->col] == 0) {
 
-        this->porte_haut = true;
-
         if (!(this->isFlipY)) {
             window.draw(porte_haut);
+            this->porte_haut = true;
         }
         else {
             window.draw(porte_bas);
+            this->porte_bas = true;
         }
-    }else {
-        this->porte_haut = false;
     }
-
     // Vérifier s'il y a une case vide adjacente en bas
     if (this->row == ROWS || mat[this->row + 1][this->col] == 0) {
 
-        this->porte_bas = true;
-
         if (this->isFlipY) {
             window.draw(porte_haut);
+            this->porte_haut = true;
         }
         else {
             window.draw(porte_bas);
+            this->porte_bas = true;
         }
-    }else {
-        this->porte_bas = false;
     }
 
     // Vérifier s'il y a une case vide adjacente à gauche
     if (this->col == 0 || mat[this->row][this->col - 1] == 0) {
 
-        this->porte_gauche = true;
-
         if (!(this->isFlipX)) {
             window.draw(porte_gauche);
+            this->porte_gauche = true;
         }
         else {
             window.draw(porte_droite);
+            this->porte_droite = true;
         }
         
     }
-    else {
-        this->porte_gauche = false;
-    }
+
 
     // Vérifier s'il y a une case vide adjacente à droite
     if (this->col == COLS || mat[row][this->col + 1] == 0) {
 
-        this->porte_droite = true;
-
         if (this->isFlipX) {
             window.draw(porte_gauche);
+            this->porte_gauche = true;
         }
         else {
             window.draw(porte_droite);
+            this->porte_droite = true;
         }
     }
-    else {
-        this->porte_droite = false;
-    }
+
+    //Génération des bordures de la map
 
     this->borduresPoints = this->borduresPoints_sansPortes;
 
