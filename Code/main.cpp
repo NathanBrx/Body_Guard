@@ -117,6 +117,8 @@ int main()
 
     vector<Projectile*> projectiles;
     vector<Perso*> ennemies;
+    vector<Projectile_ennemi*> projectiles_ennemi;
+    vector<Clock> ennemy_shoot_time;
 
     RectangleShape rectangle3(Vector2f(600,25));
     rectangle3.setFillColor(Color::Transparent);
@@ -131,9 +133,8 @@ int main()
     couleurs[2] = 50;
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
+    ennemy_shoot_time.push_back(Clock());
 
-    //test projectile ennemi
-    Projectile_ennemi projectile(0, 0, 1920 ,1080, 5, projectile1);
 
     int mat[9][8] = { 0 }; // Initialisation de la carte � 0
     generation(mat);
@@ -266,13 +267,33 @@ int main()
             }
             else {
                 ennemies.erase(ennemies.begin() + i);
+                ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
+            }
+
+            if(!shoot_ready){
+            sf::Time time1 = clock.getElapsedTime();
+            if(time1 >= A.GetDelay()){
+                shoot_ready = true;
             }
         }
+            Time time2 = (ennemy_shoot_time[i]).getElapsedTime();
+            if(time2>=ennemies[i]->GetDelay()){
+                projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), projectile1)));
+                ennemy_shoot_time[i].restart();
+            }
 
-        //test projectile ennemi
-        projectile.update(window);
-        window.draw(projectile.projectileSprite);
-        
+            for (size_t j = 0; j < projectiles_ennemi.size(); j++) {
+                if (projectiles_ennemi[j]->isAlive(window)) {
+                    projectiles_ennemi[j]->update(window);
+                    window.draw(projectiles_ennemi[j]->projectileSprite);
+                    if (projectiles_ennemi[j]->hit(A)) {
+                        A.Setpv(ennemies[i]->Getatk());
+                        projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
+                    }
+                }
+            }
+
+        }  
 
         A.isInWindow(window);
         A.update(upFlag, downFlag, leftFlag, rightFlag, window);
