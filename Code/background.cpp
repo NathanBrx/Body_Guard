@@ -1,8 +1,21 @@
 #include "mainheader.hpp"
 
-Background::Background(Sprite backgroundSprite,float ScaleX,float ScaleY) :
-    backgroundSprite(backgroundSprite),ScaleX(ScaleX),ScaleY(ScaleY)
+Background::Background(string accueil_path, string jeu_path, string fin_path,float ScaleX,float ScaleY) :
+    accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), ScaleX(ScaleX), ScaleY(ScaleY)
 {
+    
+    loadFile(this->accueil_tx,this->accueil_path);
+    this->accueilSprite.setTexture(this->accueil_tx);
+    this->accueilSprite.setScale(this->ScaleX, this->ScaleY);
+
+    loadFile(backgroundTexture, this->jeu_path);
+    this->backgroundSprite.setTexture(backgroundTexture);
+    this->backgroundSprite.setScale(this->ScaleX, this->ScaleY);
+
+    loadFile(fin_tx, this->fin_path);
+    this->finSprite.setTexture(fin_tx);
+    this->finSprite.setScale(this->ScaleX, this->ScaleY);
+
     this->portes =
     {
     sf::IntRect(0, 0, 1920*this->ScaleX, 20*this->ScaleY),

@@ -10,10 +10,9 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite backgroundSprite, spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
-    Texture backgroundTexture, porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
+    Sprite spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
-    Texture textureEnd;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -23,11 +22,7 @@ int main()
 
 
     //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "..\\Textures\\"; // Windows
-
-    // Arriere-plan
-    loadFile(backgroundTexture, texturesPath + "Map1.jpg");
-    loadFile(textureEnd, texturesPath + "Game_over.jpg");
+    string texturesPath = "Textures\\"; // Windows
 
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
@@ -71,9 +66,6 @@ int main()
     // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
-
-    backgroundSprite.setTexture(backgroundTexture);
-    backgroundSprite.setScale(ScaleX, ScaleY);
 
     spriteMain.setTexture(textureSpriteRight);
     spriteMain.setScale(ScaleX, ScaleY);
@@ -140,7 +132,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(backgroundSprite, ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
@@ -233,7 +225,6 @@ int main()
     while (window.isOpen())
     {
         while (!restart && !start && !close) {
-
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -273,7 +264,7 @@ int main()
                 }
             }
             window.clear(Color::Black);
-            window.draw(background.backgroundSprite);
+            window.draw(background.accueilSprite);
             window.draw(text1);
             window.draw(text2);
             window.draw(text3);
@@ -398,8 +389,6 @@ int main()
 
             // Clear the window and apply background
             window.clear(Color::White);
-
-            background.backgroundSprite.setTexture(backgroundTexture);
 
             window.draw(background.backgroundSprite);
 
@@ -545,8 +534,6 @@ int main()
         }
         else if (restart && !close) {
 
-            backgroundTexture = textureEnd;
-            background.backgroundSprite.setTexture(backgroundTexture);
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
             text4.setPosition(window.getSize().x / 2., 2.75 * (window.getSize().y / 3.));
@@ -602,7 +589,7 @@ int main()
                     }
                 }
                 window.clear(Color::Black);
-                window.draw(background.backgroundSprite);
+                window.draw(background.finSprite);
                 window.draw(text4);
                 window.draw(text5);
 
