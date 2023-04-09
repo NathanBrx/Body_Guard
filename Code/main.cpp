@@ -24,6 +24,82 @@ int main()
     //string texturesPath = "../Textures/"; // Linux
     string texturesPath = "Textures\\"; // Windows
 
+    //Musique   
+    Music musique_accueil;
+    if (!musique_accueil.openFromFile(texturesPath + "accueil.ogg")){
+        return -1; // error
+    }
+    musique_accueil.setLoop(true);
+
+    Music musique_jeu;
+    if (!musique_jeu.openFromFile(texturesPath + "jeu.ogg")) {
+        return -1; // error
+    }
+    musique_jeu.setLoop(true);
+
+    Music musique_boss;
+    if (!musique_boss.openFromFile(texturesPath + "boss.ogg")) {
+        return -1; // error
+    }
+    musique_boss.setLoop(true);
+
+    //Sons
+    SoundBuffer tir_bf_1;
+    if (!tir_bf_1.loadFromFile(texturesPath + "tir1.ogg")) {
+        return -1;
+    }
+    Sound tir_1;
+    tir_1.setBuffer(tir_bf_1);
+    tir_1.setVolume(50.f);
+
+    SoundBuffer tir_bf_2;
+    if (!tir_bf_2.loadFromFile(texturesPath + "tir2.ogg")) {
+        return -1;
+    }
+    Sound tir_2;
+    tir_2.setBuffer(tir_bf_2);
+    tir_2.setVolume(50.f);
+
+    SoundBuffer tir_bf_3;
+    if (!tir_bf_3.loadFromFile(texturesPath + "tir3.ogg")) {
+        return -1;
+    }
+    Sound tir_3;
+    tir_3.setBuffer(tir_bf_3);
+    tir_3.setVolume(50.f);
+
+    SoundBuffer tir_bf_4;
+    if (!tir_bf_4.loadFromFile(texturesPath + "tir4.ogg")) {
+        return -1;
+    }
+    Sound tir_4;
+    tir_4.setBuffer(tir_bf_4);
+    tir_4.setVolume(50.f);
+
+    SoundBuffer tir_bf_5;
+    if (!tir_bf_5.loadFromFile(texturesPath + "tir5.ogg")) {
+        return -1;
+    }
+    Sound tir_5;
+    tir_5.setBuffer(tir_bf_5);
+    tir_5.setVolume(50.f);
+
+    SoundBuffer tir_bf_6;
+    if (!tir_bf_6.loadFromFile(texturesPath + "tir6.ogg")) {
+        return -1;
+    }
+    Sound tir_6;
+    tir_6.setBuffer(tir_bf_6);
+    tir_6.setVolume(50.f);
+
+    SoundBuffer select_bf;
+    if (!select_bf.loadFromFile(texturesPath + "select.wav")) {
+        return -1;
+    }
+    Sound select;
+    select.setBuffer(select_bf);
+    select.setVolume(100);
+
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
     loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
@@ -135,7 +211,7 @@ int main()
     Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
 
 
-    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 5, spriteMain);
+    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, spriteMain);
     bool upFlag = false;
     bool downFlag = false;
     bool leftFlag = false;
@@ -218,9 +294,9 @@ int main()
     sf::Clock clockiframes;
     bool invincible = false;
 
-    //affichage des bordures
-    Color couleur(255, 0, 0);
-    int counter = 0;
+    musique_accueil.play();
+
+    int cursorOnText = 3;
 
     while (window.isOpen())
     {
@@ -243,9 +319,18 @@ int main()
                     for (int i = 0; i <= 2; i++) {
                         if (texts[i]->getGlobalBounds().contains(mousePosF)) {
                             texts[i]->setOutlineThickness(6);
+                            if (cursorOnText!=i)
+                            {
+                                select.play();
+                                cursorOnText = i;
+                            }
                         }
                         else {
                             texts[i]->setOutlineThickness(3);
+                            if (cursorOnText == i)
+                            {
+                                cursorOnText = 3;
+                            }
                         }
                     }
                 }break;
@@ -255,6 +340,8 @@ int main()
                     Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                     if (text2.getGlobalBounds().contains(mousePosF)) {
                         start = true;
+                        musique_accueil.stop();
+                        musique_jeu.play();
                     }
                     if (text4.getGlobalBounds().contains(mousePosF)) {
                         close = true;
@@ -272,16 +359,6 @@ int main()
             window.display();
         }
         if (!restart && start && !close) {
-
-            if (counter == 10) {
-                couleur.r = rand() % 255;
-                couleur.g = rand() % 255;
-                couleur.b = rand() % 255;
-                counter = 0;
-            }
-            else {
-                counter++;
-            }
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -322,10 +399,10 @@ int main()
                                     else { A.persoSprite.setTexture(textureSpriteLeft); }; A.SetRotation(180.f); break;
                     case Keyboard::D: rightFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteRightInv); }
                                     else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;
-                    case Keyboard::Up: if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Down: if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Left: if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Right: if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f); clock.restart(); shoot_ready = false; break; }
+                    case Keyboard::Up: if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f,tir_1,tir_2,tir_3,tir_4,tir_5,tir_6); clock.restart(); shoot_ready = false; break; }
+                    case Keyboard::Down: if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
+                    case Keyboard::Left: if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
+                    case Keyboard::Right: if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
                     default: break;
                     }
                 }
@@ -363,7 +440,6 @@ int main()
                         rightFlag = false;
                         A.SetX(A.GetX() - 5 * ScaleX);
                     }
-                    couleur.r = 255;
                 }
                 while (A.persoSprite.getGlobalBounds().contains(point))
                 {
@@ -498,7 +574,7 @@ int main()
             string string_atkspeed = to_string(atkSpd);
             vitesseTir.setString(string_atkspeed);
             window.draw(vitesseTir);
-
+            /*
             //Bordures
             RectangleShape rectangle;
             std::vector<sf::RectangleShape> bords;
@@ -528,7 +604,7 @@ int main()
             }
             for (const auto& shape : bords) {
                 window.draw(shape);
-            }
+            }*/
 
             window.display();
         }
