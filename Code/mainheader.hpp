@@ -23,6 +23,8 @@ using namespace std;
 #include "perso.hpp"
 #include "projectile.hpp"
 #include "background.hpp"
+#include "projectile_ennemi.hpp"
+
 
 void tirer(vector<Projectile*>& projectiles, Perso& A, Sprite projectile1, float direction,Sound& tir_1, Sound& tir_2, Sound& tir_3, Sound& tir_4, Sound& tir_5, Sound& tir_6);
 

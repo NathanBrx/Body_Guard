@@ -219,7 +219,9 @@ int main()
 
     vector<Projectile*> projectiles;
     vector<Perso*> ennemies;
-
+    vector<Projectile_ennemi*> projectiles_ennemi;
+    vector<Clock> ennemy_shoot_time;
+    
     RectangleShape rectangle3(Vector2f(600, 25));
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
@@ -232,6 +234,9 @@ int main()
     couleurs[2] = 50;
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
+
+    ennemy_shoot_time.push_back(Clock());
+
 
     Color color1(225.6, 161.3, 120.8);
     Color color2(213.9, 146.1, 113.6);
@@ -486,6 +491,25 @@ int main()
                     }
                 }
             }
+
+            for (size_t z = 0; z < projectiles_ennemi.size(); z++){
+                if (projectiles_ennemi[z]->isAlive(window)) {
+
+                    bool touchBorder = false;
+
+                    for (const auto& point : background.borduresPoints) {
+                        touchBorder = touchBorder || projectiles_ennemi[z]->projectileSprite.getGlobalBounds().contains(point);
+                    }
+
+                    projectiles_ennemi[z]->update(window);
+                    window.draw(projectiles_ennemi[z]->projectileSprite);
+                    if (touchBorder) {
+                        projectiles_ennemi.erase(projectiles_ennemi.begin() + z);
+                    }
+                }
+            }
+
+
             for (size_t i = 0; i < ennemies.size(); i++) {
                 if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds()) && !invincible) {
                     A.Setpvdamage(ennemies[i]->Getatk());
@@ -512,7 +536,51 @@ int main()
                 else {
                     ennemies.erase(ennemies.begin() + i);
                 }
+
+                Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
+                if(time_shoot_ennemy>=ennemies[i]->GetDelay()){
+                    projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), projectile1)));
+                    ennemy_shoot_time[i].restart();
+
+                        int sound;
+                        sound = rand() % 6;
+                        switch (sound)
+                        {
+                        case(0):
+                            tir_1.play();
+                            break;
+                        case(1):
+                            tir_2.play();
+                            break;
+                        case(2):
+                            tir_3.play();
+                            break;
+                        case(3):
+                            tir_4.play();
+                            break;
+                        case(4):
+                            tir_5.play();
+                            break;
+                        case(5):
+                            tir_6.play();
+                            break;
+                        default:
+                            break;
+                        }
+                }
+            
+                for (size_t j = 0; j < projectiles_ennemi.size(); j++) {
+                    if (projectiles_ennemi[j]->hit(A)) {
+                        A.Setpvdamage(ennemies[i]->Getatk());
+                        projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
+                    }
             }
+
+        }
+
+
+            }
+
 
             if (!A.checkAlive()) {
                 restart = true;

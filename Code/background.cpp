@@ -472,11 +472,12 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
     this->porte_droite = false;
     this->porte_gauche = false;
     this->porte_haut = false;
-
-    const int ROWS = 8; // nombre de rangées dans le tableau
+    
+    const int ROWS = 8; // nombre de rangÃ©es dans le tableau
     const int COLS = 7; // nombre de colonnes dans le tableau
 
-    // Vérifier s'il y a une case vide adjacente en haut
+    // VÃ©rifier s'il y a une case vide adjacente en haut
+
     if (this->row == 0 || mat[this->row - 1][this->col] == 0) {
 
         if (!(this->isFlipY)) {
@@ -488,7 +489,9 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
             this->porte_bas = true;
         }
     }
-    // Vérifier s'il y a une case vide adjacente en bas
+
+    // VÃ©rifier s'il y a une case vide adjacente en bas
+
     if (this->row == ROWS || mat[this->row + 1][this->col] == 0) {
 
         if (this->isFlipY) {
@@ -501,7 +504,9 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
         }
     }
 
-    // Vérifier s'il y a une case vide adjacente à gauche
+
+    // VÃ©rifier s'il y a une case vide adjacente Ã  gauche
+
     if (this->col == 0 || mat[this->row][this->col - 1] == 0) {
 
         if (!(this->isFlipX)) {
@@ -516,7 +521,9 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
     }
 
 
-    // Vérifier s'il y a une case vide adjacente à droite
+
+    // VÃ©rifier s'il y a une case vide adjacente Ã  droite
+
     if (this->col == COLS || mat[row][this->col + 1] == 0) {
 
         if (this->isFlipX) {
@@ -529,7 +536,9 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
         }
     }
 
-    //Génération des bordures de la map
+
+    //GÃ©nÃ©ration des bordures de la map
+
 
     this->borduresPoints = this->borduresPoints_sansPortes;
 
