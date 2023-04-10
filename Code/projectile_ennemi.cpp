@@ -2,8 +2,8 @@
 
 
 
-Projectile_ennemi::Projectile_ennemi(float xOrigin, float yOrigin, float xTarget, float yTarget, int vitesse, Sprite projectileSprite) :
-    xOrigin(xOrigin), yOrigin(yOrigin), vitesse(vitesse), projectileSprite(projectileSprite)
+Projectile_ennemi::Projectile_ennemi(float xOrigin, float yOrigin, float xTarget, float yTarget, int vitesse, int damage, Sprite projectileSprite) :
+    xOrigin(xOrigin), yOrigin(yOrigin), vitesse(vitesse), damage(damage), projectileSprite(projectileSprite)
 {
     double dx = xTarget - xOrigin;
     double dy = yTarget - yOrigin;
@@ -74,4 +74,8 @@ void Projectile_ennemi::update(RenderWindow& window) {
         else {
             return false;
         }
+    }
+
+    int Projectile_ennemi::GetDamage() {
+        return this->damage;
     }
