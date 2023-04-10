@@ -6,7 +6,7 @@ private:
 
     float xOrigin, yOrigin;
     float direction;
-    int vitesse; //dï¿½placement pixel par seconde
+    int vitesse; //déplacement pixel par seconde
 
 public:
 
@@ -24,7 +24,7 @@ public:
     // Methodes
 
     Sprite projectileSprite; // sprite du projectile
-    void update(Projectile& projectile, Perso& A, RenderWindow& window, float direction); // mï¿½thode pour dï¿½placer le projectile
-    bool isAlive(Projectile& projectile, RenderWindow& window); // mï¿½thode pour vï¿½rifier si le projectile est toujours dans la fenï¿½tre
-    bool hit(Perso& p1); // mï¿½thode pour vï¿½rifier si le projectile touche le personnage
+    void update(Projectile& projectile, Perso& A, RenderWindow& window, float direction); // méthode pour déplacer le projectile
+    bool isAlive(Projectile& projectile, RenderWindow& window); // méthode pour vérifier si le projectile est toujours dans la fenêtre
+    bool hit(Perso& p1); // méthode pour vérifier si le projectile touche le personnage
 };

@@ -24,6 +24,7 @@ Projectile_ennemi::Projectile_ennemi(float xOrigin, float yOrigin, float xTarget
     // Initialisation du sprite
     this->projectileSprite.setPosition(xOrigin, yOrigin);
     this->projectileSprite.setOrigin(this->projectileSprite.getGlobalBounds().width / 2, this->projectileSprite.getGlobalBounds().height / 2);
+    this->projectileSprite.setRotation(atan2(yTarget - yOrigin, xTarget - xOrigin) * 180 / M_PI);
 }
 
 void Projectile_ennemi::update(RenderWindow& window) {
