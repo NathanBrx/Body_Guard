@@ -5,16 +5,19 @@ using namespace sf;
 
 class Projectile_ennemi {
 public:
-    Projectile_ennemi(float xOrigin, float yOrigin, float xTarget, float yTarget, int vitesse, Sprite projectileSprite);
+    Projectile_ennemi(float xOrigin, float yOrigin, float xTarget, float yTarget, int vitesse, int damage, Sprite projectileSprite);
     void update(RenderWindow& window);
     bool isAlive(RenderWindow& window);
     bool hit(Perso& p1);
+    int GetDamage();
     Sprite projectileSprite;
+
 
 private:
     float xOrigin;
     float yOrigin;
     int vitesse;
+    int damage;
     double xDeplacement;
     double yDeplacement;
     double ecartX;
