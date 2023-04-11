@@ -10,11 +10,11 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
-    Texture textureProjectileRight;
+    Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
     Texture textureSpeed, textureSword, textureArrows, textureHeart;
     Text vitesseDeplacement, vitesseTir, attaque;
@@ -115,6 +115,7 @@ int main()
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
 
     // Projectiles
+    loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
     loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
     loadFile(textureSpeed, texturesPath + "speed.png");
     loadFile(textureSword, texturesPath + "sword.png");
@@ -148,6 +149,9 @@ int main()
 
     projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
+
+    projectile2.setTexture(textureProjectileEnnemi);
+    projectile2.setScale(ScaleX,ScaleY);
 
     textureSpriteRight.setRepeated(false);
     textureSpriteRight.setSmooth(true);
@@ -516,7 +520,7 @@ int main()
 
                 Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
                 if(time_shoot_ennemy>=ennemies[i]->GetDelay()){
-                    projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile1)));
+                    projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
                     ennemy_shoot_time[i].restart();
 
                         int sound;
