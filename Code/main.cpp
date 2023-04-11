@@ -10,13 +10,13 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
-    Texture textureSpeed, textureSword, textureArrows, textureHeart;
+    Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
@@ -110,6 +110,9 @@ int main()
     loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
     loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
 
+    //Powerups
+    loadFile(SwordPU, texturesPath + "sword_PU.png");
+
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
@@ -146,6 +149,10 @@ int main()
 
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
+
+    SwordSprite.setTexture(SwordPU);
+    SwordSprite.setScale(ScaleX,ScaleY);
+    SwordSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
 
     projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
@@ -299,6 +306,8 @@ int main()
     bool invincible = false;
 
     Clock changeTexture;
+
+    bool active_pu = false;
 
     musique_accueil.play();
 
@@ -519,6 +528,7 @@ int main()
                 window.draw(ennemies[i]->persoSprite);
                 if (!ennemies[i]->checkAlive()) {
                     ennemies.erase(ennemies.begin() + i);
+                    if (ennemies.size() == 0) active_pu = true;
                 }
                 
 
@@ -582,6 +592,16 @@ int main()
             A.update(upFlag, downFlag, leftFlag, rightFlag, window);
 
             window.draw(A.persoSprite);
+            
+            //Powerups
+            if (active_pu){
+                window.draw(SwordSprite);
+                if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
+                    active_pu = false;
+                    background.portesActives = true;
+                    A.Setatk(A.Getatk() + 1);
+                }
+            }
 
             //HUD vie
             window.draw(heart);

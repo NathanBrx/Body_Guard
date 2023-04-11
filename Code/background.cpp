@@ -58,7 +58,7 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,flo
 
     this->isFlipX = false;
     this->isFlipY = false;
-    this->portesActives = true;
+    this->portesActives = false;
 
     this->porte_bas = false;
     this->porte_droite = false;
@@ -456,7 +456,6 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             cerr << "Porte inexistante";
             break;
     }
-    this->portesActives = true;
     this->bordures_bas = new_bordures_bas;
     this->bordures_haut = new_bordures_haut;
     this->bordures_droite = new_bordures_droite;

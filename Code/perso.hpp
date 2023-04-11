@@ -37,6 +37,7 @@ public:
     void SetY(float y);
     void SetSpeed(int speed);
     void SetatkSpeed(int atkSpeed);
+    void Setatk(int atk);
     void SetRotation(float rotation);
     void Setpvdamage(int diffpv);
     void SetDelay(sf::Time shoot_delay);
