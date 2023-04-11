@@ -14,7 +14,7 @@ int main()
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
-    Texture textureProjectileLeft, textureProjectileRight, textureProjectileUp, textureProjectileDown;
+    Texture textureProjectileRight;
     Texture textureEnnemy1, textureEnnemy1hit;
     Texture textureSpeed, textureSword, textureArrows, textureHeart;
     Text vitesseDeplacement, vitesseTir, attaque;
@@ -115,9 +115,6 @@ int main()
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
 
     // Projectiles
-    loadFile(textureProjectileUp, texturesPath + "projectile_up.png");
-    loadFile(textureProjectileDown, texturesPath + "projectile_down.png");
-    loadFile(textureProjectileLeft, texturesPath + "projectile_left.png");
     loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
     loadFile(textureSpeed, texturesPath + "speed.png");
     loadFile(textureSword, texturesPath + "sword.png");
