@@ -298,6 +298,8 @@ int main()
     sf::Clock clockiframes;
     bool invincible = false;
 
+    Clock changeTexture;
+
     musique_accueil.play();
 
     int cursorOnText = 3;
@@ -504,16 +506,18 @@ int main()
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(*projectiles[j], window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                            ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
+                            ennemies[i]->persoSprite.setTexture(textureEnnemy1hit);
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
-                if (ennemies[i]->checkAlive()) {
-                    window.draw(ennemies[i]->persoSprite);
+                if (changeTexture.getElapsedTime().asSeconds()>=0.2f){
+                    ennemies[i]->persoSprite.setTexture(textureEnnemy1);
+                    changeTexture.restart();
                 }
-                else {
+                window.draw(ennemies[i]->persoSprite);
+                if (!ennemies[i]->checkAlive()) {
                     ennemies.erase(ennemies.begin() + i);
                 }
                 
@@ -551,7 +555,6 @@ int main()
                 }
 
             }
-
 
             for (size_t j = 0; j < projectiles_ennemi.size(); j++) {
                 if (projectiles_ennemi[j]->isAlive(window)) {
