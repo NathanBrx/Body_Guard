@@ -289,6 +289,15 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
 
+    for(int i = 0; i < 9; i++) {
+      for(int j = 0; j < 8; j++) {
+         // afficher l'élément à la position [i][j] de la matrice
+         cout << mat[i][j] << " ";
+      }
+      // passer à la ligne suivante après avoir parcouru une ligne complète de la matrice
+      cout << endl;
+   }
+
     bool shoot_ready = true;
     sf::Clock clock;
     sf::Clock clockiframes;
@@ -459,7 +468,9 @@ int main()
             }
             for (size_t i = 0; i < background.portes.size(); i += 1) {
                 if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
+                    mat[background.row][background.col]=3;
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
+                    if (!(mat[background.row][background.col]==3))
                 }
             }
 
