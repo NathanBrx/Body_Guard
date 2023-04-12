@@ -10,7 +10,7 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite,HealthSprite,SpeedSprite,AtkDelaySprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
 
@@ -19,7 +19,7 @@ int main()
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
-    Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU;
+    Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
@@ -118,7 +118,10 @@ int main()
     loadFile(Vie_tex, texturesPath + "Vie.png");
 
     //Powerups
-    loadFile(SwordPU, texturesPath + "sword_PU.png");
+    loadFile(SwordPU, texturesPath + "Atk_PU.png");
+    loadFile(HealthPU, texturesPath + "Health_PU.png");
+    loadFile(SpeedPU, texturesPath + "Speed_PU.png");
+    loadFile(AtkDelayPU, texturesPath + "AtkDelay_PU.png");
 
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
