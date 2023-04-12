@@ -24,8 +24,8 @@ int main()
     Font policeStats;
 
 
-    //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "Textures\\"; // Windows
+    string texturesPath = "../Textures/"; // Linux
+    //string texturesPath = "Textures\\"; // Windows
 
     //Musique   
     Music musique_accueil;
@@ -178,6 +178,7 @@ int main()
     BarreVie.setTexture(BarreVie_tex);
     BarreVie.setScale(ScaleX,ScaleY);
     BarreVie.setPosition(30* ScaleX,30* ScaleY);
+
     Vie.setTexture(Vie_tex);
     Vie.setScale(ScaleX, ScaleY);
     Vie.setPosition(41*ScaleX, 40*ScaleY);
@@ -188,32 +189,32 @@ int main()
 
     speed.setTexture(textureSpeed);
     speed.setScale(Vector2f(0.1f, 0.1));
-    speed.setPosition(25, 70);
+    speed.setPosition(30*ScaleX, 100*ScaleY);
 
     sword.setTexture(textureSword);
     sword.setScale(Vector2f(0.08f, 0.08f));
-    sword.setPosition(25, 130);
+    sword.setPosition(30*ScaleX, 170*ScaleY);
 
     arrows.setTexture(textureArrows);
     arrows.setScale(Vector2f(0.08f, 0.08f));
-    arrows.setPosition(25, 190);
+    arrows.setPosition(30*ScaleX, 240*ScaleY);
 
     //-------------------
 
     vitesseDeplacement.setFont(policeStats);
     vitesseDeplacement.setCharacterSize(35);
     vitesseDeplacement.setFillColor(Color::White);
-    vitesseDeplacement.setPosition(80, 70);
+    vitesseDeplacement.setPosition(100*ScaleX, 110*ScaleY);
 
     vitesseTir.setFont(policeStats);
     vitesseTir.setCharacterSize(35);
     vitesseTir.setFillColor(Color::White);
-    vitesseTir.setPosition(80, 190);
+    vitesseTir.setPosition(100*ScaleX, 240*ScaleY);
 
     attaque.setFont(policeStats);
     attaque.setCharacterSize(35);
     attaque.setFillColor(Color::White);
-    attaque.setPosition(80, 130);
+    attaque.setPosition(100*ScaleX, 170*ScaleY);
 
     //----------------------
 
@@ -250,13 +251,13 @@ int main()
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
     rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(80, 20);*/
+    rectangle3.setPosition(80, 20);
 
     int couleurs[3];
     couleurs[0] = 100;
     couleurs[1] = 250;
     couleurs[2] = 50;
-
+    */
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
     ennemy_shoot_time.push_back(Clock());
 
@@ -656,7 +657,7 @@ int main()
             rectangle2.setPosition(80, 20);*/
 
             //window.draw(rectangle2);
-            /*
+            
             //HUD attaque
             window.draw(sword);
             int atk = A.Getatk();
