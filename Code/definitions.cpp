@@ -41,4 +41,26 @@ void loadFile(Texture &texture,String filePath) {
     }
 }
 
-//vector generation_ennemis(int* tableau[9][8], int porte){}
+vector generation_ennemis(int* tableau[9][8], int porte){
+    // 1 : haut {987,265} {740, 340} {1364,324}
+    // 2 : droite {1724, 328} {1800, 555} {1560, 755}
+    // 3 : bas {1200, 766} {970, 825} {710, 725}
+    // 4 : gauche {330, 705} {160, 585} {300, 405}
+
+    // {680, 530} {1210, 540}
+
+    void haut(vector<vector<int>>& tab){
+        tab.push_back({987, 265});
+        tab.push_back({987, 265});
+
+    }
+
+    vector<vector<int>> coordonnees;
+
+    switch(porte){
+        case 1 : 
+        case 2 :
+        case 3 :
+        case 4 :
+    }
+}

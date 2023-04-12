@@ -494,7 +494,11 @@ int main()
             }
             for (size_t i = 0; i < background.portes.size(); i += 1) {
                 if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
+                    mat[background.row][background.col]=3;
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
+                    if (!(mat[background.row][background.col]==3)){
+                        
+                    }
                 }
             }
 
