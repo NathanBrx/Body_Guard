@@ -58,7 +58,7 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,flo
 
     this->isFlipX = false;
     this->isFlipY = false;
-    this->portesActives = true;
+    this->portesActives = false;
 
     this->porte_bas = false;
     this->porte_droite = false;
@@ -126,8 +126,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(0,moveYPerso));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -216,8 +216,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -307,8 +307,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(0, moveYPerso));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -395,8 +395,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -456,7 +456,6 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             cerr << "Porte inexistante";
             break;
     }
-    this->portesActives = true;
     this->bordures_bas = new_bordures_bas;
     this->bordures_haut = new_bordures_haut;
     this->bordures_droite = new_bordures_droite;

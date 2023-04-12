@@ -10,13 +10,16 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite,HealthSprite,SpeedSprite,AtkDelaySprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
+
+    Sprite BarreVie, Vie;
+    Texture BarreVie_tex, Vie_tex;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
-    Texture textureProjectileRight;
+    Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
-    Texture textureSpeed, textureSword, textureArrows, textureHeart;
+    Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
@@ -110,11 +113,22 @@ int main()
     loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
     loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
 
+    //Vie
+    loadFile(BarreVie_tex,texturesPath + "Barre_vie.png");
+    loadFile(Vie_tex, texturesPath + "Vie.png");
+
+    //Powerups
+    loadFile(SwordPU, texturesPath + "Atk_PU.png");
+    loadFile(HealthPU, texturesPath + "Health_PU.png");
+    loadFile(SpeedPU, texturesPath + "Speed_PU.png");
+    loadFile(AtkDelayPU, texturesPath + "AtkDelay_PU.png");
+
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
 
     // Projectiles
+    loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
     loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
     loadFile(textureSpeed, texturesPath + "speed.png");
     loadFile(textureSword, texturesPath + "sword.png");
@@ -146,8 +160,15 @@ int main()
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
 
+    SwordSprite.setTexture(SwordPU);
+    SwordSprite.setScale(ScaleX,ScaleY);
+    SwordSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
+
     projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
+
+    projectile2.setTexture(textureProjectileEnnemi);
+    projectile2.setScale(ScaleX,ScaleY);
 
     textureSpriteRight.setRepeated(false);
     textureSpriteRight.setSmooth(true);
@@ -156,38 +177,47 @@ int main()
     textureProjectileRight.setSmooth(true);
 
     //Textures HUD
+
+    BarreVie.setTexture(BarreVie_tex);
+    BarreVie.setScale(ScaleX,ScaleY);
+    BarreVie.setPosition(30* ScaleX,30* ScaleY);
+
+    Vie.setTexture(Vie_tex);
+    Vie.setScale(ScaleX, ScaleY);
+    Vie.setPosition(41*ScaleX, 40*ScaleY);
+
     heart.setTexture(textureHeart);
     heart.setScale(Vector2f(0.08f, 0.08f));
     heart.setPosition(25, 10);
 
     speed.setTexture(textureSpeed);
     speed.setScale(Vector2f(0.1f, 0.1));
-    speed.setPosition(25, 70);
+    speed.setPosition(30*ScaleX, 100*ScaleY);
 
     sword.setTexture(textureSword);
     sword.setScale(Vector2f(0.08f, 0.08f));
-    sword.setPosition(25, 130);
+    sword.setPosition(30*ScaleX, 170*ScaleY);
 
     arrows.setTexture(textureArrows);
     arrows.setScale(Vector2f(0.08f, 0.08f));
-    arrows.setPosition(25, 190);
+    arrows.setPosition(30*ScaleX, 240*ScaleY);
 
     //-------------------
 
     vitesseDeplacement.setFont(policeStats);
     vitesseDeplacement.setCharacterSize(35);
     vitesseDeplacement.setFillColor(Color::White);
-    vitesseDeplacement.setPosition(80, 70);
+    vitesseDeplacement.setPosition(100*ScaleX, 110*ScaleY);
 
     vitesseTir.setFont(policeStats);
     vitesseTir.setCharacterSize(35);
     vitesseTir.setFillColor(Color::White);
-    vitesseTir.setPosition(80, 190);
+    vitesseTir.setPosition(100*ScaleX, 240*ScaleY);
 
     attaque.setFont(policeStats);
     attaque.setCharacterSize(35);
     attaque.setFillColor(Color::White);
-    attaque.setPosition(80, 130);
+    attaque.setPosition(100*ScaleX, 170*ScaleY);
 
     //----------------------
 
@@ -219,6 +249,7 @@ int main()
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
 
+    /*
     RectangleShape rectangle3(Vector2f(600, 25));
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
@@ -229,7 +260,7 @@ int main()
     couleurs[0] = 100;
     couleurs[1] = 250;
     couleurs[2] = 50;
-
+    */
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
     ennemy_shoot_time.push_back(Clock());
 
@@ -289,19 +320,14 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
 
-    for(int i = 0; i < 9; i++) {
-      for(int j = 0; j < 8; j++) {
-         // afficher l'élément à la position [i][j] de la matrice
-         cout << mat[i][j] << " ";
-      }
-      // passer à la ligne suivante après avoir parcouru une ligne complète de la matrice
-      cout << endl;
-   }
-
     bool shoot_ready = true;
     sf::Clock clock;
     sf::Clock clockiframes;
     bool invincible = false;
+
+    Clock changeTexture;
+
+    bool active_pu = false;
 
     musique_accueil.play();
 
@@ -468,9 +494,7 @@ int main()
             }
             for (size_t i = 0; i < background.portes.size(); i += 1) {
                 if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
-                    mat[background.row][background.col]=3;
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
-                    if (!(mat[background.row][background.col]==3))
                 }
             }
 
@@ -511,24 +535,22 @@ int main()
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(*projectiles[j], window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                            ennemies[i]->damage(textureEnnemy1hit, textureEnnemy1, window);
+                            ennemies[i]->persoSprite.setTexture(textureEnnemy1hit);
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
+                if (changeTexture.getElapsedTime().asSeconds()>=0.2f){
+                    ennemies[i]->persoSprite.setTexture(textureEnnemy1);
+                    changeTexture.restart();
+                }
+                window.draw(ennemies[i]->persoSprite);
                 if (ennemies[i]->checkAlive()) {
-                    window.draw(ennemies[i]->persoSprite);
-                }
-                else {
-                    ennemies.erase(ennemies.begin() + i);
-                }
-                
-
-                Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
-                if(time_shoot_ennemy>=ennemies[i]->GetDelay()){
-                    projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile1)));
-                    ennemy_shoot_time[i].restart();
+                    Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
+                    if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
+                        projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
+                        ennemy_shoot_time[i].restart();
 
                         int sound;
                         sound = rand() % 6;
@@ -555,10 +577,15 @@ int main()
                         default:
                             break;
                         }
+                    }
+                }
+
+                if (!ennemies[i]->checkAlive()) {
+                    ennemies.erase(ennemies.begin() + i);
+                    if (ennemies.size() == 0) active_pu = true;
                 }
 
             }
-
 
             for (size_t j = 0; j < projectiles_ennemi.size(); j++) {
                 if (projectiles_ennemi[j]->isAlive(window)) {
@@ -571,12 +598,11 @@ int main()
                     window.draw(projectiles_ennemi[j]->projectileSprite);
                     if (touchBorder) {
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
-                    }
-                }   
-                    if (projectiles_ennemi[j]->hit(A)) {
+                    }else if (projectiles_ennemi[j]->hit(A)) {
                         A.Setpvdamage(projectiles_ennemi[j]->GetDamage());
-                            projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
-                        } 
+                        projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
+                    }
+                }
             } 
 
             if (!A.checkAlive()) {
@@ -586,11 +612,26 @@ int main()
             A.update(upFlag, downFlag, leftFlag, rightFlag, window);
 
             window.draw(A.persoSprite);
+            
+            //Powerups
+
+            if (active_pu){
+                window.draw(SwordSprite);
+                if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
+                    active_pu = false;
+                    background.portesActives = true;
+                    A.Setatk(A.Getatk() + 1);
+                }
+            }
 
             //HUD vie
-            window.draw(heart);
-            window.draw(rectangle3);
+            //window.draw(heart);
+            Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
+            window.draw(Vie);
+            window.draw(BarreVie);
 
+            //window.draw(rectangle3);
+            /*
             //HUD
             int pvs = A.Getpv();
             int pvs_max = A.Getpvmax();
@@ -612,13 +653,14 @@ int main()
                     couleurs[2] = 50;
                 }
             }
-
+            */
+            /*
             RectangleShape rectangle2(Vector2f((pvs * 600) / (pvs_max), 25));
             rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(80, 20);
+            rectangle2.setPosition(80, 20);*/
 
-            window.draw(rectangle2);
-
+            //window.draw(rectangle2);
+            
             //HUD attaque
             window.draw(sword);
             int atk = A.Getatk();

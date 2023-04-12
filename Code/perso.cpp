@@ -57,6 +57,9 @@ void Perso::SetSpeed(int speed) {
 void Perso::SetatkSpeed(int atkSpeed) {
     this->atkSpeed = atkSpeed;
 }
+void Perso::Setatk(int atk){
+    this->atk = atk;
+}
 void Perso::SetRotation(float rotation) {
     this->rotation = rotation;
 }

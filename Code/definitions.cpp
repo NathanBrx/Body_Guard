@@ -40,3 +40,5 @@ void loadFile(Texture &texture,String filePath) {
         exit(1);
     }
 }
+
+//vector generation_ennemis(int* tableau[9][8], int porte){}
