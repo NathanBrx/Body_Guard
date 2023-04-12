@@ -126,8 +126,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(0,moveYPerso));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -216,8 +216,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -307,8 +307,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(0, moveYPerso));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);
@@ -395,8 +395,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
                 window.draw(A.persoSprite);
                 window.display();
-                //std::this_thread::sleep_for(std::chrono::microseconds(1));
-                usleep(1);
+                std::this_thread::sleep_for(std::chrono::microseconds(1));
+                //usleep(1);
             }
 
             this->backgroundSprite.setScale(newScaleX, newScaleY);

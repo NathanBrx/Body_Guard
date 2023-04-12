@@ -13,6 +13,9 @@ int main()
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
+
+    Sprite BarreVie, Vie;
+    Texture BarreVie_tex, Vie_tex;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
@@ -21,8 +24,8 @@ int main()
     Font policeStats;
 
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "Textures\\"; // Windows
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "Textures\\"; // Windows
 
     //Musique   
     Music musique_accueil;
@@ -110,6 +113,10 @@ int main()
     loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
     loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
 
+    //Vie
+    loadFile(BarreVie_tex,texturesPath + "Barre_vie.png");
+    loadFile(Vie_tex, texturesPath + "Vie.png");
+
     //Powerups
     loadFile(SwordPU, texturesPath + "sword_PU.png");
 
@@ -167,6 +174,14 @@ int main()
     textureProjectileRight.setSmooth(true);
 
     //Textures HUD
+
+    BarreVie.setTexture(BarreVie_tex);
+    BarreVie.setScale(ScaleX,ScaleY);
+    BarreVie.setPosition(30* ScaleX,30* ScaleY);
+    Vie.setTexture(Vie_tex);
+    Vie.setScale(ScaleX, ScaleY);
+    Vie.setPosition(41*ScaleX, 40*ScaleY);
+
     heart.setTexture(textureHeart);
     heart.setScale(Vector2f(0.08f, 0.08f));
     heart.setPosition(25, 10);
@@ -230,11 +245,12 @@ int main()
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
 
+    /*
     RectangleShape rectangle3(Vector2f(600, 25));
     rectangle3.setFillColor(Color::Transparent);
     rectangle3.setOutlineThickness(5);
     rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(80, 20);
+    rectangle3.setPosition(80, 20);*/
 
     int couleurs[3];
     couleurs[0] = 100;
@@ -526,16 +542,11 @@ int main()
                     changeTexture.restart();
                 }
                 window.draw(ennemies[i]->persoSprite);
-                if (!ennemies[i]->checkAlive()) {
-                    ennemies.erase(ennemies.begin() + i);
-                    if (ennemies.size() == 0) active_pu = true;
-                }
-                
-
-                Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
-                if(time_shoot_ennemy>=ennemies[i]->GetDelay()){
-                    projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(),ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
-                    ennemy_shoot_time[i].restart();
+                if (ennemies[i]->checkAlive()) {
+                    Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
+                    if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
+                        projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
+                        ennemy_shoot_time[i].restart();
 
                         int sound;
                         sound = rand() % 6;
@@ -562,6 +573,12 @@ int main()
                         default:
                             break;
                         }
+                    }
+                }
+
+                if (!ennemies[i]->checkAlive()) {
+                    ennemies.erase(ennemies.begin() + i);
+                    if (ennemies.size() == 0) active_pu = true;
                 }
 
             }
@@ -577,12 +594,11 @@ int main()
                     window.draw(projectiles_ennemi[j]->projectileSprite);
                     if (touchBorder) {
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
-                    }
-                }   
-                    if (projectiles_ennemi[j]->hit(A)) {
+                    }else if (projectiles_ennemi[j]->hit(A)) {
                         A.Setpvdamage(projectiles_ennemi[j]->GetDamage());
-                            projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
-                        } 
+                        projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
+                    }
+                }
             } 
 
             if (!A.checkAlive()) {
@@ -594,6 +610,7 @@ int main()
             window.draw(A.persoSprite);
             
             //Powerups
+
             if (active_pu){
                 window.draw(SwordSprite);
                 if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
@@ -604,9 +621,13 @@ int main()
             }
 
             //HUD vie
-            window.draw(heart);
-            window.draw(rectangle3);
+            //window.draw(heart);
+            Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
+            window.draw(Vie);
+            window.draw(BarreVie);
 
+            //window.draw(rectangle3);
+            /*
             //HUD
             int pvs = A.Getpv();
             int pvs_max = A.Getpvmax();
@@ -628,13 +649,14 @@ int main()
                     couleurs[2] = 50;
                 }
             }
-
+            */
+            /*
             RectangleShape rectangle2(Vector2f((pvs * 600) / (pvs_max), 25));
             rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(80, 20);
+            rectangle2.setPosition(80, 20);*/
 
-            window.draw(rectangle2);
-
+            //window.draw(rectangle2);
+            /*
             //HUD attaque
             window.draw(sword);
             int atk = A.Getatk();
