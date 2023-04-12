@@ -69,6 +69,9 @@ void Perso::Setpvdamage(int diffpv) {
         this->alive = 0;
     }
 }
+void Perso::SetPV(int pv){
+    this->pv = pv;
+}
 void Perso::SetDelay(sf::Time shoot_delay){
     this->shoot_delay = shoot_delay;
 }

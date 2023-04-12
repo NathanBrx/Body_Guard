@@ -1,21 +1,25 @@
 #include "mainheader.hpp"
 
+// Constructeur qui initialise les chemins des images et les facteurs d'échelle
 Background::Background(string accueil_path, string jeu_path, string fin_path,float ScaleX,float ScaleY) :
     accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), ScaleX(ScaleX), ScaleY(ScaleY)
 {
-    
+    // Charge l'image de l'écran d'accueil, l'applique à un sprite et ajuste son échelle
     loadFile(this->accueil_tx,this->accueil_path);
     this->accueilSprite.setTexture(this->accueil_tx);
     this->accueilSprite.setScale(this->ScaleX, this->ScaleY);
 
+    // Charge l'image de l'arrière-plan, l'applique à un sprite et ajuste son échelle
     loadFile(backgroundTexture, this->jeu_path);
     this->backgroundSprite.setTexture(backgroundTexture);
     this->backgroundSprite.setScale(this->ScaleX, this->ScaleY);
 
+    // Charge l'image de fin de partie, l'applique à un sprite et ajuste son échelle
     loadFile(fin_tx, this->fin_path);
     this->finSprite.setTexture(fin_tx);
     this->finSprite.setScale(this->ScaleX, this->ScaleY);
 
+    // Initialise les zones de collision pour changer de map
     this->portes =
     {
     sf::IntRect(0, 0, 1920*this->ScaleX, 20*this->ScaleY),
@@ -24,6 +28,7 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,flo
     sf::IntRect(0, 0, 20*this->ScaleX, 1080*this->ScaleY)
     };
 
+    // Initialise les points qui définissent les bordures du niveau
     this->borduresPoints_sansPortes_notScaled = 
     {{0,403},{24,420},{53,427},{83,426},{112,417},{137,401},{159,381},{181,360},{202,339},{225,319},{249,301},{274,285},{300,271},{328,259},{356,249},{385,241},{414,235},{444,231},{474,228},{504,224},{534,222},{564,220},{594,217},{623,215},{653,211},{683,207},{712,201},{741,194},{770,186},{797,171},{822,155},{843,133},{859,108},{871,81},{879,52},{886,23},{889,1},{918,0},{948,0},{978,0},{1008,0},{1038,0},{1068,0},{1091,20},{1112,42},{1131,65},{1149,89},{1165,114},{1183,138},{1200,163},{1219,186},{1242,205},{1269,219},{1299,222},{1329,220},{1358,212},{1386,203},{1414,192},{1442,182},{1471,172},{1500,164},{1528,155},{1558,148},{1587,141},{1616,136},{1646,135},{1676,137},{1706,140},{1735,146},{1762,159},{1786,178},{1804,202},{1813,231},{1820,260},{1822,290},{1825,320},{1831,349},{1840,378},{1852,405},{1870,429},{1890,452},{1913,470},{1916,500},{1917,530},{1917,560},{1918,590},{1918,620},{1918,650},{1916,662},{1886,666},{1858,676},{1831,691},{1807,708},{1783,727},{1761,747},{1739,767},{1718,788},{1694,807},{1671,826},{1649,846},{1624,863},{1598,877},{1570,889},{1542,899},{1513,907},{1483,913},{1454,917},{1424,919},{1394,920},{1364,918},{1334,916},{1304,912},{1274,911},{1244,907},{1215,904},{1185,901},{1155,902},{1127,913},{1104,932},{1096,961},{1101,991},{1110,1020},{1122,1047},{1138,1072},{1109,1078},{1079,1078},{1049,1078},{1019,1078},{989,1078},{959,1078},{929,1078},{899,1078},{877,1057},{865,1030},{851,1003},{834,978},{818,953},{798,930},{776,910},{752,892},{726,877},{699,865},{670,856},{641,849},{611,844},{581,841},{551,840},{521,839},{491,838},{461,839},{431,839},{401,838},{371,835},{342,832},{312,827},{283,819},{255,808},{227,798},{199,786},{172,773},{146,759},{119,744},{93,730},{68,715},{41,701},{15,685},{0,675},{0,645},{0,615},{0,585},{0,555},{0,525},{0,495},{0,465},{0,435}};
 
@@ -90,12 +95,12 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
 
     std::vector<sf::Vector2f> new_borduresPoints_sansPortes;
 
-
-
+    // Switch selon la porte touchée
     switch (porteTouchee)
     {
         case 0: // Haut
 
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe Y
             if (!(this->isFlipY)) {
                 newScaleY = -(this->ScaleY);
                 newOriginY = this->backgroundSprite.getLocalBounds().height;
@@ -105,6 +110,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 newOriginY = 0;
             }
 
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe X
             if (this->isFlipX) {
                 newScaleX = -(this->ScaleX);
             }
@@ -113,9 +119,10 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
             newOriginX = this->backgroundSprite.getOrigin().x;
 
-
+            // Calcul du déplacement du personnage
             moveYPerso = ((1025*this->ScaleY)-A.GetY())/36;
 
+            // Animation de déplacement de l'image de fond et du personnage
             for(int i=0; i<36;i+=1){
                 window.clear();
                 this->backgroundSprite.move(sf::Vector2f(0, 30*this->ScaleY));
@@ -127,9 +134,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(A.persoSprite);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
-                //usleep(1);
             }
 
+            // Réinitialisation de l'image de fond et des portes
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
@@ -185,6 +192,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
 
         case 1: // Droite
             
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe Y
             if (this->isFlipY) {
                 newScaleY = -(this->ScaleY);
             }
@@ -193,6 +201,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
             newOriginY = this->backgroundSprite.getOrigin().y;
 
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe X
             if (!(this->isFlipX)) {
                 newScaleX = -(this->ScaleX);
                 newOriginX = this->backgroundSprite.getLocalBounds().width;
@@ -202,8 +211,10 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 newOriginX = 0;
             }
 
+            // Calcul du déplacement du personnage
             moveXPerso = ((this->portes[3].left + 55 * this->ScaleX) - A.GetX()) / 64;
 
+            // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 64; i += 1) {
                 window.clear();
                 this->backgroundSprite.move(sf::Vector2f(-30 * this->ScaleX, 0));
@@ -217,9 +228,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(A.persoSprite);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
-                //usleep(1);
             }
 
+            // Réinitialisation de l'image de fond et des portes
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
@@ -274,7 +285,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             break;
 
         case 2: // Bas
-            cerr << "bas";
+
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe Y
             if (!(this->isFlipY)) {
                 newScaleY = -(this->ScaleY);
                 newOriginY = this->backgroundSprite.getLocalBounds().height;
@@ -284,6 +296,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 newOriginY = 0;
             }
 
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe X
             if (this->isFlipX) {
                 newScaleX = -(this->ScaleX);
             }
@@ -292,9 +305,10 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
             newOriginX = this->backgroundSprite.getOrigin().x;
 
-
+            // Calcul du déplacement du personnage
             moveYPerso = ((55 * this->ScaleY) - A.GetY()) / 36;
 
+            // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 36; i += 1) {
                 window.clear();
                 this->backgroundSprite.move(sf::Vector2f(0, -30 * this->ScaleY));
@@ -308,9 +322,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(A.persoSprite);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
-                //usleep(1);
             }
 
+            // Réinitialisation de l'image de fond et des portes
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
@@ -365,7 +379,8 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             break;
 
         case 3: // Gauche
-           
+
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe Y
             if (this->isFlipY) {
                 newScaleY = -(this->ScaleY);
             }
@@ -374,6 +389,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
             newOriginY = this->backgroundSprite.getOrigin().y;
 
+            // Changement de l'échelle et de l'origine de l'image de fond selon l'axe X
             if (!(this->isFlipX)) {
                 newScaleX = -(this->ScaleX);
                 newOriginX = this->backgroundSprite.getLocalBounds().width;
@@ -383,8 +399,10 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 newOriginX = 0;
             }
 
+            // Calcul du déplacement du personnage
             moveXPerso = ((this->portes[1].left - 35 * this->ScaleX) - A.GetX()) / 64;
 
+            // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 64; i += 1) {
                 window.clear();
                 this->backgroundSprite.move(sf::Vector2f(30 * this->ScaleX, 0));
@@ -396,9 +414,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(A.persoSprite);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
-                //usleep(1);
             }
 
+            // Réinitialisation de l'image de fond et des portes
             this->backgroundSprite.setScale(newScaleX, newScaleY);
             this->backgroundSprite.setOrigin({ newOriginX, newOriginY });
             this->backgroundSprite.setPosition(0, 0);
@@ -537,8 +555,6 @@ void Background::BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_hau
 
 
     //Génération des bordures de la map
-
-
     this->borduresPoints = this->borduresPoints_sansPortes;
 
     if(this->porte_haut){

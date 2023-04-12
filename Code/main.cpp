@@ -11,7 +11,10 @@ int main()
 
     Vector2u TextureSize, WindowSize;
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite;
+    Sprite spriteBoss;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
+    Sprite spriteADN;
+    Texture textureADN;
 
 
     Sprite BarreVie, Vie;
@@ -19,15 +22,16 @@ int main()
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
     Texture textureEnnemy1, textureEnnemy1hit;
+    Texture textureBoss;
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
 
-    //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "Textures\\"; // Windows
+    string texturesPath = "../Textures/"; // Linux
+    //string texturesPath = "Textures\\"; // Windows
 
-    //Musique   
+    //Musique
     Music musique_accueil;
     if (!musique_accueil.openFromFile(texturesPath + "accueil.ogg")){
         return -1; // error
@@ -103,6 +107,13 @@ int main()
     select.setBuffer(select_bf);
     select.setVolume(100);
 
+    SoundBuffer power_up_bf;
+    if (!power_up_bf.loadFromFile(texturesPath + "power_up.wav")) {
+        return -1;
+    }
+    Sound power_up;
+    power_up.setBuffer(power_up_bf);
+
     // Joueur
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
     loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
@@ -116,6 +127,7 @@ int main()
     //Vie
     loadFile(BarreVie_tex,texturesPath + "Barre_vie.png");
     loadFile(Vie_tex, texturesPath + "Vie.png");
+    loadFile(textureADN, texturesPath + "ADN.png");
 
     //Powerups
     loadFile(SwordPU, texturesPath + "sword_PU.png");
@@ -123,6 +135,7 @@ int main()
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
+    loadFile(textureBoss, texturesPath+"Boss.png");
 
     // Projectiles
     loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
@@ -156,6 +169,8 @@ int main()
 
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
+    spriteBoss.setTexture(textureBoss);
+    spriteBoss.setScale(ScaleX,ScaleY);
 
     SwordSprite.setTexture(SwordPU);
     SwordSprite.setScale(ScaleX,ScaleY);
@@ -166,6 +181,9 @@ int main()
 
     projectile2.setTexture(textureProjectileEnnemi);
     projectile2.setScale(ScaleX,ScaleY);
+
+    spriteADN.setTexture(textureADN);
+    spriteADN.setScale(ScaleX*0.05,ScaleY*0.05);
 
     textureSpriteRight.setRepeated(false);
     textureSpriteRight.setSmooth(true);
@@ -328,6 +346,9 @@ int main()
     musique_accueil.play();
 
     int cursorOnText = 3;
+
+    vector<Vector2f> ADNs= {};
+    vector<FloatRect> ADNs_boundingbox= {};
 
     while (window.isOpen())
     {
@@ -577,7 +598,9 @@ int main()
                 }
 
                 if (!ennemies[i]->checkAlive()) {
+                    ADNs.push_back(ennemies[i]->persoSprite.getPosition());
                     ennemies.erase(ennemies.begin() + i);
+                    window.draw(spriteADN);
                     if (ennemies.size() == 0) active_pu = true;
                 }
 
@@ -609,11 +632,28 @@ int main()
 
             window.draw(A.persoSprite);
             
+            if(ADNs.size()!=0){
+                for(const auto& adn : ADNs){
+                    spriteADN.setPosition(adn);
+                    ADNs_boundingbox.push_back(spriteADN.getGlobalBounds());
+                    window.draw(spriteADN);
+                }
+            }
+
+            for(size_t i=0;i<ADNs.size();i++){
+                if(A.persoSprite.getGlobalBounds().intersects(ADNs_boundingbox[i])){
+                    A.SetPV(A.Getpv()+10);
+                    ADNs_boundingbox.erase(ADNs_boundingbox.begin()+i);
+                    ADNs.erase(ADNs.begin()+i);
+                }
+            }
+
             //Powerups
 
             if (active_pu){
                 window.draw(SwordSprite);
                 if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
+                    power_up.play();
                     active_pu = false;
                     background.portesActives = true;
                     A.Setatk(A.Getatk() + 1);
