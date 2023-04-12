@@ -316,6 +316,7 @@ int main()
     bool start = false;
     bool close = false;
     bool restart = false;
+    bool credits = false;
 
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
@@ -335,7 +336,7 @@ int main()
 
     while (window.isOpen())
     {
-        while (!restart && !start && !close) {
+        while (!restart && !start && !close && !credits) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -378,6 +379,9 @@ int main()
                         musique_accueil.stop();
                         musique_jeu.play();
                     }
+                    if (text3.getGlobalBounds().contains(mousePosF)){
+                        credits = true;
+                    }
                     if (text4.getGlobalBounds().contains(mousePosF)) {
                         close = true;
                     }
@@ -393,7 +397,7 @@ int main()
             window.draw(text4);
             window.display();
         }
-        if (!restart && start && !close) {
+        if (!restart && start && !close && !credits) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -715,7 +719,7 @@ int main()
 
             window.display();
         }
-        else if (restart && !close) {
+        else if (restart && !close && !credits) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -793,6 +797,9 @@ int main()
 
                 window.display();
             }
+        }
+        else if (!start && !restart && !close && credits){
+            
         }
         else {
             window.close();
