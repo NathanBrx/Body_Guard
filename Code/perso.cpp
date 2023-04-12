@@ -39,7 +39,9 @@ float Perso::GetRotation() {
 }
 
 // Setters
-
+void Perso::SetPvMax(int pvmax){
+    this->pvmax = pvmax;
+}
 void Perso::Reset(){
     this->pv = pvmax;
     this->persoSprite.setPosition(xOrigin, yOrigin);
