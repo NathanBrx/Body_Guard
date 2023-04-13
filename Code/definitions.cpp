@@ -1,4 +1,5 @@
 #include "mainheader.hpp"
+using namespace std;
 using namespace sf;
 
 void tirer(vector<Projectile*>& projectiles, Perso& A, Sprite projectile1, float direction,Sound& tir_1, Sound& tir_2, Sound& tir_3, Sound& tir_4, Sound& tir_5, Sound& tir_6) {
@@ -41,7 +42,35 @@ void loadFile(Texture &texture,String filePath) {
     }
 }
 
-vector generation_ennemis(int* tableau[9][8], int porte){
+void haut(vector<vector<int>>& tab){
+    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({1200, 766}); tab.push_back({970, 825}); tab.push_back({710, 725});
+    tab.push_back({330, 705}); tab.push_back({160, 585}); tab.push_back({300, 405});
+    tab.push_back({680, 530}); tab.push_back({1210, 540});
+}
+
+void droite(vector<vector<int>>& tab){
+    tab.push_back({987, 265}); tab.push_back({740, 340}); tab.push_back({1364, 324});
+    tab.push_back({1200, 766}); tab.push_back({970, 825}); tab.push_back({710, 725});
+    tab.push_back({330, 705}); tab.push_back({160, 585}); tab.push_back({300, 405});
+    tab.push_back({680, 530}); tab.push_back({1210, 540});
+}
+
+void bas(vector<vector<int>>& tab){
+    tab.push_back({987, 265}); tab.push_back({740, 340}); tab.push_back({1364, 324});
+    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({330, 705}); tab.push_back({160, 585}); tab.push_back({300, 405});
+    tab.push_back({680, 530}); tab.push_back({1210, 540});
+}
+
+void gauche(vector<vector<int>>& tab){
+    tab.push_back({987, 265}); tab.push_back({740, 340}); tab.push_back({1364, 324});
+    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({1200, 766}); tab.push_back({970, 825}); tab.push_back({710, 725});
+    tab.push_back({680, 530}); tab.push_back({1210, 540});
+}
+
+vector<vector<int>> generation_ennemis(int porte, int nbennemis){
     // 1 : haut {987,265} {740, 340} {1364,324}
     // 2 : droite {1724, 328} {1800, 555} {1560, 755}
     // 3 : bas {1200, 766} {970, 825} {710, 725}
@@ -49,18 +78,22 @@ vector generation_ennemis(int* tableau[9][8], int porte){
 
     // {680, 530} {1210, 540}
 
-    void haut(vector<vector<int>>& tab){
-        tab.push_back({987, 265});
-        tab.push_back({987, 265});
-
-    }
-
     vector<vector<int>> coordonnees;
 
     switch(porte){
-        case 1 : 
-        case 2 :
-        case 3 :
-        case 4 :
+        case 0 : bas(coordonnees); break;
+        case 1 : gauche(coordonnees); break;
+        case 2 : haut(coordonnees); break; 
+        case 3 : droite(coordonnees); break;
     }
+
+    srand(time(0));
+    for (int i = 0; i<(11-nbennemis); i++){
+        int index = rand() % (11-i);
+        coordonnees.erase(coordonnees.begin()+index);
+    }
+
+
+    return coordonnees;
+
 }

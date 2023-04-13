@@ -30,4 +30,4 @@ void tirer(vector<Projectile*>& projectiles, Perso& A, Sprite projectile1, float
 
 void loadFile(Texture& texture, String filePath);
 
-vector generation_ennemis(int* tableau[9][8], int porte);
+vector<vector<int>> generation_ennemis(int porte, int nbennemis);
