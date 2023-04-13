@@ -235,7 +235,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath+"Credits.jpg", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, spriteMain);
@@ -275,6 +275,7 @@ int main()
     Text text3("Credits", font2);
     Text text4("Quitter", font2);
     Text text5("Recommencer", font2);
+    Text text6("Retour", font2);
 
     text1.setCharacterSize(200);
     text1.setOrigin(text1.getGlobalBounds().width / 2., text1.getGlobalBounds().height / 2.);
@@ -310,6 +311,13 @@ int main()
     text5.setFillColor(Color::White);
     text5.setOutlineThickness(5);
     text5.setOutlineColor(Color::Black);
+
+    text6.setCharacterSize(70);
+    text6.setOrigin(text6.getGlobalBounds().width / 2., text6.getGlobalBounds().height / 2.);
+    text6.setPosition(50,50);
+    text6.setFillColor(Color::Black);
+    text6.setOutlineThickness(3);
+    text6.setOutlineColor(Color::White);
 
     Text* texts[3] = { &text2,&text3,&text4 };
 
@@ -799,7 +807,49 @@ int main()
             }
         }
         else if (!start && !restart && !close && credits){
-            
+            background.creditsSprite.setPosition(0, WindowSize.y);
+            while (credits && background.creditsSprite.getPosition().y > 0){
+                Event event3;
+                while (window.pollEvent(event3)) {
+                    switch (event3.type) {
+                    case Event::Closed:
+                        close = true;
+                        credits = false;
+                        break;
+                    case Event::KeyPressed:
+                        if (event3.key.code == Keyboard::Escape) {
+                            close = true;
+                            credits = false;
+                        }
+                        break;
+                    case Event::MouseMoved:
+                    {
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (text6.getGlobalBounds().contains(mousePosF)) {
+                            text6.setOutlineThickness(5);
+                        }
+                        else {
+                            text6.setOutlineThickness(3);
+                        }
+                    }break;
+                    case Event::MouseButtonPressed:
+                    {
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (text6.getGlobalBounds().contains(mousePosF)) {
+                            credits = false;
+                        }
+                    }break;
+                    default: break;
+                    }
+                }
+                background.creditsSprite.move(0, -1);
+                window.clear(Color::Black);
+                window.draw(background.creditsSprite);
+                window.draw(text6);
+                window.display();
+            }
         }
         else {
             window.close();

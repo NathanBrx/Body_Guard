@@ -1,7 +1,7 @@
 #include "mainheader.hpp"
 
-Background::Background(string accueil_path, string jeu_path, string fin_path,float ScaleX,float ScaleY) :
-    accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), ScaleX(ScaleX), ScaleY(ScaleY)
+Background::Background(string accueil_path, string jeu_path, string fin_path, string credits_path, float ScaleX,float ScaleY) :
+    accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), credits_path(credits_path), ScaleX(ScaleX), ScaleY(ScaleY)
 {
     
     loadFile(this->accueil_tx,this->accueil_path);
@@ -15,6 +15,10 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,flo
     loadFile(fin_tx, this->fin_path);
     this->finSprite.setTexture(fin_tx);
     this->finSprite.setScale(this->ScaleX, this->ScaleY);
+
+    loadFile(credits_tx, this->credits_path);
+    this->creditsSprite.setTexture(credits_tx);
+    this->creditsSprite.setScale(this->ScaleX, this->ScaleY);
 
     this->portes =
     {
