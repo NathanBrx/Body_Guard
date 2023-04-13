@@ -317,7 +317,7 @@ int main()
     bool restart = false;
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
-    int randi;
+    bool active_rando = true;
 
     bool shoot_ready = true;
     sf::Clock clock;
@@ -335,7 +335,7 @@ int main()
     while (window.isOpen())
     {
         srand(time(0));
-        int rando = rand()%4;
+        if(active_rando){int rando = rand()%4;}
         
         while (!restart && !start && !close) {
             Event event1;
@@ -587,7 +587,7 @@ int main()
                     ennemies.erase(ennemies.begin() + i);
                     if (ennemies.size() == 0){ 
                         active_pu = true;
-                        int randi = rando;
+                        active_rando = false;
                     }
                 }
 
@@ -624,7 +624,7 @@ int main()
             if (active_pu){
                 
 
-                switch(randi){
+                switch(rando){
                     case 0: PowerUpSprite.setTexture(SwordPU);break;
                     case 1: PowerUpSprite.setTexture(SpeedPU);break;
                     case 2: PowerUpSprite.setTexture(HealthPU);break;
@@ -638,7 +638,7 @@ int main()
                     active_pu = false;
                     background.portesActives = true;
                     
-                    switch(randi){
+                    switch(rando){
                     case 0: A.Setatk(A.Getatk() + 1);break;
                     case 1: A.SetSpeed(A.GetSpeed()+1);break;
                     case 2: A.SetPvMax(A.Getpvmax() + 10);break;
