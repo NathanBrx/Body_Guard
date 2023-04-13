@@ -1,11 +1,16 @@
 #include "mainheader.hpp"
 
-Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite) :
-    xOrigin(xOrigin), yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed), persoSprite(persoSprite)
+Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Sprite persoSpriteBas) :
+    xOrigin(xOrigin), yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed), persoSprite(persoSprite), persoSpriteBas(persoSpriteBas)
 {
     this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
+
+    this->persoSpriteBas.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
+    this->persoSpriteBas.setPosition(xOrigin, yOrigin);
+
     this->shoot_delay = sf::milliseconds(500);
+    this->hitbox = FloatRect(this->persoSprite.getGlobalBounds().left+this->persoSprite.getScale().x*250, this->persoSprite.getGlobalBounds().top, this->persoSprite.getScale().x * 500, this->persoSprite.getGlobalBounds().height);
 }
 
 // Getters
@@ -38,6 +43,14 @@ float Perso::GetRotation() {
     return this->rotation;
 }
 
+FloatRect Perso::GetHitbox() {
+    this->hitbox.left = this->persoSprite.getGlobalBounds().left + this->persoSprite.getScale().x * 250;
+    this->hitbox.top = this->persoSprite.getGlobalBounds().top;
+    this->hitbox.width = this->persoSprite.getScale().x * 500;
+    this->hitbox.height = this->persoSprite.getGlobalBounds().height;
+    return this->hitbox;
+}
+
 // Setters
 
 void Perso::Reset(){
@@ -47,9 +60,12 @@ void Perso::Reset(){
 }
 void Perso::SetX(float x) {
     this->persoSprite.setPosition(x, this->GetY());
+    this->persoSpriteBas.setPosition(x, this->GetY());
+
 }
 void Perso::SetY(float y) {
     this->persoSprite.setPosition(this->GetX(), y);
+    this->persoSpriteBas.setPosition(this->GetX(), y);
 }
 void Perso::SetSpeed(int speed) {
     this->speed = speed;
@@ -69,9 +85,15 @@ void Perso::Setpvdamage(int diffpv) {
         this->alive = 0;
     }
 }
-void Perso::SetPV(int pv){
-    this->pv = pv;
+void Perso::AddPV(int pv){
+    if ((this->pv + pv) <= this->pvmax) {
+        this->pv += pv;
+    }
+    else {
+        this->pv = this->pvmax;
+    }
 }
+
 void Perso::SetDelay(sf::Time shoot_delay){
     this->shoot_delay = shoot_delay;
 }

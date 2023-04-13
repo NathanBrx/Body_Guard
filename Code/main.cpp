@@ -3,7 +3,7 @@
 int main()
 {
 
-    RenderWindow window(VideoMode(/*VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height*/1920, 1080), "Body Guard"/*, Style::Fullscreen*/);
+    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard"/*, Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -27,9 +27,16 @@ int main()
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
 
+    Texture PersoTex_h_b, PersoTex_h_h, PersoTex_h_g, PersoTex_h_d;
+    Texture PersoTex_b_0, PersoTex_b_1, PersoTex_b_2, PersoTex_b_3, PersoTex_b_4, PersoTex_b_5, PersoTex_b_6, PersoTex_b_7, PersoTex_b_8;
+    Texture PersoTex_b_0_h, PersoTex_b_1_h, PersoTex_b_2_h, PersoTex_b_3_h, PersoTex_b_4_h, PersoTex_b_5_h, PersoTex_b_6_h, PersoTex_b_7_h, PersoTex_b_8_h;
+    Texture PersoTex_b_1_d, PersoTex_b_2_d, PersoTex_b_3_d, PersoTex_b_4_d, PersoTex_b_5_d, PersoTex_b_6_d, PersoTex_b_7_d, PersoTex_b_8_d, PersoTex_b_9_d;
+    Texture PersoTex_b_1_g, PersoTex_b_2_g, PersoTex_b_3_g, PersoTex_b_4_g, PersoTex_b_5_g, PersoTex_b_6_g, PersoTex_b_7_g, PersoTex_b_8_g, PersoTex_b_9_g;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "Textures\\"; // Windows
+    Sprite PersoSprite_h, PersoSprite_b;
+
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -115,6 +122,7 @@ int main()
     power_up.setBuffer(power_up_bf);
 
     // Joueur
+    /*
     loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
     loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
     loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
@@ -122,7 +130,52 @@ int main()
     loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
     loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
     loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
-    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");
+    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");*/
+
+    loadFile(PersoTex_h_b,texturesPath + "Perso_h_b.png");
+    loadFile(PersoTex_h_h, texturesPath + "Perso_h_h.png");
+    loadFile(PersoTex_h_d, texturesPath + "Perso_h_d.png");
+    loadFile(PersoTex_h_g, texturesPath + "Perso_h_g.png");
+
+    loadFile(PersoTex_b_0, texturesPath + "Perso_b_0.png");
+    loadFile(PersoTex_b_1, texturesPath + "Perso_b_1.png");
+    loadFile(PersoTex_b_2, texturesPath + "Perso_b_2.png");
+    loadFile(PersoTex_b_3, texturesPath + "Perso_b_3.png");
+    loadFile(PersoTex_b_4, texturesPath + "Perso_b_4.png");
+    loadFile(PersoTex_b_5, texturesPath + "Perso_b_5.png");
+    loadFile(PersoTex_b_6, texturesPath + "Perso_b_6.png");
+    loadFile(PersoTex_b_7, texturesPath + "Perso_b_7.png");
+    loadFile(PersoTex_b_8, texturesPath + "Perso_b_8.png");
+
+    loadFile(PersoTex_b_0_h, texturesPath + "Perso_b_0_h.png");
+    loadFile(PersoTex_b_1_h, texturesPath + "Perso_b_1_h.png");
+    loadFile(PersoTex_b_2_h, texturesPath + "Perso_b_2_h.png");
+    loadFile(PersoTex_b_3_h, texturesPath + "Perso_b_3_h.png");
+    loadFile(PersoTex_b_4_h, texturesPath + "Perso_b_4_h.png");
+    loadFile(PersoTex_b_5_h, texturesPath + "Perso_b_5_h.png");
+    loadFile(PersoTex_b_6_h, texturesPath + "Perso_b_6_h.png");
+    loadFile(PersoTex_b_7_h, texturesPath + "Perso_b_7_h.png");
+    loadFile(PersoTex_b_8_h, texturesPath + "Perso_b_8_h.png");
+
+    loadFile(PersoTex_b_1_d, texturesPath + "Perso_b_1_d.png");
+    loadFile(PersoTex_b_2_d, texturesPath + "Perso_b_2_d.png");
+    loadFile(PersoTex_b_3_d, texturesPath + "Perso_b_3_d.png");
+    loadFile(PersoTex_b_4_d, texturesPath + "Perso_b_4_d.png");
+    loadFile(PersoTex_b_5_d, texturesPath + "Perso_b_5_d.png");
+    loadFile(PersoTex_b_6_d, texturesPath + "Perso_b_6_d.png");
+    loadFile(PersoTex_b_7_d, texturesPath + "Perso_b_7_d.png");
+    loadFile(PersoTex_b_8_d, texturesPath + "Perso_b_8_d.png");
+    loadFile(PersoTex_b_9_d, texturesPath + "Perso_b_9_d.png");
+
+    loadFile(PersoTex_b_1_g, texturesPath + "Perso_b_1_g.png");
+    loadFile(PersoTex_b_2_g, texturesPath + "Perso_b_2_g.png");
+    loadFile(PersoTex_b_3_g, texturesPath + "Perso_b_3_g.png");
+    loadFile(PersoTex_b_4_g, texturesPath + "Perso_b_4_g.png");
+    loadFile(PersoTex_b_5_g, texturesPath + "Perso_b_5_g.png");
+    loadFile(PersoTex_b_6_g, texturesPath + "Perso_b_6_g.png");
+    loadFile(PersoTex_b_7_g, texturesPath + "Perso_b_7_g.png");
+    loadFile(PersoTex_b_8_g, texturesPath + "Perso_b_8_g.png");
+    loadFile(PersoTex_b_9_g, texturesPath + "Perso_b_9_g.png");
 
     //Vie
     loadFile(BarreVie_tex,texturesPath + "Barre_vie.png");
@@ -163,9 +216,15 @@ int main()
     // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
-
+    /*
     spriteMain.setTexture(textureSpriteRight);
-    spriteMain.setScale(ScaleX, ScaleY);
+    spriteMain.setScale(ScaleX, ScaleY);*/
+
+    PersoSprite_h.setTexture(PersoTex_h_d);
+    PersoSprite_h.setScale(ScaleX*0.1, ScaleY * 0.1);
+
+    PersoSprite_b.setTexture(PersoTex_b_0);
+    PersoSprite_b.setScale(ScaleX * 0.1, ScaleY * 0.1);
 
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
@@ -252,7 +311,7 @@ int main()
     Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
 
 
-    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, spriteMain);
+    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, PersoSprite_h,PersoSprite_b);
     bool upFlag = false;
     bool downFlag = false;
     bool leftFlag = false;
@@ -275,7 +334,7 @@ int main()
     couleurs[1] = 250;
     couleurs[2] = 50;
 
-    ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
+    ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1,PersoSprite_b));
     ennemy_shoot_time.push_back(Clock());
 
     Color color1(225.6, 161.3, 120.8);
@@ -350,6 +409,19 @@ int main()
     vector<Vector2f> ADNs= {};
     vector<FloatRect> ADNs_boundingbox= {};
 
+    int numTexSpriteAnim = 0;
+    int numTexSpriteAnim_h = 0;
+    int numTexSpriteAnim_d = 0;
+    int numTexSpriteAnim_g = 0;
+
+    bool isBackSide = false;
+
+    int waitForNextFrame = 0;
+    const int timeToWait = 3;
+    int waitForNextRotation = 0;
+
+    int pvBonusAnim = 0;
+
     while (window.isOpen())
     {
         while (!restart && !start && !close) {
@@ -421,11 +493,11 @@ int main()
             if (invincible) {
                 sf::Time time2 = clockiframes.getElapsedTime();
                 if (time2 >= sf::milliseconds(500)) {
-                    invincible = false;
+                    invincible = false;/*
                     if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRight); }
                     if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUp); }
                     if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeft); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDown); }
+                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDown); }*/
                 }
             }
 
@@ -442,7 +514,7 @@ int main()
                     case  Keyboard::Escape: close = true; break;
 
                         // up, down, left and right keys
-
+/*
                     case Keyboard::Z: upFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteUpInv); }
                                     else { A.persoSprite.setTexture(textureSpriteUp); }; A.SetRotation(90.f); break;
                     case Keyboard::S: downFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteDownInv); }
@@ -450,11 +522,15 @@ int main()
                     case Keyboard::Q: leftFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteLeftInv); }
                                     else { A.persoSprite.setTexture(textureSpriteLeft); }; A.SetRotation(180.f); break;
                     case Keyboard::D: rightFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;
-                    case Keyboard::Up: if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f,tir_1,tir_2,tir_3,tir_4,tir_5,tir_6); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Down: if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Left: if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
-                    case Keyboard::Right: if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; break; }
+                                    else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;*/
+                    case Keyboard::Z: upFlag = true; A.SetRotation(90.f); break;
+                    case Keyboard::S: downFlag = true; A.SetRotation(270.f); break;
+                    case Keyboard::Q: leftFlag = true; A.SetRotation(180.f); break;
+                    case Keyboard::D: rightFlag = true; A.SetRotation(0.f); break;
+                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; clock.restart(); if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); shoot_ready = false;  }break;
+                    case Keyboard::Down:A.persoSprite.setTexture(PersoTex_h_b); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6);  clock.restart(); shoot_ready = false;  }break;
+                    case Keyboard::Left:A.persoSprite.setTexture(PersoTex_h_g); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; }break;
+                    case Keyboard::Right:A.persoSprite.setTexture(PersoTex_h_d); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false;  }break;
                     default: break;
                     }
                 }
@@ -472,10 +548,10 @@ int main()
                 }
 
             }
-
+            
             for (const auto& point : background.borduresPoints) {
 
-                if (A.persoSprite.getGlobalBounds().contains(point)) {
+                if (A.GetHitbox().contains(point)) {
                     if (upFlag) {
                         upFlag = false;
                         A.SetY(A.GetY() + 5 * ScaleY);
@@ -493,7 +569,7 @@ int main()
                         A.SetX(A.GetX() - 5 * ScaleX);
                     }
                 }
-                while (A.persoSprite.getGlobalBounds().contains(point))
+                while (A.GetHitbox().contains(point))
                 {
                     if (A.GetY() > 540 * ScaleY) {
                         A.SetY(A.GetY() - 5 * ScaleY);
@@ -510,7 +586,7 @@ int main()
                 }
             }
             for (size_t i = 0; i < background.portes.size(); i += 1) {
-                if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
+                if (A.GetHitbox().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
                 }
             }
@@ -539,14 +615,14 @@ int main()
                 }
             }
             for (size_t i = 0; i < ennemies.size(); i++) {
-                if (A.persoSprite.getGlobalBounds().intersects(ennemies[i]->persoSprite.getGlobalBounds()) && !invincible) {
+                if (A.GetHitbox().intersects(ennemies[i]->persoSprite.getGlobalBounds()) && !invincible) {
                     A.Setpvdamage(ennemies[i]->Getatk());
                     invincible = true;
-                    clockiframes.restart();
+                    clockiframes.restart();/*
                     if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRightInv); }
                     if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUpInv); }
                     if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDownInv); }
+                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDownInv); }*/
 
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
@@ -630,6 +706,255 @@ int main()
             A.isInWindow(window);
             A.update(upFlag, downFlag, leftFlag, rightFlag, window);
 
+            if ((rightFlag&&!leftFlag)) {
+                numTexSpriteAnim_h = 0;
+                numTexSpriteAnim = 0;
+                numTexSpriteAnim_g = 0;
+                if (waitForNextFrame == 0)
+                {
+                    switch (numTexSpriteAnim_d)
+                    {
+                    case 0:
+                        A.persoSpriteBas.setTexture(PersoTex_b_1_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 1:
+                        A.persoSpriteBas.setTexture(PersoTex_b_2_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 2:
+                        A.persoSpriteBas.setTexture(PersoTex_b_3_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 3:
+                        A.persoSpriteBas.setTexture(PersoTex_b_4_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 4:
+                        A.persoSpriteBas.setTexture(PersoTex_b_5_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 5:
+                        A.persoSpriteBas.setTexture(PersoTex_b_6_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 6:
+                        A.persoSpriteBas.setTexture(PersoTex_b_7_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 7:
+                        A.persoSpriteBas.setTexture(PersoTex_b_8_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    case 8:
+                        A.persoSpriteBas.setTexture(PersoTex_b_9_d);
+                        numTexSpriteAnim_d++;
+                        break;
+                    default:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0);
+                        numTexSpriteAnim_d = 0;
+                        break;
+                    }
+                    waitForNextFrame = timeToWait;
+                }
+                else {
+                    waitForNextFrame--;
+                }
+
+            }
+
+            else if ((leftFlag && !rightFlag)) {
+                numTexSpriteAnim_h = 0;
+                numTexSpriteAnim = 0;
+                numTexSpriteAnim_d = 0;
+                if (waitForNextFrame == 0)
+                {
+                    switch (numTexSpriteAnim_g)
+                    {
+                    case 0:
+                        A.persoSpriteBas.setTexture(PersoTex_b_1_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 1:
+                        A.persoSpriteBas.setTexture(PersoTex_b_2_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 2:
+                        A.persoSpriteBas.setTexture(PersoTex_b_3_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 3:
+                        A.persoSpriteBas.setTexture(PersoTex_b_4_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 4:
+                        A.persoSpriteBas.setTexture(PersoTex_b_5_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 5:
+                        A.persoSpriteBas.setTexture(PersoTex_b_6_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 6:
+                        A.persoSpriteBas.setTexture(PersoTex_b_7_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 7:
+                        A.persoSpriteBas.setTexture(PersoTex_b_8_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    case 8:
+                        A.persoSpriteBas.setTexture(PersoTex_b_9_g);
+                        numTexSpriteAnim_g++;
+                        break;
+                    default:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0);
+                        numTexSpriteAnim_g = 0;
+                        break;
+                    }
+                    waitForNextFrame = timeToWait;
+                }
+                else {
+                    waitForNextFrame--;
+                }
+
+            }
+
+            else if (downFlag&&!upFlag) {
+                numTexSpriteAnim_h = 0;
+                numTexSpriteAnim_d = 0;
+                numTexSpriteAnim_g = 0;
+                if (waitForNextFrame == 0)
+                {
+                    switch (numTexSpriteAnim)
+                    {
+                    case 0:
+                        A.persoSpriteBas.setTexture(PersoTex_b_1);
+                        numTexSpriteAnim++;
+                        break;
+                    case 1:
+                        A.persoSpriteBas.setTexture(PersoTex_b_2);
+                        numTexSpriteAnim++;
+                        break;
+                    case 2:
+                        A.persoSpriteBas.setTexture(PersoTex_b_3);
+                        numTexSpriteAnim++;
+                        break;
+                    case 3:
+                        A.persoSpriteBas.setTexture(PersoTex_b_4);
+                        numTexSpriteAnim++;
+                        break;
+                    case 4:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0);
+                        numTexSpriteAnim++;
+                        break;
+                    case 5:
+                        A.persoSpriteBas.setTexture(PersoTex_b_5);
+                        numTexSpriteAnim++;
+                        break;
+                    case 6:
+                        A.persoSpriteBas.setTexture(PersoTex_b_6);
+                        numTexSpriteAnim++;
+                        break;
+                    case 7:
+                        A.persoSpriteBas.setTexture(PersoTex_b_7);
+                        numTexSpriteAnim++;
+                        break;
+                    case 8:
+                        A.persoSpriteBas.setTexture(PersoTex_b_8);
+                        numTexSpriteAnim++;
+                        break;
+                    default:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0);
+                        numTexSpriteAnim = 0;
+                        break;
+                    }
+                    waitForNextFrame = timeToWait;
+                }
+                else {
+                    waitForNextFrame--;
+                }
+
+            }
+
+            else if (upFlag&&!downFlag) {
+                numTexSpriteAnim = 0;
+                numTexSpriteAnim_d = 0;
+                numTexSpriteAnim_g = 0;
+                if (waitForNextFrame == 0)
+                {
+                    switch (numTexSpriteAnim_h)
+                    {
+                    case 0:
+                        A.persoSpriteBas.setTexture(PersoTex_b_1_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 1:
+                        A.persoSpriteBas.setTexture(PersoTex_b_2_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 2:
+                        A.persoSpriteBas.setTexture(PersoTex_b_3_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 3:
+                        A.persoSpriteBas.setTexture(PersoTex_b_4_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 4:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 5:
+                        A.persoSpriteBas.setTexture(PersoTex_b_5_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 6:
+                        A.persoSpriteBas.setTexture(PersoTex_b_6_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 7:
+                        A.persoSpriteBas.setTexture(PersoTex_b_7_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    case 8:
+                        A.persoSpriteBas.setTexture(PersoTex_b_8_h);
+                        numTexSpriteAnim_h++;
+                        break;
+                    default:
+                        A.persoSpriteBas.setTexture(PersoTex_b_0_h);
+                        numTexSpriteAnim_h = 0;
+                        break;
+                    }
+                    waitForNextFrame = timeToWait;
+                }
+                else {
+                    waitForNextFrame--;
+                }
+            }
+            
+            else{
+                if (isBackSide){
+                    A.persoSpriteBas.setTexture(PersoTex_b_0_h);
+                }
+                else {
+                    A.persoSpriteBas.setTexture(PersoTex_b_0);
+                }
+            }
+            
+
+            if (waitForNextRotation == 0)
+            {
+                if (upFlag) { A.persoSprite.setTexture(PersoTex_h_h); isBackSide = true;}
+                if (downFlag) { A.persoSprite.setTexture(PersoTex_h_b); isBackSide = false;}
+                if (leftFlag) { A.persoSprite.setTexture(PersoTex_h_g); isBackSide = false;}
+                if (rightFlag) { A.persoSprite.setTexture(PersoTex_h_d); isBackSide = false;}
+            }
+            else {
+                waitForNextRotation--;
+            }
+
+            window.draw(A.persoSpriteBas);
             window.draw(A.persoSprite);
             
             if(ADNs.size()!=0){
@@ -641,8 +966,9 @@ int main()
             }
 
             for(size_t i=0;i<ADNs.size();i++){
-                if(A.persoSprite.getGlobalBounds().intersects(ADNs_boundingbox[i])){
-                    A.SetPV(A.Getpv()+10);
+                if(A.GetHitbox().intersects(ADNs_boundingbox[i])){
+                    pvBonusAnim += 20;
+                    power_up.play();
                     ADNs_boundingbox.erase(ADNs_boundingbox.begin()+i);
                     ADNs.erase(ADNs.begin()+i);
                 }
@@ -652,7 +978,7 @@ int main()
 
             if (active_pu){
                 window.draw(SwordSprite);
-                if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
+                if (A.GetHitbox().intersects(SwordSprite.getGlobalBounds())){
                     power_up.play();
                     active_pu = false;
                     background.portesActives = true;
@@ -663,6 +989,11 @@ int main()
             //HUD vie
             //window.draw(heart);
             Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
+            if (pvBonusAnim!=0)
+            {
+                A.AddPV(1);
+                pvBonusAnim--;
+            }
             window.draw(Vie);
             window.draw(BarreVie);
 
