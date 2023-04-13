@@ -494,7 +494,15 @@ int main()
             }
             for (size_t i = 0; i < background.portes.size(); i += 1) {
                 if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
+                    mat[background.row][background.col]=3;
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
+                    if (!(mat[background.row][background.col]==3)){
+                        vector<vector<int>> nouveaux_ennemis= generation_ennemis(i, 3);
+                        for (size_t i = 0; i < nouveaux_ennemis.size(); i ++) {
+                            ennemies.push_back(new Perso(nouveaux_ennemis[i][0], nouveaux_ennemis[i][1], 0., 50, 5, 5, 5, spriteEnnemy1));
+                            ennemy_shoot_time.push_back(Clock());
+                        }
+                    }
                 }
             }
 
