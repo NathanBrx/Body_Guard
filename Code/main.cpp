@@ -318,6 +318,7 @@ int main()
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
+    int rando;
 
     bool shoot_ready = true;
     sf::Clock clock;
@@ -335,7 +336,7 @@ int main()
     while (window.isOpen())
     {
         srand(time(0));
-        if(active_rando){int rando = rand()%4;}
+        if(active_rando){rando = rand()%4;}
         
         while (!restart && !start && !close) {
             Event event1;
