@@ -49,7 +49,6 @@ public:
     Sprite persoSprite; //attribut sprite du personnage
     Texture texturebase; //attribut texture du personnage
     Texture texturehit; //attribut texture du personnage pour quand il prend des dégâts
-    void damage(RenderWindow& window); // méthode pour afficher l'animation de dégats
 
     // Destructeur
     ~Perso();

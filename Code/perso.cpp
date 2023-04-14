@@ -97,16 +97,6 @@ void Perso::isInWindow(RenderWindow& window) {
     if (this->GetY() > (int)window.getSize().y) this->SetY(window.getSize().y);
 }
 
-void Perso::damage(RenderWindow& window) {
-    int compteur = 0;
-    this->persoSprite.setTexture(this->texturehit);
-    window.draw(this->persoSprite);
-    while (compteur < 100) {
-        compteur++;
-    }
-    this->persoSprite.setTexture(this->texturebase);
-}
-
 //Destructeur
 Perso::~Perso() {}
 
