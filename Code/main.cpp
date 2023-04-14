@@ -10,7 +10,7 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, SwordSprite,HealthSprite,SpeedSprite,AtkDelaySprite;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
 
@@ -22,7 +22,7 @@ int main()
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
-
+    
 
     string texturesPath = "../Textures/"; // Linux
     //string texturesPath = "Textures\\"; // Windows
@@ -160,9 +160,8 @@ int main()
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
 
-    SwordSprite.setTexture(SwordPU);
-    SwordSprite.setScale(ScaleX,ScaleY);
-    SwordSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
+    PowerUpSprite.setScale(ScaleX,ScaleY);
+    PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
 
     projectile1.setTexture(textureProjectileRight);
     projectile1.setScale(ScaleX, ScaleY);
@@ -316,9 +315,10 @@ int main()
     bool start = false;
     bool close = false;
     bool restart = false;
-
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
+    bool active_rando = true;
+    int rando;
 
     bool shoot_ready = true;
     sf::Clock clock;
@@ -335,6 +335,9 @@ int main()
 
     while (window.isOpen())
     {
+        srand(time(0));
+        if(active_rando){rando = rand()%4;}
+        
         while (!restart && !start && !close) {
             Event event1;
             while (window.pollEvent(event1)) {
@@ -392,6 +395,7 @@ int main()
             window.draw(text3);
             window.draw(text4);
             window.display();
+            
         }
         if (!restart && start && !close) {
 
@@ -590,7 +594,10 @@ int main()
 
                 if (!ennemies[i]->checkAlive()) {
                     ennemies.erase(ennemies.begin() + i);
-                    if (ennemies.size() == 0) active_pu = true;
+                    if (ennemies.size() == 0){ 
+                        active_pu = true;
+                        active_rando = false;
+                    }
                 }
 
             }
@@ -622,14 +629,31 @@ int main()
             window.draw(A.persoSprite);
             
             //Powerups
-
+            
             if (active_pu){
-                window.draw(SwordSprite);
-                if (A.persoSprite.getGlobalBounds().intersects(SwordSprite.getGlobalBounds())){
+                
+
+                switch(rando){
+                    case 0: PowerUpSprite.setTexture(SwordPU);break;
+                    case 1: PowerUpSprite.setTexture(SpeedPU);break;
+                    case 2: PowerUpSprite.setTexture(HealthPU);break;
+                    case 3: PowerUpSprite.setTexture(AtkDelayPU);break;
+
+
+                }
+
+                window.draw(PowerUpSprite);
+                if (A.persoSprite.getGlobalBounds().intersects(PowerUpSprite.getGlobalBounds())){
                     active_pu = false;
                     background.portesActives = true;
-                    A.Setatk(A.Getatk() + 1);
+                    
+                    switch(rando){
+                    case 0: A.Setatk(A.Getatk() + 1);break;
+                    case 1: A.SetSpeed(A.GetSpeed()+1);break;
+                    case 2: A.SetPvMax(A.Getpvmax() + 10);break;
+                    case 3: A.SetDelay(A.GetDelay()-sf::milliseconds(50));break; 
                 }
+            }
             }
 
             //HUD vie
@@ -808,3 +832,4 @@ int main()
     }
     return 0;
 }
+

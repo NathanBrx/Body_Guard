@@ -19,7 +19,6 @@ public:
     Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite);
 
     // Getters
-
     float GetX();
     float GetY();
     int GetSpeed();
@@ -31,7 +30,7 @@ public:
     sf::Time GetDelay();
 
     // Setters
-
+    void SetPvMax(int pvmax);
     void Reset();
     void SetX(float x);
     void SetY(float y);
