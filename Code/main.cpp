@@ -543,7 +543,7 @@ int main()
             background.BoucheTrou(window, mat, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
 
             for (size_t j = 0; j < projectiles.size(); j++) {
-                if (projectiles[j]->isAlive(*projectiles[j], window)) {
+                if (projectiles[j]->isAlive(window)) {
 
                     bool touchBorder = false;
 
@@ -551,7 +551,7 @@ int main()
                         touchBorder = touchBorder || projectiles[j]->projectileSprite.getGlobalBounds().contains(point);
                     }
 
-                    projectiles[j]->update(*projectiles[j], A, window, projectiles[j]->GetDirection());
+                    projectiles[j]->update(window);
                     window.draw(projectiles[j]->projectileSprite);
                     if (touchBorder) {
                         projectiles.erase(projectiles.begin() + j);
@@ -570,7 +570,7 @@ int main()
 
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
-                    if (projectiles[j]->isAlive(*projectiles[j], window)) {
+                    if (projectiles[j]->isAlive(window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
                             ennemies[i]->persoSprite.setTexture(ennemies[i]->texturehit);
                             projectiles.erase(projectiles.begin() + j);

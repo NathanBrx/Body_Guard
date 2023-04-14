@@ -25,18 +25,18 @@ void Projectile::SetVitesse(int vitesse) {
 
 // Methodes
 
-void Projectile::update(Projectile& projectile, Perso& A, RenderWindow& window, float direction) {
-    switch ((int)direction) {
-    case 270: projectile.projectileSprite.move(0.f, -(float)A.GetatkSpeed()); break;
-    case 90: projectile.projectileSprite.move(0.f, (float)A.GetatkSpeed()); break;
-    case 180: projectile.projectileSprite.move(-(float)A.GetatkSpeed(), 0.f); break;
-    case 0: projectile.projectileSprite.move((float)A.GetatkSpeed(), 0.f); break;
+void Projectile::update(RenderWindow& window) {
+    switch ((int) this->direction) {
+    case 270: this->projectileSprite.move(0.f, -(float)vitesse); break;
+    case 90: this->projectileSprite.move(0.f, (float)vitesse); break;
+    case 180: this->projectileSprite.move(-(float)vitesse, 0.f); break;
+    case 0: this->projectileSprite.move((float)vitesse, 0.f); break;
     default: break;
     }
 }
 
-bool Projectile::isAlive(Projectile& projectile, RenderWindow& window) {
-    if (projectile.projectileSprite.getPosition().y < 0 || projectile.projectileSprite.getPosition().y > window.getSize().y || projectile.projectileSprite.getPosition().x < 0 || projectile.projectileSprite.getPosition().x > window.getSize().x) {
+bool Projectile::isAlive(RenderWindow& window) {
+    if (this->projectileSprite.getPosition().y < 0 || this->projectileSprite.getPosition().y > window.getSize().y || this->projectileSprite.getPosition().x < 0 || this->projectileSprite.getPosition().x > window.getSize().x) {
         return false;
     }
     else {
