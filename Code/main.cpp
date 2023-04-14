@@ -820,6 +820,27 @@ int main()
                         Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                         if (text5.getGlobalBounds().contains(mousePosF)) {
                             A.Reset();
+                            projectiles ={};
+                            ennemies={};
+                            projectiles_ennemi={};
+                            ennemy_shoot_time={};
+                            changeTexture={};
+                            start = false;
+                            close = false;
+                            restart = false;
+                            mat[9][8] = { 0 }; // Initialisation de la carte
+                            generation(mat);
+                            active_rando = true;
+
+                            shoot_ready = true;
+                            clock={};
+                            clockiframes={};
+                            invincible = false;
+
+                            active_pu = false;
+
+                            musique_accueil.play();
+
                             restart = false;
                         }
                         if (text4.getGlobalBounds().contains(mousePosF)) {
