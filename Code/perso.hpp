@@ -16,7 +16,7 @@ private:
 
 public:
 
-    Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite);
+    Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Texture texturebase, Texture texturehit);
 
     // Getters
     float GetX();
@@ -47,7 +47,9 @@ public:
     void update(bool upFlag, bool downFlag, bool leftFlag, bool rightFlag, RenderWindow& window);
     void isInWindow(RenderWindow& window);
     Sprite persoSprite; //attribut sprite du personnage
-    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // méthode pour afficher l'animation de dégats
+    Texture texturebase; //attribut texture du personnage
+    Texture texturehit; //attribut texture du personnage pour quand il prend des dégâts
+    void damage(RenderWindow& window); // méthode pour afficher l'animation de dégats
 
     // Destructeur
     ~Perso();

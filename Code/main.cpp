@@ -10,7 +10,7 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
 
@@ -18,7 +18,7 @@ int main()
     Texture BarreVie_tex, Vie_tex;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
-    Texture textureEnnemy1, textureEnnemy1hit;
+    Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit;
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
@@ -126,6 +126,10 @@ int main()
     // Ennemies
     loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
     loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
+    loadFile(textureEnnemy2, texturesPath + "ennemy2.png");
+    loadFile(textureEnnemy2hit, texturesPath + "ennemy2hit.png");
+    loadFile(textureEnnemy3, texturesPath + "ennemy3.png");
+    loadFile(textureEnnemy3hit, texturesPath + "ennemy3hit.png");
 
     // Projectiles
     loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
@@ -159,6 +163,12 @@ int main()
 
     spriteEnnemy1.setTexture(textureEnnemy1);
     spriteEnnemy1.setScale(ScaleX, ScaleY);
+
+    spriteEnnemy2.setTexture(textureEnnemy2);
+    spriteEnnemy2.setScale(ScaleX, ScaleY);
+
+    spriteEnnemy3.setTexture(textureEnnemy3);
+    spriteEnnemy3.setScale(ScaleX, ScaleY);
 
     PowerUpSprite.setScale(ScaleX,ScaleY);
     PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
@@ -237,7 +247,7 @@ int main()
     Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
 
 
-    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, spriteMain);
+    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, spriteMain, textureSpriteRight, textureSpriteRightInv);
     bool upFlag = false;
     bool downFlag = false;
     bool leftFlag = false;
@@ -247,6 +257,7 @@ int main()
     vector<Perso*> ennemies;
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
+    vector<Clock> changeTexture;
 
     /*
     RectangleShape rectangle3(Vector2f(600, 25));
@@ -260,8 +271,9 @@ int main()
     couleurs[1] = 250;
     couleurs[2] = 50;
     */
-    ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1));
+    ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1, textureEnnemy1, textureEnnemy1hit));
     ennemy_shoot_time.push_back(Clock());
+    changeTexture.push_back(Clock());
 
     Color color1(225.6, 161.3, 120.8);
     Color color2(213.9, 146.1, 113.6);
@@ -325,7 +337,6 @@ int main()
     sf::Clock clockiframes;
     bool invincible = false;
 
-    Clock changeTexture;
 
     bool active_pu = false;
 
@@ -503,9 +514,22 @@ int main()
                     if (!(mat[background.row][background.col]==3)){
                         vector<vector<int>> nouveaux_ennemis= generation_ennemis(i, 3);
                         active_rando=true;
+                        srand(time(0));
                         for (size_t i = 0; i < nouveaux_ennemis.size(); i ++) {
-                            ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy1));
+                            int sprite_choisi = rand() % 3 + 1;
+                            switch (sprite_choisi){
+                            case 1:
+                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy1, textureEnnemy1, textureEnnemy1hit));
+                                break;
+                            case 2:
+                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy2, textureEnnemy2, textureEnnemy2hit));
+                                break;
+                            case 3:
+                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, textureEnnemy3, textureEnnemy3hit));
+                                break;
+                            }
                             ennemy_shoot_time.push_back(Clock());
+                            changeTexture.push_back(Clock());
                         }
                     }
                 }
@@ -548,15 +572,15 @@ int main()
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(*projectiles[j], window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                            ennemies[i]->persoSprite.setTexture(textureEnnemy1hit);
+                            ennemies[i]->persoSprite.setTexture(ennemies[i]->texturehit);
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
-                if (changeTexture.getElapsedTime().asSeconds()>=0.2f){
-                    ennemies[i]->persoSprite.setTexture(textureEnnemy1);
-                    changeTexture.restart();
+                if (changeTexture[i].getElapsedTime().asSeconds()>=0.2f){
+                    ennemies[i]->persoSprite.setTexture(ennemies[i]->texturebase);
+                    changeTexture[i].restart();
                 }
                 window.draw(ennemies[i]->persoSprite);
                 if (ennemies[i]->checkAlive()) {
@@ -595,6 +619,8 @@ int main()
 
                 if (!ennemies[i]->checkAlive()) {
                     ennemies.erase(ennemies.begin() + i);
+                    ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
+                    changeTexture.erase(changeTexture.begin() + i);
                     if (ennemies.size() == 0){ 
                         active_pu = true;
                         active_rando = false;
