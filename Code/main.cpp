@@ -10,7 +10,7 @@ int main()
     window.setFramerateLimit(60);
 
     Vector2u TextureSize, WindowSize;
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
 
 
@@ -18,7 +18,7 @@ int main()
     Texture BarreVie_tex, Vie_tex;
     Texture textureSpriteLeft, textureSpriteRight, textureSpriteUp, textureSpriteDown, textureSpriteDownInv, textureSpriteLeftInv, textureSpriteRightInv, textureSpriteUpInv;
     Texture textureProjectileRight, textureProjectileEnnemi;
-    Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit;
+    Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit, textureBoss;
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
@@ -130,6 +130,7 @@ int main()
     loadFile(textureEnnemy2hit, texturesPath + "ennemy2hit.png");
     loadFile(textureEnnemy3, texturesPath + "ennemy3.png");
     loadFile(textureEnnemy3hit, texturesPath + "ennemy3hit.png");
+    loadFile(textureBoss, texturesPath + "Boss.png");
 
     // Projectiles
     loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
@@ -169,6 +170,9 @@ int main()
 
     spriteEnnemy3.setTexture(textureEnnemy3);
     spriteEnnemy3.setScale(ScaleX, ScaleY);
+
+    spriteBoss.setTexture(textureBoss);
+    spriteBoss.setScale(ScaleX/2, ScaleY/2);
 
     PowerUpSprite.setScale(ScaleX,ScaleY);
     PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
@@ -332,6 +336,13 @@ int main()
     bool active_rando = true;
     int rando;
 
+    cout << "Generation de la carte" << endl;
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 8; j++) {
+            cout << mat[i][j] << " ";
+        }
+        cout << endl;
+    }
     bool shoot_ready = true;
     sf::Clock clock;
     sf::Clock clockiframes;
@@ -511,7 +522,7 @@ int main()
                 if (A.persoSprite.getGlobalBounds().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
                     mat[background.row][background.col]=3;
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
-                    if (!(mat[background.row][background.col]==3)){
+                    if (mat[background.row][background.col]==1){
                         vector<vector<int>> nouveaux_ennemis= generation_ennemis(i, 3);
                         active_rando=true;
                         srand(time(0));
@@ -519,19 +530,23 @@ int main()
                             int sprite_choisi = rand() % 3 + 1;
                             switch (sprite_choisi){
                             case 1:
-                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy1, textureEnnemy1, textureEnnemy1hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy1, textureEnnemy1, textureEnnemy1hit));
                                 break;
                             case 2:
-                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy2, textureEnnemy2, textureEnnemy2hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, textureEnnemy2, textureEnnemy2hit));
                                 break;
                             case 3:
-                                ennemies.push_back(new Perso(((nouveaux_ennemis[i][0])*WindowSize.x)/1920, ((nouveaux_ennemis[i][1])*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, textureEnnemy3, textureEnnemy3hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, textureEnnemy3, textureEnnemy3hit));
                                 break;
                             }
                             ennemy_shoot_time.push_back(Clock());
                             changeTexture.push_back(Clock());
                         }
                     }
+                    if (mat[background.row][background.col]==2){
+                        ennemies.push_back(new Perso(boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
+                        
+                }
                 }
             }
 

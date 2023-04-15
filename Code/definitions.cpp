@@ -97,3 +97,16 @@ vector<vector<int>> generation_ennemis(int porte, int nbennemis){
     return coordonnees;
 
 }
+
+
+Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebosshit, Vector2u WindowSize){
+    int xOrigin, yOrigin;
+    switch(porte){
+        case 0 : xOrigin = 740; yOrigin = 340; break;
+        case 1 : xOrigin = 1800; yOrigin = 555; break;
+        case 2 : xOrigin = 970; yOrigin = 825; break;
+        case 3 : xOrigin = 160; yOrigin = 585; break;
+    }
+    Perso boss = Perso(xOrigin*WindowSize.x/1920, yOrigin*WindowSize.y/1080, 0., 200, 10, 5, 8, spriteboss, textureboss, texturebosshit);
+    return boss;
+}
