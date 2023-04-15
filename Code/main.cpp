@@ -698,6 +698,9 @@ int main()
             }
             }
 
+            if (ennemies.size()==0 && !active_pu){
+                background.portesActives = true;
+            }
             //HUD vie
             //window.draw(heart);
             Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
