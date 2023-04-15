@@ -692,7 +692,7 @@ int main()
                     switch(rando){
                     case 0: A.Setatk(A.Getatk() + 1);break;
                     case 1: A.SetSpeed(A.GetSpeed()+1);break;
-                    case 2: A.SetPvMax(A.Getpvmax() + 10);break;
+                    case 2: {int ratio = ((float)A.Getpv()/(float)A.Getpvmax())*10;  A.SetPvMax(A.Getpvmax() + 10); A.Setpvdamage(-ratio); break;}
                     case 3: A.SetDelay(A.GetDelay()-sf::milliseconds(50));break; 
                 }
             }
