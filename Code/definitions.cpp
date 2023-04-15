@@ -43,7 +43,7 @@ void loadFile(Texture &texture,String filePath) {
 }
 
 void haut(vector<vector<int>>& tab){
-    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({1600, 400}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
     tab.push_back({1200, 766}); tab.push_back({970, 825}); tab.push_back({710, 725});
     tab.push_back({330, 705}); tab.push_back({160, 585}); tab.push_back({300, 405});
     tab.push_back({680, 530}); tab.push_back({1210, 540});
@@ -58,21 +58,21 @@ void droite(vector<vector<int>>& tab){
 
 void bas(vector<vector<int>>& tab){
     tab.push_back({987, 265}); tab.push_back({740, 340}); tab.push_back({1364, 324});
-    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({1600, 400}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
     tab.push_back({330, 705}); tab.push_back({160, 585}); tab.push_back({300, 405});
     tab.push_back({680, 530}); tab.push_back({1210, 540});
 }
 
 void gauche(vector<vector<int>>& tab){
     tab.push_back({987, 265}); tab.push_back({740, 340}); tab.push_back({1364, 324});
-    tab.push_back({1724, 328}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
+    tab.push_back({1600, 400}); tab.push_back({1800, 555}); tab.push_back({1560, 755});
     tab.push_back({1200, 766}); tab.push_back({970, 825}); tab.push_back({710, 725});
     tab.push_back({680, 530}); tab.push_back({1210, 540});
 }
 
 vector<vector<int>> generation_ennemis(int porte, int nbennemis){
     // 1 : haut {987,265} {740, 340} {1364,324}
-    // 2 : droite {1724, 328} {1800, 555} {1560, 755}
+    // 2 : droite {1600, 400} {1800, 555} {1560, 755}
     // 3 : bas {1200, 766} {970, 825} {710, 725}
     // 4 : gauche {330, 705} {160, 585} {300, 405}
 
