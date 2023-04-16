@@ -3,7 +3,7 @@
 int main()
 {
 
-    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard"/*, Style::Fullscreen*/);
+    RenderWindow window(VideoMode(/*VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height*/1920, 1080), "Body Guard"/*, Style::Fullscreen*/);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -36,8 +36,8 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "Textures\\"; // Windows
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "..\\Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -330,6 +330,8 @@ int main()
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, PersoSprite_h,PersoSprite_b);
 
+    A.SetDelay(sf::milliseconds(500));
+
     bool upFlag = false;
     bool downFlag = false;
     bool leftFlag = false;
@@ -351,7 +353,7 @@ int main()
     int couleurs[3];
     couleurs[0] = 100;
     couleurs[1] = 250;
-    couleurs[2] = 50;
+    couleurs[2] = 50;*/
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1,PersoSprite_b));
     
@@ -630,13 +632,13 @@ int main()
                             int sprite_choisi = rand() % 3 + 1;
                             switch (sprite_choisi){
                             case 1:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy1, textureEnnemy1, textureEnnemy1hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy1, spriteEnnemy1));
                                 break;
                             case 2:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, textureEnnemy2, textureEnnemy2hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, spriteEnnemy1));
                                 break;
                             case 3:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, textureEnnemy3, textureEnnemy3hit));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, spriteEnnemy1));
                                 break;
                             }
                             ennemy_shoot_time.push_back(Clock());
@@ -687,14 +689,14 @@ int main()
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                            ennemies[i]->persoSprite.setTexture(ennemies[i]->texturehit);
+                            //ennemies[i]->persoSprite.setTexture(ennemies[i]->texturehit);
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
                 if (changeTexture[i].getElapsedTime().asSeconds()>=0.2f){
-                    ennemies[i]->persoSprite.setTexture(ennemies[i]->texturebase);
+                    //ennemies[i]->persoSprite.setTexture(ennemies[i]->texturebase);
                     changeTexture[i].restart();
                 }
                 window.draw(ennemies[i]->persoSprite);
@@ -734,6 +736,8 @@ int main()
 
                 if (!ennemies[i]->checkAlive()) {
                     ADNs.push_back(ennemies[i]->persoSprite.getPosition());
+                    spriteADN.setPosition(ennemies[i]->persoSprite.getPosition());
+                    ADNs_boundingbox.push_back(spriteADN.getGlobalBounds());
                     ennemies.erase(ennemies.begin() + i);
                     window.draw(spriteADN);
                     ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
@@ -1024,7 +1028,6 @@ int main()
             if(ADNs.size()!=0){
                 for(const auto& adn : ADNs){
                     spriteADN.setPosition(adn);
-                    ADNs_boundingbox.push_back(spriteADN.getGlobalBounds());
                     window.draw(spriteADN);
                 }
             }
@@ -1124,7 +1127,23 @@ int main()
             window.draw(arrows);
             vitesseTir.setString(to_string(A.GetatkSpeed()));
             window.draw(vitesseTir);
-            /*
+
+            //***** Affichage des bordures et des portes *****//
+            //Portes
+            
+            std::vector<sf::RectangleShape> rectangles;
+            for (const auto& rect : background.portes) {
+                sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
+                shape.setPosition(sf::Vector2f(rect.left, rect.top));
+                shape.setFillColor(sf::Color::Green);
+                rectangles.push_back(shape);
+            }
+            for (const auto& shape : rectangles) {
+                window.draw(shape);
+            }
+            
+
+            
             //Bordures
             RectangleShape rectangle;
             std::vector<sf::RectangleShape> bords;
@@ -1140,8 +1159,9 @@ int main()
                 rectangle.setSize(Vector2f(length, 1.f));
                 rectangle.setRotation(angle * 180.f / 3.14159f);
                 rectangle.setOutlineThickness(2);
-                rectangle.setFillColor(couleur);
-                rectangle.setOutlineColor(couleur);
+                
+                //rectangle.setFillColor(couleur);
+                //rectangle.setOutlineColor(couleur);
 
                 // Positionner le rectangle en utilisant le coin inf�rieur gauche
                 rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
@@ -1154,7 +1174,7 @@ int main()
             }
             for (const auto& shape : bords) {
                 window.draw(shape);
-            }*/
+            }
 
             window.display();
         }
@@ -1239,21 +1259,6 @@ int main()
                 window.draw(background.finSprite);
                 window.draw(text4);
                 window.draw(text5);
-
-                //***** Affichage des bordures et des portes *****//
-                //Portes
-                /*
-                std::vector<sf::RectangleShape> rectangles;
-                for (const auto& rect : background.portes) {
-                    sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
-                    shape.setPosition(sf::Vector2f(rect.left, rect.top));
-                    shape.setFillColor(sf::Color::Green);
-                    rectangles.push_back(shape);
-                }
-                for (const auto& shape : rectangles) {
-                    window.draw(shape);
-                }
-                */
 
                 window.display();
             }

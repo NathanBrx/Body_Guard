@@ -10,7 +10,7 @@ Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed,
     this->persoSpriteBas.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
     this->persoSpriteBas.setPosition(xOrigin, yOrigin);
 
-    this->shoot_delay = sf::milliseconds(500);
+    this->shoot_delay = sf::milliseconds(2000);
     this->hitbox = FloatRect(this->persoSprite.getGlobalBounds().left+this->persoSprite.getScale().x*250, this->persoSprite.getGlobalBounds().top, this->persoSprite.getScale().x * 500, this->persoSprite.getGlobalBounds().height);
 }
 

@@ -107,6 +107,6 @@ Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebos
         case 2 : xOrigin = 970; yOrigin = 825; break;
         case 3 : xOrigin = 160; yOrigin = 585; break;
     }
-    Perso boss = Perso(xOrigin*WindowSize.x/1920, yOrigin*WindowSize.y/1080, 0., 200, 10, 5, 8, spriteboss, textureboss, texturebosshit);
+    Perso boss = Perso(xOrigin*WindowSize.x/1920, yOrigin*WindowSize.y/1080, 0., 200, 10, 5, 8, spriteboss, spriteboss);
     return boss;
 }
