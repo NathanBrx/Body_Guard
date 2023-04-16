@@ -1,7 +1,7 @@
 #include "mainheader.hpp"
 
-Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite) :
-    xOrigin(xOrigin), yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed), persoSprite(persoSprite)
+Perso::Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Texture texturebase, Texture texturehit) :
+    xOrigin(xOrigin), yOrigin(yOrigin), rotation(rotation), pvmax(pvmax), speed(speed), atk(atk), atkSpeed(atkSpeed), persoSprite(persoSprite), texturebase(texturebase), texturehit(texturehit)
 {
     this->persoSprite.setOrigin(persoSprite.getTexture()->getSize().x / 2, persoSprite.getTexture()->getSize().y / 2);
     this->persoSprite.setPosition(xOrigin,yOrigin);
@@ -95,16 +95,6 @@ void Perso::isInWindow(RenderWindow& window) {
     if (this->GetX() > (int)window.getSize().x) this->SetX(window.getSize().x);
     if (this->GetY() < 0) this->SetY(0);
     if (this->GetY() > (int)window.getSize().y) this->SetY(window.getSize().y);
-}
-
-void Perso::damage(Texture& texturehit, Texture& texturebase, RenderWindow& window) {
-    int compteur = 0;
-    this->persoSprite.setTexture(texturehit);
-    window.draw(this->persoSprite);
-    while (compteur < 100) {
-        compteur++;
-    }
-    this->persoSprite.setTexture(texturebase);
 }
 
 //Destructeur

@@ -31,3 +31,4 @@ void tirer(vector<Projectile*>& projectiles, Perso& A, Sprite projectile1, float
 void loadFile(Texture& texture, String filePath);
 
 vector<vector<int>> generation_ennemis(int porte, int nbennemis);
+Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebosshit, Vector2u WindowSize);
