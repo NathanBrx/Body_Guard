@@ -13,10 +13,11 @@ private:
     int atkSpeed; // vitesse d'attaque
     int alive = 1; // booléen qui indique si le perso est mort ou vivant (1=vivant, 0=mort )
     sf::Time shoot_delay; //délai entre les tirs
+    FloatRect hitbox;
 
 public:
 
-    Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Texture texturebase, Texture texturehit);
+    Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Sprite persoSpriteBass);
 
     // Getters
     float GetX();
@@ -28,6 +29,7 @@ public:
     int GetatkSpeed();
     float GetRotation();
     sf::Time GetDelay();
+    FloatRect GetHitbox();
 
     // Setters
     void SetPvMax(int pvmax);
@@ -39,6 +41,7 @@ public:
     void Setatk(int atk);
     void SetRotation(float rotation);
     void Setpvdamage(int diffpv);
+    void AddPV(int pv);
     void SetDelay(sf::Time shoot_delay);
 
     // Methodes
@@ -47,8 +50,9 @@ public:
     void update(bool upFlag, bool downFlag, bool leftFlag, bool rightFlag, RenderWindow& window);
     void isInWindow(RenderWindow& window);
     Sprite persoSprite; //attribut sprite du personnage
-    Texture texturebase; //attribut texture du personnage
-    Texture texturehit; //attribut texture du personnage pour quand il prend des dégâts
+
+    Sprite persoSpriteBas;
+    void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // méthode pour afficher l'animation de dégats
 
     // Destructeur
     ~Perso();

@@ -9,12 +9,8 @@
 #include <cstdlib>
 #include <ctime>
 
-//Windows
 #include <chrono>
 #include <thread>
-
-//Linux
-//#include<unistd.h>
 
 using namespace sf;
 using namespace std;
