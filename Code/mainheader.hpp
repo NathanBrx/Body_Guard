@@ -25,3 +25,6 @@ using namespace std;
 void tirer(vector<Projectile*>& projectiles, Perso& A, Sprite projectile1, float direction,Sound& tir_1, Sound& tir_2, Sound& tir_3, Sound& tir_4, Sound& tir_5, Sound& tir_6);
 
 void loadFile(Texture& texture, String filePath);
+
+vector<vector<int>> generation_ennemis(int porte, int nbennemis);
+Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebosshit, Vector2u WindowSize);

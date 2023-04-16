@@ -20,7 +20,6 @@ public:
     Perso(float xOrigin, float yOrigin, float rotation, int pvmax, int speed, int atk, int atkSpeed, Sprite persoSprite, Sprite persoSpriteBass);
 
     // Getters
-
     float GetX();
     float GetY();
     int GetSpeed();
@@ -33,7 +32,7 @@ public:
     FloatRect GetHitbox();
 
     // Setters
-
+    void SetPvMax(int pvmax);
     void Reset();
     void SetX(float x);
     void SetY(float y);
@@ -51,6 +50,7 @@ public:
     void update(bool upFlag, bool downFlag, bool leftFlag, bool rightFlag, RenderWindow& window);
     void isInWindow(RenderWindow& window);
     Sprite persoSprite; //attribut sprite du personnage
+
     Sprite persoSpriteBas;
     void damage(Texture& texturehit, Texture& texturebase, RenderWindow& window); // méthode pour afficher l'animation de dégats
 
