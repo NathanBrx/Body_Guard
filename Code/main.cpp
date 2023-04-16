@@ -687,7 +687,6 @@ int main()
                 window.draw(PowerUpSprite);
                 if (A.persoSprite.getGlobalBounds().intersects(PowerUpSprite.getGlobalBounds())){
                     active_pu = false;
-                    background.portesActives = true;
                     
                     switch(rando){
                     case 0: A.Setatk(A.Getatk() + 1);break;
@@ -740,23 +739,17 @@ int main()
             
             //HUD attaque
             window.draw(sword);
-            int atk = A.Getatk();
-            string string_atk = to_string(atk);
-            attaque.setString(string_atk);
+            attaque.setString(to_string(A.Getatk()));
             window.draw(attaque);
 
             //HUD vitesse de déplacement
             window.draw(speed);
-            int spd = A.GetSpeed();
-            string string_speed = to_string(spd);
-            vitesseDeplacement.setString(string_speed);
+            vitesseDeplacement.setString(to_string(A.GetSpeed()));
             window.draw(vitesseDeplacement);
 
             //HUD vitesse de tir
             window.draw(arrows);
-            int atkSpd = A.GetatkSpeed();
-            string string_atkspeed = to_string(atkSpd);
-            vitesseTir.setString(string_atkspeed);
+            vitesseTir.setString(to_string(A.GetatkSpeed()));
             window.draw(vitesseTir);
             /*
             //Bordures
