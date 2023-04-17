@@ -2,13 +2,13 @@
 
 int main()
 {
-
     RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard", Style::Fullscreen);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
+    start:
     Vector2u TextureSize, WindowSize;
 
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
@@ -1167,28 +1167,7 @@ int main()
                         Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                         if (text5.getGlobalBounds().contains(mousePosF)) {
-                            A.Reset();
-                            projectiles ={};
-                            ennemies={};
-                            projectiles_ennemi={};
-                            ennemy_shoot_time={};
-                            changeTexture={};
-                            start = false;
-                            close = false;
-                            restart = false;
-                            mat[9][8] = { 0 }; // Initialisation de la carte
-                            generation(mat);
-                            active_rando = true;
-
-                            shoot_ready = true;
-                            clockiframes={};
-                            invincible = false;
-
-                            active_pu = false;
-
-                            musique_accueil.play();
-
-                            restart = false;
+                            goto start;
                         }
                         if (text4.getGlobalBounds().contains(mousePosF)) {
                             restart = false;
