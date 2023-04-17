@@ -36,8 +36,8 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "..\\Textures\\"; // Windows
+    string texturesPath = "../Textures/"; // Linux
+    //string texturesPath = "..\\Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -326,7 +326,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
 
@@ -1102,7 +1102,7 @@ int main()
             }
             }
 
-            if (ennemies.size()==0 && !active_pu){
+            if (ennemies.size()==0 && !active_pu && ADNs.size()==0){
                 background.portesActives = true;
             }
             //HUD vie
