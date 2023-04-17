@@ -315,7 +315,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath+"Credits.jpg", texturesPath+"image_fin.png", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
@@ -400,6 +400,9 @@ int main()
     bool close = false;
     bool restart = false;
     bool credits = false;
+    bool win = false;
+    
+
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -447,7 +450,7 @@ int main()
         srand(time(0));
         if(active_rando){rando = rand()%4;}
         
-        while (!restart && !start && !close && !credits) {
+        while (!restart && !start && !close && !credits && !win) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -509,7 +512,7 @@ int main()
             window.display();
             
         }
-        if (!restart && start && !close && !credits) {
+        if (!restart && start && !close && !credits && !win) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -763,7 +766,10 @@ int main()
                     window.draw(spriteADN);
                     ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
                     changeTexture.erase(changeTexture.begin() + i);
-                    if (ennemies.size() == 0){ 
+                    if (ennemies.size() == 0){
+                       if(mat[background.row][background.col] == 2){
+                            win = true;
+                        }
                         active_pu = true;
                         active_rando = false;
                     }
@@ -1122,7 +1128,7 @@ int main()
             window.draw(vitesseTir);
             window.display();
         }
-        else if (restart && !close && !credits) {
+        else if (restart && !close && !credits && !win) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -1185,8 +1191,7 @@ int main()
                 window.display();
             }
         }
-
-        else if (!start && !restart && !close && credits) {
+        else if (!start && !restart && !close && credits && !win){
             background.creditsSprite.setPosition(0, WindowSize.y);
             while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
@@ -1230,8 +1235,14 @@ int main()
                 window.draw(text6);
                 window.display();
             }
+        }
+        else if(!start && !restart && !close && !credits && win){
+            while(win){
+            window.clear();
+            window.draw(background.winSprite);
+            window.display();
             }
-
+        }
         else {
             window.close();
         }

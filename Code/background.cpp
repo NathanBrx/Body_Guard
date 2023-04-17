@@ -1,8 +1,8 @@
 #include "mainheader.hpp"
 
 // Constructeur qui initialise les chemins des images et les facteurs d'échelle
-Background::Background(string accueil_path, string jeu_path, string fin_path,string credits_path,float ScaleX,float ScaleY) :
-    accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), credits_path(credits_path), ScaleX(ScaleX), ScaleY(ScaleY)
+Background::Background(string accueil_path, string jeu_path, string fin_path,string credits_path,string win_path,float ScaleX,float ScaleY) :
+    accueil_path(accueil_path), jeu_path(jeu_path), fin_path(fin_path), credits_path(credits_path),win_path(win_path), ScaleX(ScaleX), ScaleY(ScaleY)
 {
     // Charge l'image de l'écran d'accueil, l'applique à un sprite et ajuste son échelle
     loadFile(this->accueil_tx,this->accueil_path);
@@ -23,6 +23,11 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,str
     loadFile(credits_tx, this->credits_path);
     this->creditsSprite.setTexture(credits_tx);
     this->creditsSprite.setScale(this->ScaleX, this->ScaleY);
+
+    // charge l'image de victoire 
+    loadFile(win_tx, this->win_path);
+    this->winSprite.setTexture(win_tx);
+    this->winSprite.setScale(this->ScaleX, this->ScaleY);
 
     // Initialise les zones de collision pour changer de map
     this->portes =
