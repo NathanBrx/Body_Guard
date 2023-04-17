@@ -41,31 +41,31 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "..\\Textures\\"; // Windows
+    string ressourcesPath = "../Ressources/"; // Linux
+    //string ressourcesPath = "..\\Ressources\\"; // Windows
 
     //Musique
     Music musique_accueil;
-    if (!musique_accueil.openFromFile(texturesPath + "accueil.ogg")){
+    if (!musique_accueil.openFromFile(ressourcesPath + "accueil.ogg")){
         return -1; // error
     }
     musique_accueil.setLoop(true);
 
     Music musique_jeu;
-    if (!musique_jeu.openFromFile(texturesPath + "jeu.ogg")) {
+    if (!musique_jeu.openFromFile(ressourcesPath + "jeu.ogg")) {
         return -1; // error
     }
     musique_jeu.setLoop(true);
 
     Music musique_boss;
-    if (!musique_boss.openFromFile(texturesPath + "boss.ogg")) {
+    if (!musique_boss.openFromFile(ressourcesPath + "boss.ogg")) {
         return -1; // error
     }
     musique_boss.setLoop(true);
 
     //Sons
     SoundBuffer tir_bf_1;
-    if (!tir_bf_1.loadFromFile(texturesPath + "tir1.ogg")) {
+    if (!tir_bf_1.loadFromFile(ressourcesPath + "tir1.ogg")) {
         return -1;
     }
     Sound tir_1;
@@ -73,7 +73,7 @@ int main()
     tir_1.setVolume(50.f);
 
     SoundBuffer tir_bf_2;
-    if (!tir_bf_2.loadFromFile(texturesPath + "tir2.ogg")) {
+    if (!tir_bf_2.loadFromFile(ressourcesPath + "tir2.ogg")) {
         return -1;
     }
     Sound tir_2;
@@ -81,7 +81,7 @@ int main()
     tir_2.setVolume(50.f);
 
     SoundBuffer tir_bf_3;
-    if (!tir_bf_3.loadFromFile(texturesPath + "tir3.ogg")) {
+    if (!tir_bf_3.loadFromFile(ressourcesPath + "tir3.ogg")) {
         return -1;
     }
     Sound tir_3;
@@ -89,7 +89,7 @@ int main()
     tir_3.setVolume(50.f);
 
     SoundBuffer tir_bf_4;
-    if (!tir_bf_4.loadFromFile(texturesPath + "tir4.ogg")) {
+    if (!tir_bf_4.loadFromFile(ressourcesPath + "tir4.ogg")) {
         return -1;
     }
     Sound tir_4;
@@ -97,7 +97,7 @@ int main()
     tir_4.setVolume(50.f);
 
     SoundBuffer tir_bf_5;
-    if (!tir_bf_5.loadFromFile(texturesPath + "tir5.ogg")) {
+    if (!tir_bf_5.loadFromFile(ressourcesPath + "tir5.ogg")) {
         return -1;
     }
     Sound tir_5;
@@ -105,7 +105,7 @@ int main()
     tir_5.setVolume(50.f);
 
     SoundBuffer tir_bf_6;
-    if (!tir_bf_6.loadFromFile(texturesPath + "tir6.ogg")) {
+    if (!tir_bf_6.loadFromFile(ressourcesPath + "tir6.ogg")) {
         return -1;
     }
     Sound tir_6;
@@ -113,7 +113,7 @@ int main()
     tir_6.setVolume(50.f);
 
     SoundBuffer select_bf;
-    if (!select_bf.loadFromFile(texturesPath + "select.wav")) {
+    if (!select_bf.loadFromFile(ressourcesPath + "select.wav")) {
         return -1;
     }
     Sound select;
@@ -121,7 +121,7 @@ int main()
     select.setVolume(100);
 
     SoundBuffer power_up_bf;
-    if (!power_up_bf.loadFromFile(texturesPath + "power_up.wav")) {
+    if (!power_up_bf.loadFromFile(ressourcesPath + "power_up.wav")) {
         return -1;
     }
     Sound power_up;
@@ -129,93 +129,93 @@ int main()
 
     // Joueur
 
-    loadFile(PersoTex_h_b,texturesPath + "Perso_h_b.png");
-    loadFile(PersoTex_h_h, texturesPath + "Perso_h_h.png");
-    loadFile(PersoTex_h_d, texturesPath + "Perso_h_d.png");
-    loadFile(PersoTex_h_g, texturesPath + "Perso_h_g.png");
+    loadFile(PersoTex_h_b,ressourcesPath + "Perso_h_b.png");
+    loadFile(PersoTex_h_h, ressourcesPath + "Perso_h_h.png");
+    loadFile(PersoTex_h_d, ressourcesPath + "Perso_h_d.png");
+    loadFile(PersoTex_h_g, ressourcesPath + "Perso_h_g.png");
 
-    loadFile(PersoTex_b_0, texturesPath + "Perso_b_0.png");
-    loadFile(PersoTex_b_1, texturesPath + "Perso_b_1.png");
-    loadFile(PersoTex_b_2, texturesPath + "Perso_b_2.png");
-    loadFile(PersoTex_b_3, texturesPath + "Perso_b_3.png");
-    loadFile(PersoTex_b_4, texturesPath + "Perso_b_4.png");
-    loadFile(PersoTex_b_5, texturesPath + "Perso_b_5.png");
-    loadFile(PersoTex_b_6, texturesPath + "Perso_b_6.png");
-    loadFile(PersoTex_b_7, texturesPath + "Perso_b_7.png");
-    loadFile(PersoTex_b_8, texturesPath + "Perso_b_8.png");
+    loadFile(PersoTex_b_0, ressourcesPath + "Perso_b_0.png");
+    loadFile(PersoTex_b_1, ressourcesPath + "Perso_b_1.png");
+    loadFile(PersoTex_b_2, ressourcesPath + "Perso_b_2.png");
+    loadFile(PersoTex_b_3, ressourcesPath + "Perso_b_3.png");
+    loadFile(PersoTex_b_4, ressourcesPath + "Perso_b_4.png");
+    loadFile(PersoTex_b_5, ressourcesPath + "Perso_b_5.png");
+    loadFile(PersoTex_b_6, ressourcesPath + "Perso_b_6.png");
+    loadFile(PersoTex_b_7, ressourcesPath + "Perso_b_7.png");
+    loadFile(PersoTex_b_8, ressourcesPath + "Perso_b_8.png");
 
-    loadFile(PersoTex_b_0_h, texturesPath + "Perso_b_0_h.png");
-    loadFile(PersoTex_b_1_h, texturesPath + "Perso_b_1_h.png");
-    loadFile(PersoTex_b_2_h, texturesPath + "Perso_b_2_h.png");
-    loadFile(PersoTex_b_3_h, texturesPath + "Perso_b_3_h.png");
-    loadFile(PersoTex_b_4_h, texturesPath + "Perso_b_4_h.png");
-    loadFile(PersoTex_b_5_h, texturesPath + "Perso_b_5_h.png");
-    loadFile(PersoTex_b_6_h, texturesPath + "Perso_b_6_h.png");
-    loadFile(PersoTex_b_7_h, texturesPath + "Perso_b_7_h.png");
-    loadFile(PersoTex_b_8_h, texturesPath + "Perso_b_8_h.png");
+    loadFile(PersoTex_b_0_h, ressourcesPath + "Perso_b_0_h.png");
+    loadFile(PersoTex_b_1_h, ressourcesPath + "Perso_b_1_h.png");
+    loadFile(PersoTex_b_2_h, ressourcesPath + "Perso_b_2_h.png");
+    loadFile(PersoTex_b_3_h, ressourcesPath + "Perso_b_3_h.png");
+    loadFile(PersoTex_b_4_h, ressourcesPath + "Perso_b_4_h.png");
+    loadFile(PersoTex_b_5_h, ressourcesPath + "Perso_b_5_h.png");
+    loadFile(PersoTex_b_6_h, ressourcesPath + "Perso_b_6_h.png");
+    loadFile(PersoTex_b_7_h, ressourcesPath + "Perso_b_7_h.png");
+    loadFile(PersoTex_b_8_h, ressourcesPath + "Perso_b_8_h.png");
 
-    loadFile(PersoTex_b_1_d, texturesPath + "Perso_b_1_d.png");
-    loadFile(PersoTex_b_2_d, texturesPath + "Perso_b_2_d.png");
-    loadFile(PersoTex_b_3_d, texturesPath + "Perso_b_3_d.png");
-    loadFile(PersoTex_b_4_d, texturesPath + "Perso_b_4_d.png");
-    loadFile(PersoTex_b_5_d, texturesPath + "Perso_b_5_d.png");
-    loadFile(PersoTex_b_6_d, texturesPath + "Perso_b_6_d.png");
-    loadFile(PersoTex_b_7_d, texturesPath + "Perso_b_7_d.png");
-    loadFile(PersoTex_b_8_d, texturesPath + "Perso_b_8_d.png");
-    loadFile(PersoTex_b_9_d, texturesPath + "Perso_b_9_d.png");
+    loadFile(PersoTex_b_1_d, ressourcesPath + "Perso_b_1_d.png");
+    loadFile(PersoTex_b_2_d, ressourcesPath + "Perso_b_2_d.png");
+    loadFile(PersoTex_b_3_d, ressourcesPath + "Perso_b_3_d.png");
+    loadFile(PersoTex_b_4_d, ressourcesPath + "Perso_b_4_d.png");
+    loadFile(PersoTex_b_5_d, ressourcesPath + "Perso_b_5_d.png");
+    loadFile(PersoTex_b_6_d, ressourcesPath + "Perso_b_6_d.png");
+    loadFile(PersoTex_b_7_d, ressourcesPath + "Perso_b_7_d.png");
+    loadFile(PersoTex_b_8_d, ressourcesPath + "Perso_b_8_d.png");
+    loadFile(PersoTex_b_9_d, ressourcesPath + "Perso_b_9_d.png");
 
-    loadFile(PersoTex_b_1_g, texturesPath + "Perso_b_1_g.png");
-    loadFile(PersoTex_b_2_g, texturesPath + "Perso_b_2_g.png");
-    loadFile(PersoTex_b_3_g, texturesPath + "Perso_b_3_g.png");
-    loadFile(PersoTex_b_4_g, texturesPath + "Perso_b_4_g.png");
-    loadFile(PersoTex_b_5_g, texturesPath + "Perso_b_5_g.png");
-    loadFile(PersoTex_b_6_g, texturesPath + "Perso_b_6_g.png");
-    loadFile(PersoTex_b_7_g, texturesPath + "Perso_b_7_g.png");
-    loadFile(PersoTex_b_8_g, texturesPath + "Perso_b_8_g.png");
-    loadFile(PersoTex_b_9_g, texturesPath + "Perso_b_9_g.png");
+    loadFile(PersoTex_b_1_g, ressourcesPath + "Perso_b_1_g.png");
+    loadFile(PersoTex_b_2_g, ressourcesPath + "Perso_b_2_g.png");
+    loadFile(PersoTex_b_3_g, ressourcesPath + "Perso_b_3_g.png");
+    loadFile(PersoTex_b_4_g, ressourcesPath + "Perso_b_4_g.png");
+    loadFile(PersoTex_b_5_g, ressourcesPath + "Perso_b_5_g.png");
+    loadFile(PersoTex_b_6_g, ressourcesPath + "Perso_b_6_g.png");
+    loadFile(PersoTex_b_7_g, ressourcesPath + "Perso_b_7_g.png");
+    loadFile(PersoTex_b_8_g, ressourcesPath + "Perso_b_8_g.png");
+    loadFile(PersoTex_b_9_g, ressourcesPath + "Perso_b_9_g.png");
 
     //Vie
-    loadFile(BarreVie_tex,texturesPath + "Barre_vie.png");
-    loadFile(Vie_tex, texturesPath + "Vie.png");
-    loadFile(textureADN, texturesPath + "ADN.png");
+    loadFile(BarreVie_tex,ressourcesPath + "Barre_vie.png");
+    loadFile(Vie_tex, ressourcesPath + "Vie.png");
+    loadFile(textureADN, ressourcesPath + "ADN.png");
 
     //Powerups
-    loadFile(SwordPU, texturesPath + "Atk_PU.png");
-    loadFile(HealthPU, texturesPath + "Health_PU.png");
-    loadFile(SpeedPU, texturesPath + "Speed_PU.png");
-    loadFile(AtkDelayPU, texturesPath + "AtkDelay_PU.png");
+    loadFile(SwordPU, ressourcesPath + "Atk_PU.png");
+    loadFile(HealthPU, ressourcesPath + "Health_PU.png");
+    loadFile(SpeedPU, ressourcesPath + "Speed_PU.png");
+    loadFile(AtkDelayPU, ressourcesPath + "AtkDelay_PU.png");
 
     // Ennemies
-    loadFile(textureEnnemy1, texturesPath + "ennemy1.png");
-    loadFile(textureEnnemy1hit, texturesPath + "ennemy1hit.png");
+    loadFile(textureEnnemy1, ressourcesPath + "ennemy1.png");
+    loadFile(textureEnnemy1hit, ressourcesPath + "ennemy1hit.png");
 
-    loadFile(textureEnnemy2, texturesPath + "ennemy2.png");
-    loadFile(textureEnnemy2hit, texturesPath + "ennemy2hit.png");
-    loadFile(textureEnnemy3, texturesPath + "ennemy3.png");
-    loadFile(textureEnnemy3hit, texturesPath + "ennemy3hit.png");
-    loadFile(textureBoss, texturesPath + "Boss.png");
+    loadFile(textureEnnemy2, ressourcesPath + "ennemy2.png");
+    loadFile(textureEnnemy2hit, ressourcesPath + "ennemy2hit.png");
+    loadFile(textureEnnemy3, ressourcesPath + "ennemy3.png");
+    loadFile(textureEnnemy3hit, ressourcesPath + "ennemy3hit.png");
+    loadFile(textureBoss, ressourcesPath + "Boss.png");
 
     // Projectiles
-    loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
-    loadFile(textureProjectileRight, texturesPath + "projectile.png");
-    loadFile(textureSpeed, texturesPath + "speed.png");
-    loadFile(textureSword, texturesPath + "sword.png");
-    loadFile(textureArrows, texturesPath + "arrows.png");
+    loadFile(textureProjectileEnnemi, ressourcesPath + "projectile_ennemi.png");
+    loadFile(textureProjectileRight, ressourcesPath + "projectile.png");
+    loadFile(textureSpeed, ressourcesPath + "speed.png");
+    loadFile(textureSword, ressourcesPath + "sword.png");
+    loadFile(textureArrows, ressourcesPath + "arrows.png");
 
     //Police
-    if (!policeStats.loadFromFile(texturesPath + "Nabla-Regular.ttf")) {
+    if (!policeStats.loadFromFile(ressourcesPath + "Nabla-Regular.ttf")) {
         cerr << "Failed to load font" << endl;
         exit(1);
     }
 
     //Portes
-    loadFile(porte_haut_tx, texturesPath + "porte_haut.png");
-    loadFile(porte_bas_tx, texturesPath + "porte_bas.png");
-    loadFile(porte_droite_tx, texturesPath + "porte_droite.png");
-    loadFile(porte_gauche_tx, texturesPath + "porte_gauche.png");
+    loadFile(porte_haut_tx, ressourcesPath + "porte_haut.png");
+    loadFile(porte_bas_tx, ressourcesPath + "porte_bas.png");
+    loadFile(porte_droite_tx, ressourcesPath + "porte_droite.png");
+    loadFile(porte_gauche_tx, ressourcesPath + "porte_gauche.png");
 
     //écran de fin
-    loadFile(finjeu, texturesPath + "image_fin.png");
+    loadFile(finjeu, ressourcesPath + "image_fin.png");
 
 
     // Taille de la fenetre
@@ -321,7 +321,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", texturesPath + "image_fin.png", ScaleX, ScaleY);
+    Background background(ressourcesPath+"Accueil.png", ressourcesPath + "Map1.jpg", ressourcesPath + "Game_over.jpg", ressourcesPath + "Credits.jpg", ressourcesPath + "image_fin.png", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
@@ -348,8 +348,8 @@ int main()
     Color color2(213.9, 146.1, 113.6);
     Font font1;
     Font font2;
-    font1.loadFromFile(texturesPath + "Orbitron-ExtraBold.ttf");
-    font2.loadFromFile(texturesPath + "Exo-SemiBoldItalic.ttf");
+    font1.loadFromFile(ressourcesPath + "Orbitron-ExtraBold.ttf");
+    font2.loadFromFile(ressourcesPath + "Exo-SemiBoldItalic.ttf");
     Text text1("BODY GUARD", font1);
     Text text2("Jouer", font2);
     Text text3("Credits", font2);
