@@ -778,10 +778,10 @@ int main()
                     
                     for (size_t n = 0; n < ennemisQuiBougent.size(); n++)
                     {
-                        if (i<=ennemisQuiBougent[n])
+                        if ((int)i<=ennemisQuiBougent[n])
                         {
                             ennemisQuiBougent[n]--;
-                            if (i == ennemisQuiBougent[n])
+                            if ((int)i == ennemisQuiBougent[n])
                             {
                                 ennemisQuiBougent[n]=10;
                             }
