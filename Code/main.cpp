@@ -36,8 +36,8 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "..\\Textures\\"; // Windows
+    string texturesPath = "../Textures/"; // Linux
+    //string texturesPath = "..\\Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -509,6 +509,9 @@ int main()
                         start = true;
                         musique_accueil.stop();
                         musique_jeu.play();
+                    }
+                    if (text3.getGlobalBounds().contains(mousePosF)){
+                        credits = true;
                     }
                     if (text4.getGlobalBounds().contains(mousePosF)) {
                         close = true;
