@@ -36,8 +36,8 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    string texturesPath = "../Textures/"; // Linux
-    //string texturesPath = "..\\Textures\\"; // Windows
+    //string texturesPath = "../Textures/"; // Linux
+    string texturesPath = "..\\Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -326,7 +326,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath+"Credits.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath + "Credits.jpg", ScaleX, ScaleY);
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
 
@@ -407,21 +407,21 @@ int main()
     text5.setFillColor(Color::White);
     text5.setOutlineThickness(5);
     text5.setOutlineColor(Color::Black);
-    
+
     text6.setCharacterSize(70);
     text6.setOrigin(text6.getGlobalBounds().width / 2., text6.getGlobalBounds().height / 2.);
-    text6.setPosition(150,50);
+    text6.setPosition(150, 50);
     text6.setFillColor(Color::Black);
     text6.setOutlineThickness(3);
     text6.setOutlineColor(Color::White);
-    
+
+
     Text* texts[3] = { &text2,&text3,&text4 };
 
     bool start = false;
     bool close = false;
     bool restart = false;
     bool credits = false;
-    
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -461,6 +461,8 @@ int main()
     int waitForNextRotation = 0;
 
     int pvBonusAnim = 0;
+
+    vector<int> ennemisQuiBougent = {};
 
     while (window.isOpen())
     {
@@ -510,7 +512,7 @@ int main()
                         musique_accueil.stop();
                         musique_jeu.play();
                     }
-                    if (text3.getGlobalBounds().contains(mousePosF)){
+                    if (text3.getGlobalBounds().contains(mousePosF)) {
                         credits = true;
                     }
                     if (text4.getGlobalBounds().contains(mousePosF)) {
@@ -540,11 +542,13 @@ int main()
             if (invincible) {
                 sf::Time time2 = clockiframes.getElapsedTime();
                 if (time2 >= sf::milliseconds(500)) {
-                    invincible = false;/*
-                    if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRight); }
-                    if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUp); }
-                    if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeft); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDown); }*/
+                    invincible = false;
+                    A.persoSprite.setColor(Color(255, 255, 255));
+                    A.persoSpriteBas.setColor(Color(255, 255, 255));
+                }
+                else {
+                    A.persoSprite.setColor(Color(255, 200, 200));
+                    A.persoSpriteBas.setColor(Color(255, 200, 200));
                 }
             }
 
@@ -638,6 +642,7 @@ int main()
                     mat[background.row][background.col]=3;
                     ADNs.clear();
                     ADNs_boundingbox.clear();
+                    ennemisQuiBougent.clear();
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
                     
                     if (mat[background.row][background.col]==1){
@@ -652,9 +657,11 @@ int main()
                                 break;
                             case 2:
                                 ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, spriteEnnemy1));
+                                ennemisQuiBougent.push_back(ennemies.size() - 1);
                                 break;
                             case 3:
                                 ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, spriteEnnemy1));
+                                
                                 break;
                             }
                             ennemy_shoot_time.push_back(Clock());
@@ -662,8 +669,7 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso (boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
-                        
+                        ennemies.push_back(new Perso(boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
                 }
                 }
             }
@@ -695,18 +701,14 @@ int main()
                 if (A.GetHitbox().intersects(ennemies[i]->persoSprite.getGlobalBounds()) && !invincible) {
                     A.Setpvdamage(ennemies[i]->Getatk());
                     invincible = true;
-                    clockiframes.restart();/*
-                    if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                    if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUpInv); }
-                    if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDownInv); }*/
+                    clockiframes.restart();
 
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
 
-                            ennemies[i]->persoSprite.setColor(Color(200,200,200));
+                            ennemies[i]->persoSprite.setColor(Color(255,200,200));
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
@@ -718,40 +720,70 @@ int main()
                 }
                 window.draw(ennemies[i]->persoSprite);
                 if (ennemies[i]->checkAlive()) {
-                    Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
-                    if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
-                        projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
-                        ennemy_shoot_time[i].restart();
+                    if (count(ennemisQuiBougent.begin(), ennemisQuiBougent.end(), i))
+                    {
 
-                        int sound;
-                        sound = rand() % 6;
-                        switch (sound)
-                        {
-                        case(0):
-                            tir_1.play();
-                            break;
-                        case(1):
-                            tir_2.play();
-                            break;
-                        case(2):
-                            tir_3.play();
-                            break;
-                        case(3):
-                            tir_4.play();
-                            break;
-                        case(4):
-                            tir_5.play();
-                            break;
-                        case(5):
-                            tir_6.play();
-                            break;
-                        default:
-                            break;
+                        Vector2f direction = A.persoSprite.getPosition() - ennemies[i]->persoSprite.getPosition();
+
+                        float angle = (atan2(direction.y, direction.x) * 180 / 3.14)+45;
+                        ennemies[i]->persoSprite.setRotation(angle);
+
+                        float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+                        if (distance > 50.0f) {
+                            direction /= distance;
+                            float speed = 2;
+                            ennemies[i]->persoSprite.move(direction* speed);
                         }
+                    }
+                    else {
+                        Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
+                        if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
+                            projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
+                            ennemy_shoot_time[i].restart();
+
+                            int sound;
+                            sound = rand() % 6;
+                            switch (sound)
+                            {
+                            case(0):
+                                tir_1.play();
+                                break;
+                            case(1):
+                                tir_2.play();
+                                break;
+                            case(2):
+                                tir_3.play();
+                                break;
+                            case(3):
+                                tir_4.play();
+                                break;
+                            case(4):
+                                tir_5.play();
+                                break;
+                            case(5):
+                                tir_6.play();
+                                break;
+                            default:
+                                break;
+                            }
+                    }
+                    
                     }
                 }
 
                 if (!ennemies[i]->checkAlive()) {
+                    
+                    for (size_t n = 0; n < ennemisQuiBougent.size(); n++)
+                    {
+                        if (i<=ennemisQuiBougent[n])
+                        {
+                            ennemisQuiBougent[n]--;
+                            if (i == ennemisQuiBougent[n])
+                            {
+                                ennemisQuiBougent[n]=10;
+                            }
+                        }
+                    }
                     ADNs.push_back(ennemies[i]->persoSprite.getPosition());
                     spriteADN.setPosition(ennemies[i]->persoSprite.getPosition());
                     ADNs_boundingbox.push_back(spriteADN.getGlobalBounds());
@@ -780,6 +812,8 @@ int main()
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
                     }else if (projectiles_ennemi[j]->hit(A)) {
                         A.Setpvdamage(projectiles_ennemi[j]->GetDamage());
+                        invincible = true;
+                        clockiframes.restart();
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
                     }
                 }
@@ -1146,6 +1180,7 @@ int main()
             window.draw(vitesseTir);
 
             //***** Affichage des bordures et des portes *****//
+            /*
             //Portes
             
             std::vector<sf::RectangleShape> rectangles;
@@ -1191,7 +1226,7 @@ int main()
             }
             for (const auto& shape : bords) {
                 window.draw(shape);
-            }
+            }*/
 
             window.display();
         }
@@ -1280,9 +1315,10 @@ int main()
                 window.display();
             }
         }
-        else if (!start && !restart && !close && credits){
+
+        else if (!start && !restart && !close && credits) {
             background.creditsSprite.setPosition(0, WindowSize.y);
-            while (credits && background.creditsSprite.getPosition().y > 0){
+            while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
                 while (window.pollEvent(event3)) {
                     switch (event3.type) {
@@ -1324,7 +1360,8 @@ int main()
                 window.draw(text6);
                 window.display();
             }
-        }
+            }
+
         else {
             window.close();
         }
