@@ -406,12 +406,21 @@ int main()
     text5.setFillColor(Color::White);
     text5.setOutlineThickness(5);
     text5.setOutlineColor(Color::Black);
-
+    
+    text6.setCharacterSize(70);
+    text6.setOrigin(text6.getGlobalBounds().width / 2., text6.getGlobalBounds().height / 2.);
+    text6.setPosition(150,50);
+    text6.setFillColor(Color::Black);
+    text6.setOutlineThickness(3);
+    text6.setOutlineColor(Color::White);
+    
     Text* texts[3] = { &text2,&text3,&text4 };
 
     bool start = false;
     bool close = false;
     bool restart = false;
+    bool credits = false;
+    
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -457,7 +466,7 @@ int main()
         srand(time(0));
         if(active_rando){rando = rand()%4;}
         
-        while (!restart && !start && !close) {
+        while (!restart && !start && !close && !credits) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -516,7 +525,7 @@ int main()
             window.display();
             
         }
-        if (!restart && start && !close) {
+        if (!restart && start && !close && !credits) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -1182,7 +1191,7 @@ int main()
 
             window.display();
         }
-        else if (restart && !close) {
+        else if (restart && !close && !credits) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -1264,6 +1273,51 @@ int main()
                 window.draw(text4);
                 window.draw(text5);
 
+                window.display();
+            }
+        }
+        else if (!start && !restart && !close && credits){
+            background.creditsSprite.setPosition(0, WindowSize.y);
+            while (credits && background.creditsSprite.getPosition().y > 0){
+                Event event3;
+                while (window.pollEvent(event3)) {
+                    switch (event3.type) {
+                    case Event::Closed:
+                        close = true;
+                        credits = false;
+                        break;
+                    case Event::KeyPressed:
+                        if (event3.key.code == Keyboard::Escape) {
+                            close = true;
+                            credits = false;
+                        }
+                        break;
+                    case Event::MouseMoved:
+                    {
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (text6.getGlobalBounds().contains(mousePosF)) {
+                            text6.setOutlineThickness(5);
+                        }
+                        else {
+                            text6.setOutlineThickness(3);
+                        }
+                    }break;
+                    case Event::MouseButtonPressed:
+                    {
+                        Vector2i mousePos = Mouse::getPosition(window);
+                        Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                        if (text6.getGlobalBounds().contains(mousePosF)) {
+                            credits = false;
+                        }
+                    }break;
+                    default: break;
+                    }
+                }
+                background.creditsSprite.move(0, -1);
+                window.clear(Color::Black);
+                window.draw(background.creditsSprite);
+                window.draw(text6);
                 window.display();
             }
         }
