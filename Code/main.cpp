@@ -314,7 +314,7 @@ int main()
 
     text6.setCharacterSize(70);
     text6.setOrigin(text6.getGlobalBounds().width / 2., text6.getGlobalBounds().height / 2.);
-    text6.setPosition(50,50);
+    text6.setPosition(150,50);
     text6.setFillColor(Color::Black);
     text6.setOutlineThickness(3);
     text6.setOutlineColor(Color::White);
