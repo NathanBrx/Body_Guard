@@ -9,6 +9,9 @@ int main()
     window.setFramerateLimit(60);
 
     start:
+    
+    start2:
+    
     Vector2u TextureSize, WindowSize;
 
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
@@ -323,7 +326,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", texturesPath + "image_fin.png", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
@@ -408,6 +411,8 @@ int main()
     bool close = false;
     bool restart = false;
     bool credits = false;
+    bool win = false;
+
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -455,7 +460,7 @@ int main()
         srand(time(0));
         if(active_rando){rando = rand()%4;}
         
-        while (!restart && !start && !close && !credits) {
+        while (!restart && !start && !close && !credits && !win) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -517,7 +522,7 @@ int main()
             window.display();
             
         }
-        if (!restart && start && !close && !credits) {
+        if (!restart && start && !close && !credits && !win) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -773,7 +778,11 @@ int main()
                     window.draw(spriteADN);
                     ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
                     changeTexture.erase(changeTexture.begin() + i);
-                    if (ennemies.size() == 0){ 
+                    if (ennemies.size() == 0){
+                        if(mat[background.row][background.col] == 2){
+                            start = false;
+                            win = true;
+                        }
                         active_pu = true;
                         active_rando = false;
                     }
@@ -1137,7 +1146,7 @@ int main()
                 window.draw(spritefin);
             }
         }
-        else if (restart && !close && !credits) {
+        else if (restart && !close && !credits && !win) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -1196,12 +1205,10 @@ int main()
                 window.draw(background.finSprite);
                 window.draw(text4);
                 window.draw(text5);
-
                 window.display();
             }
         }
-
-        else if (!start && !restart && !close && credits) {
+        else if (!start && !restart && !close && credits && !win) {
             background.creditsSprite.setPosition(0, WindowSize.y);
             while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
@@ -1245,8 +1252,50 @@ int main()
                 window.draw(text6);
                 window.display();
             }
+        }
+        else if (!start && !restart && !close && !credits && win){
+            while(win){
+                Event event4;
+                while (window.pollEvent(event4)) {
+                    switch (event4.type) {
+                        case Event::Closed:
+                            close = true;
+                            win = false;
+                            break;
+                        case Event::KeyPressed:
+                            if (event4.key.code == Keyboard::Escape) {
+                                close = true;
+                                win = false;
+                            }
+                            break;
+                        case Event::MouseMoved:
+                        {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text6.getGlobalBounds().contains(mousePosF)) {
+                                text6.setOutlineThickness(5);
+                            }
+                            else {
+                                text6.setOutlineThickness(3);
+                            }
+                        }break;
+                        case Event::MouseButtonPressed:
+                        {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text6.getGlobalBounds().contains(mousePosF)) {
+                                goto start2;
+                            }
+                        }break;
+                        default: break;
+                    }
+                }
+                window.clear(Color::Black);
+                window.draw(background.winSprite);
+                window.draw(text6);
+                window.display();
             }
-
+        }
         else {
             window.close();
         }
