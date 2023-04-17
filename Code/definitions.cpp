@@ -71,3 +71,24 @@ void gauche(vector<vector<int>>& tab){
 }
 
 
+vector<vector<int>> generation_ennemis(int porte, int nbennemis){
+
+    vector<vector<int>> coordonnees;
+
+    switch(porte){
+        case 0 : bas(coordonnees); break;
+        case 1 : gauche(coordonnees); break;
+        case 2 : haut(coordonnees); break; 
+        case 3 : droite(coordonnees); break;
+    }
+
+    srand(time(0));
+    for (int i = 0; i<(11-nbennemis); i++){
+        int index = rand() % (11-i);
+        coordonnees.erase(coordonnees.begin()+index);
+    }
+
+
+    return coordonnees;
+
+}
