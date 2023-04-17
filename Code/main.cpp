@@ -1133,7 +1133,7 @@ int main()
             window.display();
 
             if ((mat[background.row][background.col]==2) && ennemies.size()==0){
-                printf("%d",12);
+                window.clear(Color::Black);
                 window.draw(spritefin);
             }
         }
