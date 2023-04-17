@@ -22,10 +22,10 @@ Background::Background(string accueil_path, string jeu_path, string fin_path,flo
     // Initialise les zones de collision pour changer de map
     this->portes =
     {
-    sf::IntRect(0, 0, 1920*this->ScaleX, 20*this->ScaleY),
-    sf::IntRect(1900*this->ScaleX, 0, 20*this->ScaleX, 1080*this->ScaleY),
+    sf::IntRect(0, 0, 1920*this->ScaleX, 10*this->ScaleY),
+    sf::IntRect(1910*this->ScaleX, 0, 10*this->ScaleX, 1080*this->ScaleY),
     sf::IntRect(0, 1070*this->ScaleY, 1920*this->ScaleX, 10*this->ScaleY),
-    sf::IntRect(0, 0, 20*this->ScaleX, 1080*this->ScaleY)
+    sf::IntRect(0, 0, 10*this->ScaleX, 1080*this->ScaleY)
     };
 
     // Initialise les points qui définissent les bordures du niveau
@@ -120,7 +120,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             newOriginX = this->backgroundSprite.getOrigin().x;
 
             // Calcul du déplacement du personnage
-            moveYPerso = ((1025*this->ScaleY)-A.GetY())/36;
+            moveYPerso = ((1010*this->ScaleY)-A.GetY())/36;
 
             // Animation de déplacement de l'image de fond et du personnage
             for(int i=0; i<36;i+=1){
@@ -131,7 +131,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(this->backgroundSprite);
                 this->backgroundSprite.setScale(newScaleX,-newScaleY);
                 A.persoSprite.move(sf::Vector2f(0,moveYPerso));
+                A.persoSpriteBas.move(sf::Vector2f(0, moveYPerso));
                 window.draw(A.persoSprite);
+                window.draw(A.persoSpriteBas);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
@@ -212,7 +214,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
 
             // Calcul du déplacement du personnage
-            moveXPerso = ((this->portes[3].left + 55 * this->ScaleX) - A.GetX()) / 64;
+            moveXPerso = ((70 * this->ScaleX) - A.GetX()) / 64;
 
             // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 64; i += 1) {
@@ -225,7 +227,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 this->backgroundSprite.setScale(-newScaleX, newScaleY);
                 this->backgroundSprite.move(sf::Vector2f(-3840 * this->ScaleX, 0));
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
+                A.persoSpriteBas.move(sf::Vector2f(moveXPerso,0 ));
                 window.draw(A.persoSprite);
+                window.draw(A.persoSpriteBas);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
@@ -306,7 +310,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             newOriginX = this->backgroundSprite.getOrigin().x;
 
             // Calcul du déplacement du personnage
-            moveYPerso = ((55 * this->ScaleY) - A.GetY()) / 36;
+            moveYPerso = ((70 * this->ScaleY) - A.GetY()) / 36;
 
             // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 36; i += 1) {
@@ -319,7 +323,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 this->backgroundSprite.setScale(newScaleX, -newScaleY);
                 this->backgroundSprite.move(sf::Vector2f(0, -2160 * this->ScaleY));
                 A.persoSprite.move(sf::Vector2f(0, moveYPerso));
+                A.persoSpriteBas.move(sf::Vector2f(0, moveYPerso));
                 window.draw(A.persoSprite);
+                window.draw(A.persoSpriteBas);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }
@@ -400,7 +406,7 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
             }
 
             // Calcul du déplacement du personnage
-            moveXPerso = ((this->portes[1].left - 35 * this->ScaleX) - A.GetX()) / 64;
+            moveXPerso = ((1850 * this->ScaleX) - A.GetX()) / 64;
 
             // Animation de déplacement de l'image de fond et du personnage
             for (int i = 0; i < 64; i += 1) {
@@ -411,7 +417,9 @@ void Background::ChangeMap(int porteTouchee, Perso& A,RenderWindow& window, Spri
                 window.draw(this->backgroundSprite);
                 this->backgroundSprite.setScale(-newScaleX, newScaleY);
                 A.persoSprite.move(sf::Vector2f(moveXPerso, 0));
+                A.persoSpriteBas.move(sf::Vector2f(moveXPerso, 0));
                 window.draw(A.persoSprite);
+                window.draw(A.persoSpriteBas);
                 window.display();
                 std::this_thread::sleep_for(std::chrono::microseconds(1));
             }

@@ -3,7 +3,7 @@
 int main()
 {
 
-    RenderWindow window(VideoMode(/*VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height*/1920, 1080), "Body Guard"/*, Style::Fullscreen*/);
+    RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard", Style::Fullscreen);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
@@ -328,7 +328,7 @@ int main()
 
     Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", ScaleX, ScaleY);
 
-    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, PersoSprite_h,PersoSprite_b);
+    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
 
     A.SetDelay(sf::milliseconds(500));
 
@@ -623,7 +623,10 @@ int main()
 
                 if (A.GetHitbox().intersects(sf::FloatRect(background.portes[i].left, background.portes[i].top, background.portes[i].width, background.portes[i].height)) && background.portesActives) {
                     mat[background.row][background.col]=3;
+                    ADNs.clear();
+                    ADNs_boundingbox.clear();
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
+                    
                     if (mat[background.row][background.col]==1){
                         vector<vector<int>> nouveaux_ennemis= generation_ennemis(i, 3);
                         active_rando=true;
@@ -689,14 +692,15 @@ int main()
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
-                            //ennemies[i]->persoSprite.setTexture(ennemies[i]->texturehit);
+
+                            ennemies[i]->persoSprite.setColor(Color(200,200,200));
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
                     }
                 }
                 if (changeTexture[i].getElapsedTime().asSeconds()>=0.2f){
-                    //ennemies[i]->persoSprite.setTexture(ennemies[i]->texturebase);
+                    ennemies[i]->persoSprite.setColor(Color(255, 255, 255));
                     changeTexture[i].restart();
                 }
                 window.draw(ennemies[i]->persoSprite);
