@@ -24,6 +24,8 @@ int main()
 
     Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit, textureBoss;
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
+    Texture finjeu;
+    Sprite spritefin;
 
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
@@ -210,6 +212,10 @@ int main()
     loadFile(porte_droite_tx, texturesPath + "porte_droite.png");
     loadFile(porte_gauche_tx, texturesPath + "porte_gauche.png");
 
+    //écran de fin
+    loadFile(finjeu, texturesPath + "image_fin.png");
+
+
     // Taille de la fenetre
     WindowSize = window.getSize();
 
@@ -217,6 +223,8 @@ int main()
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
 
+    spritefin.setTexture(finjeu);
+    spritefin.setScale(1920,1080);
 
     PersoSprite_h.setTexture(PersoTex_h_d);
     PersoSprite_h.setScale(ScaleX*0.1, ScaleY * 0.1);
@@ -315,7 +323,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath+"Credits.jpg", texturesPath+"image_fin.png", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
@@ -400,9 +408,6 @@ int main()
     bool close = false;
     bool restart = false;
     bool credits = false;
-    bool win = false;
-    
-
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -450,7 +455,7 @@ int main()
         srand(time(0));
         if(active_rando){rando = rand()%4;}
         
-        while (!restart && !start && !close && !credits && !win) {
+        while (!restart && !start && !close && !credits) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -512,7 +517,7 @@ int main()
             window.display();
             
         }
-        if (!restart && start && !close && !credits && !win) {
+        if (!restart && start && !close && !credits) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -643,6 +648,8 @@ int main()
                     }
                     if (mat[background.row][background.col]==2){
                         ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
+                        ennemy_shoot_time.push_back(Clock());
+                        changeTexture.push_back(Clock());
                         musique_jeu.stop();
                         musique_boss.play();
                 }
@@ -766,10 +773,7 @@ int main()
                     window.draw(spriteADN);
                     ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
                     changeTexture.erase(changeTexture.begin() + i);
-                    if (ennemies.size() == 0){
-                       if(mat[background.row][background.col] == 2){
-                            win = true;
-                        }
+                    if (ennemies.size() == 0){ 
                         active_pu = true;
                         active_rando = false;
                     }
@@ -1127,8 +1131,13 @@ int main()
             vitesseTir.setString(to_string(A.GetDelay().asMilliseconds()));
             window.draw(vitesseTir);
             window.display();
+
+            if ((mat[background.row][background.col]==2) && ennemies.size()==0){
+                printf("%d",12);
+                window.draw(spritefin);
+            }
         }
-        else if (restart && !close && !credits && !win) {
+        else if (restart && !close && !credits) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -1191,7 +1200,8 @@ int main()
                 window.display();
             }
         }
-        else if (!start && !restart && !close && credits && !win){
+
+        else if (!start && !restart && !close && credits) {
             background.creditsSprite.setPosition(0, WindowSize.y);
             while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
@@ -1235,18 +1245,11 @@ int main()
                 window.draw(text6);
                 window.display();
             }
-        }
-        else if(!start && !restart && !close && !credits && win){
-            while(win){
-            window.clear();
-            window.draw(background.winSprite);
-            window.display();
             }
-        }
+
         else {
             window.close();
         }
     }
     return 0;
 }
-
