@@ -3,7 +3,7 @@
 class Background {
 public:
 
-    Background(string accueil_path,string jeu_path,string fin_path , float ScaleX, float ScaleY);
+    Background(string accueil_path,string jeu_path,string fin_path,string credits_path, float ScaleX, float ScaleY);
 
     std::vector<sf::RectangleShape> rectangles;
     std::vector<sf::FloatRect> hitboxs;
@@ -13,7 +13,7 @@ public:
 
     Sprite backgroundSprite,accueilSprite,finSprite;
     Texture backgroundTexture,accueil_tx,fin_tx;
-    string accueil_path, jeu_path, fin_path;
+    string accueil_path, jeu_path, fin_path, credits_path;
 
 
     float ScaleX;
