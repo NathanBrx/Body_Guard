@@ -2,13 +2,13 @@
 
 int main()
 {
-
     RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard", Style::Fullscreen);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
+    start:
     Vector2u TextureSize, WindowSize;
 
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
@@ -123,15 +123,6 @@ int main()
     power_up.setBuffer(power_up_bf);
 
     // Joueur
-    /*
-    loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
-    loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
-    loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
-    loadFile(textureSpriteDown, texturesPath + "sprite_down.png");
-    loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
-    loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
-    loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
-    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");*/
 
     loadFile(PersoTex_h_b,texturesPath + "Perso_h_b.png");
     loadFile(PersoTex_h_h, texturesPath + "Perso_h_h.png");
@@ -225,9 +216,7 @@ int main()
     // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
-    /*
-    spriteMain.setTexture(textureSpriteRight);
-    spriteMain.setScale(ScaleX, ScaleY);*/
+
 
     PersoSprite_h.setTexture(PersoTex_h_d);
     PersoSprite_h.setScale(ScaleX*0.1, ScaleY * 0.1);
@@ -247,7 +236,7 @@ int main()
     spriteEnnemy3.setScale(ScaleX * ScaleEnnemies, ScaleY * ScaleEnnemies);
 
     spriteBoss.setTexture(textureBoss);
-    spriteBoss.setScale(ScaleX/2, ScaleY/2);
+    spriteBoss.setScale(ScaleX/3, ScaleY/3);
 
     PowerUpSprite.setScale(ScaleX,ScaleY);
     PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
@@ -328,6 +317,7 @@ int main()
 
     Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath+"Credits.jpg", texturesPath+"image_fin.png", ScaleX, ScaleY);
 
+
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
 
     A.SetDelay(sf::milliseconds(500));
@@ -342,18 +332,6 @@ int main()
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
     vector<Clock> changeTexture;
-
-    /*
-    RectangleShape rectangle3(Vector2f(600, 25));
-    rectangle3.setFillColor(Color::Transparent);
-    rectangle3.setOutlineThickness(5);
-    rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(80, 20);
-
-    int couleurs[3];
-    couleurs[0] = 100;
-    couleurs[1] = 250;
-    couleurs[2] = 50;*/
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1,PersoSprite_b));
     
@@ -407,14 +385,15 @@ int main()
     text5.setFillColor(Color::White);
     text5.setOutlineThickness(5);
     text5.setOutlineColor(Color::Black);
-    
+
     text6.setCharacterSize(70);
     text6.setOrigin(text6.getGlobalBounds().width / 2., text6.getGlobalBounds().height / 2.);
-    text6.setPosition(150,50);
+    text6.setPosition(150, 50);
     text6.setFillColor(Color::Black);
     text6.setOutlineThickness(3);
     text6.setOutlineColor(Color::White);
-    
+
+
     Text* texts[3] = { &text2,&text3,&text4 };
 
     bool start = false;
@@ -423,6 +402,7 @@ int main()
     bool credits = false;
     bool win = false;
     
+
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -462,6 +442,8 @@ int main()
     int waitForNextRotation = 0;
 
     int pvBonusAnim = 0;
+
+    vector<int> ennemisQuiBougent = {};
 
     while (window.isOpen())
     {
@@ -511,7 +493,7 @@ int main()
                         musique_accueil.stop();
                         musique_jeu.play();
                     }
-                    if (text3.getGlobalBounds().contains(mousePosF)){
+                    if (text3.getGlobalBounds().contains(mousePosF)) {
                         credits = true;
                     }
                     if (text4.getGlobalBounds().contains(mousePosF)) {
@@ -541,11 +523,13 @@ int main()
             if (invincible) {
                 sf::Time time2 = clockiframes.getElapsedTime();
                 if (time2 >= sf::milliseconds(500)) {
-                    invincible = false;/*
-                    if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRight); }
-                    if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUp); }
-                    if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeft); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDown); }*/
+                    invincible = false;
+                    A.persoSprite.setColor(Color(255, 255, 255));
+                    A.persoSpriteBas.setColor(Color(255, 255, 255));
+                }
+                else {
+                    A.persoSprite.setColor(Color(255, 200, 200));
+                    A.persoSpriteBas.setColor(Color(255, 200, 200));
                 }
             }
 
@@ -562,20 +546,12 @@ int main()
                     case  Keyboard::Escape: close = true; break;
 
                         // up, down, left and right keys
-/*
-                    case Keyboard::Z: upFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteUpInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteUp); }; A.SetRotation(90.f); break;
-                    case Keyboard::S: downFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteDownInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteDown); }; A.SetRotation(270.f); break;
-                    case Keyboard::Q: leftFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteLeft); }; A.SetRotation(180.f); break;
-                    case Keyboard::D: rightFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;*/
+
                     case Keyboard::Z: upFlag = true; A.SetRotation(90.f); break;
                     case Keyboard::S: downFlag = true; A.SetRotation(270.f); break;
                     case Keyboard::Q: leftFlag = true; A.SetRotation(180.f); break;
                     case Keyboard::D: rightFlag = true; A.SetRotation(0.f); break;
-                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; clock.restart(); if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); shoot_ready = false;  }break;
+                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart() ; shoot_ready = false;  }break;
                     case Keyboard::Down:A.persoSprite.setTexture(PersoTex_h_b); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6);  clock.restart(); shoot_ready = false;  }break;
                     case Keyboard::Left:A.persoSprite.setTexture(PersoTex_h_g); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; }break;
                     case Keyboard::Right:A.persoSprite.setTexture(PersoTex_h_d); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false;  }break;
@@ -639,6 +615,7 @@ int main()
                     mat[background.row][background.col]=3;
                     ADNs.clear();
                     ADNs_boundingbox.clear();
+                    ennemisQuiBougent.clear();
                     background.ChangeMap(i, A, window, porte_haut_sp, porte_bas_sp, porte_gauche_sp, porte_droite_sp);
                     
                     if (mat[background.row][background.col]==1){
@@ -653,9 +630,11 @@ int main()
                                 break;
                             case 2:
                                 ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, spriteEnnemy1));
+                                ennemisQuiBougent.push_back(ennemies.size() - 1);
                                 break;
                             case 3:
                                 ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, spriteEnnemy1));
+                                
                                 break;
                             }
                             ennemy_shoot_time.push_back(Clock());
@@ -663,8 +642,9 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso (boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
-                        
+                        ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
+                        musique_jeu.stop();
+                        musique_boss.play();
                 }
                 }
             }
@@ -696,18 +676,14 @@ int main()
                 if (A.GetHitbox().intersects(ennemies[i]->persoSprite.getGlobalBounds()) && !invincible) {
                     A.Setpvdamage(ennemies[i]->Getatk());
                     invincible = true;
-                    clockiframes.restart();/*
-                    if (A.GetRotation() == 0.) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                    if (A.GetRotation() == 90.) { A.persoSprite.setTexture(textureSpriteUpInv); }
-                    if (A.GetRotation() == 180.) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                    if (A.GetRotation() == 270.) { A.persoSprite.setTexture(textureSpriteDownInv); }*/
+                    clockiframes.restart();
 
                 }
                 for (size_t j = 0; j < projectiles.size(); j++) {
                     if (projectiles[j]->isAlive(window)) {
                         if (ennemies[i]->checkAlive() && projectiles[j]->hit(*ennemies[i])) {
 
-                            ennemies[i]->persoSprite.setColor(Color(200,200,200));
+                            ennemies[i]->persoSprite.setColor(Color(255,200,200));
                             projectiles.erase(projectiles.begin() + j);
                             ennemies[i]->Setpvdamage(A.Getatk());
                         }
@@ -719,40 +695,70 @@ int main()
                 }
                 window.draw(ennemies[i]->persoSprite);
                 if (ennemies[i]->checkAlive()) {
-                    Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
-                    if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
-                        projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
-                        ennemy_shoot_time[i].restart();
+                    if (count(ennemisQuiBougent.begin(), ennemisQuiBougent.end(), i))
+                    {
 
-                        int sound;
-                        sound = rand() % 6;
-                        switch (sound)
-                        {
-                        case(0):
-                            tir_1.play();
-                            break;
-                        case(1):
-                            tir_2.play();
-                            break;
-                        case(2):
-                            tir_3.play();
-                            break;
-                        case(3):
-                            tir_4.play();
-                            break;
-                        case(4):
-                            tir_5.play();
-                            break;
-                        case(5):
-                            tir_6.play();
-                            break;
-                        default:
-                            break;
+                        Vector2f direction = A.persoSprite.getPosition() - ennemies[i]->persoSprite.getPosition();
+
+                        float angle = (atan2(direction.y, direction.x) * 180 / 3.14)+45;
+                        ennemies[i]->persoSprite.setRotation(angle);
+
+                        float distance = sqrt(direction.x * direction.x + direction.y * direction.y);
+                        if (distance > 50.0f) {
+                            direction /= distance;
+                            float speed = 2;
+                            ennemies[i]->persoSprite.move(direction* speed);
                         }
+                    }
+                    else {
+                        Time time_shoot_ennemy = (ennemy_shoot_time[i]).getElapsedTime();
+                        if (time_shoot_ennemy >= ennemies[i]->GetDelay()) {
+                            projectiles_ennemi.push_back((new Projectile_ennemi(ennemies[i]->GetX(), ennemies[i]->GetY(), A.GetX(), A.GetY(), ennemies[i]->GetatkSpeed(), ennemies[i]->Getatk(), projectile2)));
+                            ennemy_shoot_time[i].restart();
+
+                            int sound;
+                            sound = rand() % 6;
+                            switch (sound)
+                            {
+                            case(0):
+                                tir_1.play();
+                                break;
+                            case(1):
+                                tir_2.play();
+                                break;
+                            case(2):
+                                tir_3.play();
+                                break;
+                            case(3):
+                                tir_4.play();
+                                break;
+                            case(4):
+                                tir_5.play();
+                                break;
+                            case(5):
+                                tir_6.play();
+                                break;
+                            default:
+                                break;
+                            }
+                    }
+                    
                     }
                 }
 
                 if (!ennemies[i]->checkAlive()) {
+                    
+                    for (size_t n = 0; n < ennemisQuiBougent.size(); n++)
+                    {
+                        if ((int)i<=ennemisQuiBougent[n])
+                        {
+                            ennemisQuiBougent[n]--;
+                            if ((int)i == ennemisQuiBougent[n])
+                            {
+                                ennemisQuiBougent[n]=10;
+                            }
+                        }
+                    }
                     ADNs.push_back(ennemies[i]->persoSprite.getPosition());
                     spriteADN.setPosition(ennemies[i]->persoSprite.getPosition());
                     ADNs_boundingbox.push_back(spriteADN.getGlobalBounds());
@@ -784,6 +790,8 @@ int main()
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
                     }else if (projectiles_ennemi[j]->hit(A)) {
                         A.Setpvdamage(projectiles_ennemi[j]->GetDamage());
+                        invincible = true;
+                        clockiframes.restart();
                         projectiles_ennemi.erase(projectiles_ennemi.begin() + j);
                     }
                 }
@@ -1089,11 +1097,11 @@ int main()
             }
             }
 
-            if (ennemies.size()==0 && !active_pu){
+            if (ennemies.size()==0 && !active_pu && ADNs.size()==0){
                 background.portesActives = true;
             }
             //HUD vie
-            //window.draw(heart);
+
             Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
             if (pvBonusAnim!=0)
             {
@@ -1103,36 +1111,6 @@ int main()
             window.draw(Vie);
             window.draw(BarreVie);
 
-            //window.draw(rectangle3);
-            /*
-            //HUD
-            int pvs = A.Getpv();
-            int pvs_max = A.Getpvmax();
-
-            if (A.Getpv() < A.Getpvmax() * 0.33) {
-                couleurs[0] = 243;
-                couleurs[1] = 22;
-                couleurs[2] = 22;
-            }
-            else {
-                if (A.Getpv() < A.Getpvmax() * 0.67) {
-                    couleurs[0] = 252;
-                    couleurs[1] = 255;
-                    couleurs[2] = 51;
-                }
-                else {
-                    couleurs[0] = 100;
-                    couleurs[1] = 250;
-                    couleurs[2] = 50;
-                }
-            }
-            */
-            /*
-            RectangleShape rectangle2(Vector2f((pvs * 600) / (pvs_max), 25));
-            rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(80, 20);*/
-
-            //window.draw(rectangle2);
             
             //HUD attaque
             window.draw(sword);
@@ -1148,55 +1126,6 @@ int main()
             window.draw(arrows);
             vitesseTir.setString(to_string(A.GetDelay().asMilliseconds()));
             window.draw(vitesseTir);
-
-            //***** Affichage des bordures et des portes *****//
-            //Portes
-            
-            std::vector<sf::RectangleShape> rectangles;
-            for (const auto& rect : background.portes) {
-                sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
-                shape.setPosition(sf::Vector2f(rect.left, rect.top));
-                shape.setFillColor(sf::Color::Green);
-                rectangles.push_back(shape);
-            }
-            for (const auto& shape : rectangles) {
-                window.draw(shape);
-            }
-            
-
-            
-            //Bordures
-            RectangleShape rectangle;
-            std::vector<sf::RectangleShape> bords;
-            for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                Vector2f bottomLeft = background.borduresPoints[i];
-                Vector2f bottomRight = background.borduresPoints[i + 1];
-                // Calculer la longueur et l'angle du rectangle
-                float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
-
-                // Cr�er le rectangle
-
-                rectangle.setSize(Vector2f(length, 1.f));
-                rectangle.setRotation(angle * 180.f / 3.14159f);
-                rectangle.setOutlineThickness(2);
-                
-                //rectangle.setFillColor(couleur);
-                //rectangle.setOutlineColor(couleur);
-
-                // Positionner le rectangle en utilisant le coin inf�rieur gauche
-                rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
-
-                double distance = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                if (distance < 50) {
-                    bords.push_back(rectangle);
-                }
-
-            }
-            for (const auto& shape : bords) {
-                window.draw(shape);
-            }
-
             window.display();
         }
         else if (restart && !close && !credits && !win) {
@@ -1244,29 +1173,7 @@ int main()
                         Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                         if (text5.getGlobalBounds().contains(mousePosF)) {
-                            A.Reset();
-                            projectiles ={};
-                            ennemies={};
-                            projectiles_ennemi={};
-                            ennemy_shoot_time={};
-                            changeTexture={};
-                            start = false;
-                            close = false;
-                            restart = false;
-                            mat[9][8] = { 0 }; // Initialisation de la carte
-                            generation(mat);
-                            active_rando = true;
-
-                            shoot_ready = true;
-                            clock={};
-                            clockiframes={};
-                            invincible = false;
-
-                            active_pu = false;
-
-                            musique_accueil.play();
-
-                            restart = false;
+                            goto start;
                         }
                         if (text4.getGlobalBounds().contains(mousePosF)) {
                             restart = false;
@@ -1286,7 +1193,7 @@ int main()
         }
         else if (!start && !restart && !close && credits && !win){
             background.creditsSprite.setPosition(0, WindowSize.y);
-            while (credits && background.creditsSprite.getPosition().y > 0){
+            while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
                 while (window.pollEvent(event3)) {
                     switch (event3.type) {

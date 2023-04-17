@@ -70,13 +70,8 @@ void gauche(vector<vector<int>>& tab){
     tab.push_back({680, 530}); tab.push_back({1210, 540});
 }
 
-vector<vector<int>> generation_ennemis(int porte, int nbennemis){
-    // 1 : haut {987,265} {740, 340} {1364,324}
-    // 2 : droite {1600, 400} {1800, 555} {1560, 755}
-    // 3 : bas {1200, 766} {970, 825} {710, 725}
-    // 4 : gauche {330, 705} {160, 585} {300, 405}
 
-    // {680, 530} {1210, 540}
+vector<vector<int>> generation_ennemis(int porte, int nbennemis){
 
     vector<vector<int>> coordonnees;
 
@@ -96,17 +91,4 @@ vector<vector<int>> generation_ennemis(int porte, int nbennemis){
 
     return coordonnees;
 
-}
-
-
-Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebosshit, Vector2u WindowSize){
-    int xOrigin, yOrigin;
-    switch(porte){
-        case 0 : xOrigin = 740; yOrigin = 340; break;
-        case 1 : xOrigin = 1800; yOrigin = 555; break;
-        case 2 : xOrigin = 970; yOrigin = 825; break;
-        case 3 : xOrigin = 160; yOrigin = 585; break;
-    }
-    Perso boss = Perso(xOrigin*WindowSize.x/1920, yOrigin*WindowSize.y/1080, 0., 200, 10, 5, 8, spriteboss, spriteboss);
-    return boss;
 }

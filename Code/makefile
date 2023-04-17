@@ -22,4 +22,4 @@ background.o : background.cpp background.hpp
 projectile_ennemi.o: projectile_ennemi.cpp projectile_ennemi.hpp
 	g++ -Wall -c projectile_ennemi.cpp
 clean : 
-	rm *.o sfml-app
+	rm *.o bodyguard
