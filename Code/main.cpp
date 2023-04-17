@@ -2,13 +2,16 @@
 
 int main()
 {
-
     RenderWindow window(VideoMode(VideoMode::getDesktopMode().width, VideoMode::getDesktopMode().height/*1920, 1080*/), "Body Guard", Style::Fullscreen);
 
     window.setVerticalSyncEnabled(true);
     window.setKeyRepeatEnabled(false);
     window.setFramerateLimit(60);
 
+    start:
+    
+    start2:
+    
     Vector2u TextureSize, WindowSize;
 
     Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
@@ -24,6 +27,8 @@ int main()
 
     Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit, textureBoss;
     Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
+    Texture finjeu;
+    Sprite spritefin;
 
     Text vitesseDeplacement, vitesseTir, attaque;
     Font policeStats;
@@ -123,15 +128,6 @@ int main()
     power_up.setBuffer(power_up_bf);
 
     // Joueur
-    /*
-    loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
-    loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
-    loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
-    loadFile(textureSpriteDown, texturesPath + "sprite_down.png");
-    loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
-    loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
-    loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
-    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");*/
 
     loadFile(PersoTex_h_b,texturesPath + "Perso_h_b.png");
     loadFile(PersoTex_h_h, texturesPath + "Perso_h_h.png");
@@ -219,15 +215,19 @@ int main()
     loadFile(porte_droite_tx, texturesPath + "porte_droite.png");
     loadFile(porte_gauche_tx, texturesPath + "porte_gauche.png");
 
+    //écran de fin
+    loadFile(finjeu, texturesPath + "image_fin.png");
+
+
     // Taille de la fenetre
     WindowSize = window.getSize();
 
     // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
-    /*
-    spriteMain.setTexture(textureSpriteRight);
-    spriteMain.setScale(ScaleX, ScaleY);*/
+
+    spritefin.setTexture(finjeu);
+    spritefin.setScale(1920,1080);
 
     PersoSprite_h.setTexture(PersoTex_h_d);
     PersoSprite_h.setScale(ScaleX*0.1, ScaleY * 0.1);
@@ -326,7 +326,7 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", texturesPath + "image_fin.png", ScaleX, ScaleY);
 
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
@@ -343,18 +343,6 @@ int main()
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
     vector<Clock> changeTexture;
-
-    /*
-    RectangleShape rectangle3(Vector2f(600, 25));
-    rectangle3.setFillColor(Color::Transparent);
-    rectangle3.setOutlineThickness(5);
-    rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(80, 20);
-
-    int couleurs[3];
-    couleurs[0] = 100;
-    couleurs[1] = 250;
-    couleurs[2] = 50;*/
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1,PersoSprite_b));
     
@@ -423,6 +411,8 @@ int main()
     bool close = false;
     bool restart = false;
     bool credits = false;
+    bool win = false;
+
     int mat[9][8] = { 0 }; // Initialisation de la carte
     generation(mat);
     bool active_rando = true;
@@ -470,7 +460,7 @@ int main()
         srand(time(0));
         if(active_rando){rando = rand()%4;}
         
-        while (!restart && !start && !close && !credits) {
+        while (!restart && !start && !close && !credits && !win) {
             Event event1;
             while (window.pollEvent(event1)) {
                 switch (event1.type) {
@@ -532,7 +522,7 @@ int main()
             window.display();
             
         }
-        if (!restart && start && !close && !credits) {
+        if (!restart && start && !close && !credits && !win) {
 
             if (!shoot_ready) {
                 sf::Time time1 = clock.getElapsedTime();
@@ -566,20 +556,12 @@ int main()
                     case  Keyboard::Escape: close = true; break;
 
                         // up, down, left and right keys
-/*
-                    case Keyboard::Z: upFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteUpInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteUp); }; A.SetRotation(90.f); break;
-                    case Keyboard::S: downFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteDownInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteDown); }; A.SetRotation(270.f); break;
-                    case Keyboard::Q: leftFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteLeft); }; A.SetRotation(180.f); break;
-                    case Keyboard::D: rightFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;*/
+
                     case Keyboard::Z: upFlag = true; A.SetRotation(90.f); break;
                     case Keyboard::S: downFlag = true; A.SetRotation(270.f); break;
                     case Keyboard::Q: leftFlag = true; A.SetRotation(180.f); break;
                     case Keyboard::D: rightFlag = true; A.SetRotation(0.f); break;
-                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; clock.restart(); if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); shoot_ready = false;  }break;
+                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart() ; shoot_ready = false;  }break;
                     case Keyboard::Down:A.persoSprite.setTexture(PersoTex_h_b); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6);  clock.restart(); shoot_ready = false;  }break;
                     case Keyboard::Left:A.persoSprite.setTexture(PersoTex_h_g); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; }break;
                     case Keyboard::Right:A.persoSprite.setTexture(PersoTex_h_d); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false;  }break;
@@ -671,6 +653,10 @@ int main()
                     }
                     if (mat[background.row][background.col]==2){
                         ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
+                        ennemy_shoot_time.push_back(Clock());
+                        changeTexture.push_back(Clock());
+                        musique_jeu.stop();
+                        musique_boss.play();
                 }
                 }
             }
@@ -776,10 +762,10 @@ int main()
                     
                     for (size_t n = 0; n < ennemisQuiBougent.size(); n++)
                     {
-                        if (i<=ennemisQuiBougent[n])
+                        if ((int)i<=ennemisQuiBougent[n])
                         {
                             ennemisQuiBougent[n]--;
-                            if (i == ennemisQuiBougent[n])
+                            if ((int)i == ennemisQuiBougent[n])
                             {
                                 ennemisQuiBougent[n]=10;
                             }
@@ -792,7 +778,11 @@ int main()
                     window.draw(spriteADN);
                     ennemy_shoot_time.erase(ennemy_shoot_time.begin() + i);
                     changeTexture.erase(changeTexture.begin() + i);
-                    if (ennemies.size() == 0){ 
+                    if (ennemies.size() == 0){
+                        if(mat[background.row][background.col] == 2){
+                            start = false;
+                            win = true;
+                        }
                         active_pu = true;
                         active_rando = false;
                     }
@@ -1124,7 +1114,7 @@ int main()
                 background.portesActives = true;
             }
             //HUD vie
-            //window.draw(heart);
+
             Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
             if (pvBonusAnim!=0)
             {
@@ -1134,36 +1124,6 @@ int main()
             window.draw(Vie);
             window.draw(BarreVie);
 
-            //window.draw(rectangle3);
-            /*
-            //HUD
-            int pvs = A.Getpv();
-            int pvs_max = A.Getpvmax();
-
-            if (A.Getpv() < A.Getpvmax() * 0.33) {
-                couleurs[0] = 243;
-                couleurs[1] = 22;
-                couleurs[2] = 22;
-            }
-            else {
-                if (A.Getpv() < A.Getpvmax() * 0.67) {
-                    couleurs[0] = 252;
-                    couleurs[1] = 255;
-                    couleurs[2] = 51;
-                }
-                else {
-                    couleurs[0] = 100;
-                    couleurs[1] = 250;
-                    couleurs[2] = 50;
-                }
-            }
-            */
-            /*
-            RectangleShape rectangle2(Vector2f((pvs * 600) / (pvs_max), 25));
-            rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(80, 20);*/
-
-            //window.draw(rectangle2);
             
             //HUD attaque
             window.draw(sword);
@@ -1179,59 +1139,14 @@ int main()
             window.draw(arrows);
             vitesseTir.setString(to_string(A.GetDelay().asMilliseconds()));
             window.draw(vitesseTir);
-
-            //***** Affichage des bordures et des portes *****//
-            /*
-            //Portes
-            
-            std::vector<sf::RectangleShape> rectangles;
-            for (const auto& rect : background.portes) {
-                sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
-                shape.setPosition(sf::Vector2f(rect.left, rect.top));
-                shape.setFillColor(sf::Color::Green);
-                rectangles.push_back(shape);
-            }
-            for (const auto& shape : rectangles) {
-                window.draw(shape);
-            }
-            
-
-            
-            //Bordures
-            RectangleShape rectangle;
-            std::vector<sf::RectangleShape> bords;
-            for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                Vector2f bottomLeft = background.borduresPoints[i];
-                Vector2f bottomRight = background.borduresPoints[i + 1];
-                // Calculer la longueur et l'angle du rectangle
-                float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
-
-                // Cr�er le rectangle
-
-                rectangle.setSize(Vector2f(length, 1.f));
-                rectangle.setRotation(angle * 180.f / 3.14159f);
-                rectangle.setOutlineThickness(2);
-                
-                //rectangle.setFillColor(couleur);
-                //rectangle.setOutlineColor(couleur);
-
-                // Positionner le rectangle en utilisant le coin inf�rieur gauche
-                rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
-
-                double distance = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                if (distance < 50) {
-                    bords.push_back(rectangle);
-                }
-
-            }
-            for (const auto& shape : bords) {
-                window.draw(shape);
-            }*/
-
             window.display();
+
+            if ((mat[background.row][background.col]==2) && ennemies.size()==0){
+                window.clear(Color::Black);
+                window.draw(spritefin);
+            }
         }
-        else if (restart && !close && !credits) {
+        else if (restart && !close && !credits && !win) {
 
             text4.setCharacterSize(50);
             text4.setOrigin(text4.getGlobalBounds().width / 2., text4.getGlobalBounds().height / 2.);
@@ -1276,29 +1191,7 @@ int main()
                         Vector2i mousePos = Mouse::getPosition(window);
                         Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
                         if (text5.getGlobalBounds().contains(mousePosF)) {
-                            A.Reset();
-                            projectiles ={};
-                            ennemies={};
-                            projectiles_ennemi={};
-                            ennemy_shoot_time={};
-                            changeTexture={};
-                            start = false;
-                            close = false;
-                            restart = false;
-                            mat[9][8] = { 0 }; // Initialisation de la carte
-                            generation(mat);
-                            active_rando = true;
-
-                            shoot_ready = true;
-                            clock={};
-                            clockiframes={};
-                            invincible = false;
-
-                            active_pu = false;
-
-                            musique_accueil.play();
-
-                            restart = false;
+                            goto start;
                         }
                         if (text4.getGlobalBounds().contains(mousePosF)) {
                             restart = false;
@@ -1312,12 +1205,10 @@ int main()
                 window.draw(background.finSprite);
                 window.draw(text4);
                 window.draw(text5);
-
                 window.display();
             }
         }
-
-        else if (!start && !restart && !close && credits) {
+        else if (!start && !restart && !close && credits && !win) {
             background.creditsSprite.setPosition(0, WindowSize.y);
             while (credits && background.creditsSprite.getPosition().y > 0) {
                 Event event3;
@@ -1361,12 +1252,53 @@ int main()
                 window.draw(text6);
                 window.display();
             }
+        }
+        else if (!start && !restart && !close && !credits && win){
+            while(win){
+                Event event4;
+                while (window.pollEvent(event4)) {
+                    switch (event4.type) {
+                        case Event::Closed:
+                            close = true;
+                            win = false;
+                            break;
+                        case Event::KeyPressed:
+                            if (event4.key.code == Keyboard::Escape) {
+                                close = true;
+                                win = false;
+                            }
+                            break;
+                        case Event::MouseMoved:
+                        {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text6.getGlobalBounds().contains(mousePosF)) {
+                                text6.setOutlineThickness(5);
+                            }
+                            else {
+                                text6.setOutlineThickness(3);
+                            }
+                        }break;
+                        case Event::MouseButtonPressed:
+                        {
+                            Vector2i mousePos = Mouse::getPosition(window);
+                            Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                            if (text6.getGlobalBounds().contains(mousePosF)) {
+                                goto start2;
+                            }
+                        }break;
+                        default: break;
+                    }
+                }
+                window.clear(Color::Black);
+                window.draw(background.winSprite);
+                window.draw(text6);
+                window.display();
             }
-
+        }
         else {
             window.close();
         }
     }
     return 0;
 }
-
