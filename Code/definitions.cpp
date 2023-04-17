@@ -70,30 +70,4 @@ void gauche(vector<vector<int>>& tab){
     tab.push_back({680, 530}); tab.push_back({1210, 540});
 }
 
-vector<vector<int>> generation_ennemis(int porte, int nbennemis){
-    // 1 : haut {987,265} {740, 340} {1364,324}
-    // 2 : droite {1600, 400} {1800, 555} {1560, 755}
-    // 3 : bas {1200, 766} {970, 825} {710, 725}
-    // 4 : gauche {330, 705} {160, 585} {300, 405}
 
-    // {680, 530} {1210, 540}
-
-    vector<vector<int>> coordonnees;
-
-    switch(porte){
-        case 0 : bas(coordonnees); break;
-        case 1 : gauche(coordonnees); break;
-        case 2 : haut(coordonnees); break; 
-        case 3 : droite(coordonnees); break;
-    }
-
-    srand(time(0));
-    for (int i = 0; i<(11-nbennemis); i++){
-        int index = rand() % (11-i);
-        coordonnees.erase(coordonnees.begin()+index);
-    }
-
-
-    return coordonnees;
-
-}
