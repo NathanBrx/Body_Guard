@@ -579,7 +579,7 @@ int main()
                     case Keyboard::S: downFlag = true; A.SetRotation(270.f); break;
                     case Keyboard::Q: leftFlag = true; A.SetRotation(180.f); break;
                     case Keyboard::D: rightFlag = true; A.SetRotation(0.f); break;
-                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; clock.restart(); if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); shoot_ready = false;  }break;
+                    case Keyboard::Up: A.persoSprite.setTexture(PersoTex_h_h); waitForNextRotation = 30; isBackSide = true; if (shoot_ready) { tirer(projectiles, A, projectile1, 270.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart() ; shoot_ready = false;  }break;
                     case Keyboard::Down:A.persoSprite.setTexture(PersoTex_h_b); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 90.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6);  clock.restart(); shoot_ready = false;  }break;
                     case Keyboard::Left:A.persoSprite.setTexture(PersoTex_h_g); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 180.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false; }break;
                     case Keyboard::Right:A.persoSprite.setTexture(PersoTex_h_d); waitForNextRotation = 30; isBackSide = false; if (shoot_ready) { tirer(projectiles, A, projectile1, 0.f, tir_1, tir_2, tir_3, tir_4, tir_5, tir_6); clock.restart(); shoot_ready = false;  }break;
@@ -671,6 +671,8 @@ int main()
                     }
                     if (mat[background.row][background.col]==2){
                         ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
+                        musique_jeu.stop();
+                        musique_boss.play();
                 }
                 }
             }
@@ -1290,7 +1292,6 @@ int main()
                             active_rando = true;
 
                             shoot_ready = true;
-                            clock={};
                             clockiframes={};
                             invincible = false;
 
