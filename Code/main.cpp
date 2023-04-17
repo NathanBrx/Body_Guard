@@ -235,16 +235,16 @@ int main()
     PersoSprite_b.setTexture(PersoTex_b_0);
     PersoSprite_b.setScale(ScaleX * 0.1, ScaleY * 0.1);
 
+    float ScaleEnnemies = 0.2;
+
     spriteEnnemy1.setTexture(textureEnnemy1);
-    spriteEnnemy1.setScale(ScaleX, ScaleY);
-    spriteBoss.setTexture(textureBoss);
-    spriteBoss.setScale(ScaleX,ScaleY);
+    spriteEnnemy1.setScale(ScaleX* ScaleEnnemies, ScaleY * ScaleEnnemies);
 
     spriteEnnemy2.setTexture(textureEnnemy2);
-    spriteEnnemy2.setScale(ScaleX, ScaleY);
+    spriteEnnemy2.setScale(ScaleX * 0.1, ScaleY * 0.1);
 
     spriteEnnemy3.setTexture(textureEnnemy3);
-    spriteEnnemy3.setScale(ScaleX, ScaleY);
+    spriteEnnemy3.setScale(ScaleX * ScaleEnnemies, ScaleY * ScaleEnnemies);
 
     spriteBoss.setTexture(textureBoss);
     spriteBoss.setScale(ScaleX/2, ScaleY/2);
