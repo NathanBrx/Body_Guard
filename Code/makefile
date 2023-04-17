@@ -1,5 +1,5 @@
 sfml-app : main.o definitions.o generation.o perso.o projectile.o background.o projectile_ennemi.o
-	g++ main.o definitions.o generation.o perso.o projectile.o background.o projectile_ennemi.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+	g++ main.o definitions.o generation.o perso.o projectile.o background.o projectile_ennemi.o -o bodyguard -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 main.o : main.cpp
 	g++ -Wall -c main.cpp
