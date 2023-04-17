@@ -11,8 +11,8 @@ public:
     void BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite);
 
 
-    Sprite backgroundSprite,accueilSprite,finSprite;
-    Texture backgroundTexture,accueil_tx,fin_tx;
+    Sprite backgroundSprite,accueilSprite,finSprite,creditsSprite;
+    Texture backgroundTexture,accueil_tx,fin_tx,credits_tx;
     string accueil_path, jeu_path, fin_path, credits_path;
 
 
