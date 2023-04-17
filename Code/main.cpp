@@ -247,7 +247,7 @@ int main()
     spriteEnnemy3.setScale(ScaleX * ScaleEnnemies, ScaleY * ScaleEnnemies);
 
     spriteBoss.setTexture(textureBoss);
-    spriteBoss.setScale(ScaleX/2, ScaleY/2);
+    spriteBoss.setScale(ScaleX/3, ScaleY/3);
 
     PowerUpSprite.setScale(ScaleX,ScaleY);
     PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
@@ -654,7 +654,7 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso(boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
+                        ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
                 }
                 }
             }
