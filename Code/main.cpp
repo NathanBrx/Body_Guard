@@ -662,7 +662,7 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso(boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
+                        ennemies.push_back(new Perso (boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
                         
                 }
                 }
@@ -1142,7 +1142,7 @@ int main()
 
             //HUD vitesse de tir
             window.draw(arrows);
-            vitesseTir.setString(to_string(A.GetatkSpeed()));
+            vitesseTir.setString(to_string(A.GetDelay().asMilliseconds()));
             window.draw(vitesseTir);
 
             //***** Affichage des bordures et des portes *****//
