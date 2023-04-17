@@ -14,7 +14,7 @@ int main()
     
     Vector2u TextureSize, WindowSize;
 
-    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, heart, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
+    Sprite spriteMain, projectile1, projectile2, spriteEnnemy1, spriteEnnemy2, spriteEnnemy3, spriteBoss, speed, sword, arrows, porte_haut_sp, porte_droite_sp, porte_bas_sp, porte_gauche_sp, PowerUpSprite;
     Texture porte_haut_tx, porte_droite_tx, porte_bas_tx, porte_gauche_tx;
     Sprite spriteADN;
     Texture textureADN;
@@ -26,7 +26,7 @@ int main()
     Texture textureProjectileRight, textureProjectileEnnemi;
 
     Texture textureEnnemy1, textureEnnemy1hit, textureEnnemy2, textureEnnemy2hit, textureEnnemy3, textureEnnemy3hit, textureBoss;
-    Texture textureSpeed, textureSword, textureArrows, textureHeart, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
+    Texture textureSpeed, textureSword, textureArrows, SwordPU,HealthPU,SpeedPU,AtkDelayPU;
     Texture finjeu;
     Sprite spritefin;
 
@@ -197,11 +197,10 @@ int main()
 
     // Projectiles
     loadFile(textureProjectileEnnemi, texturesPath + "projectile_ennemi.png");
-    loadFile(textureProjectileRight, texturesPath + "projectile_right.png");
+    loadFile(textureProjectileRight, texturesPath + "projectile.png");
     loadFile(textureSpeed, texturesPath + "speed.png");
     loadFile(textureSword, texturesPath + "sword.png");
     loadFile(textureArrows, texturesPath + "arrows.png");
-    loadFile(textureHeart, texturesPath + "heart.png");
 
     //Police
     if (!policeStats.loadFromFile(texturesPath + "Nabla-Regular.ttf")) {
@@ -276,10 +275,6 @@ int main()
     Vie.setTexture(Vie_tex);
     Vie.setScale(ScaleX, ScaleY);
     Vie.setPosition(41*ScaleX, 40*ScaleY);
-
-    heart.setTexture(textureHeart);
-    heart.setScale(Vector2f(0.08f, 0.08f));
-    heart.setPosition(25, 10);
 
     speed.setTexture(textureSpeed);
     speed.setScale(Vector2f(0.1f, 0.1));
