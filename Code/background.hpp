@@ -3,7 +3,7 @@
 class Background {
 public:
 
-    Background(string accueil_path,string jeu_path,string fin_path,string credits_path, float ScaleX, float ScaleY);
+    Background(string accueil_path,string jeu_path,string fin_path,string credits_path,string win_path, float ScaleX, float ScaleY);
 
     std::vector<sf::RectangleShape> rectangles;
     std::vector<sf::FloatRect> hitboxs;
@@ -11,9 +11,9 @@ public:
     void BoucheTrou(RenderWindow& window, int mat[][8], Sprite porte_haut, Sprite porte_bas, Sprite porte_gauche, Sprite porte_droite);
 
 
-    Sprite backgroundSprite,accueilSprite,finSprite,creditsSprite;
-    Texture backgroundTexture,accueil_tx,fin_tx,credits_tx;
-    string accueil_path, jeu_path, fin_path, credits_path;
+    Sprite backgroundSprite,accueilSprite,finSprite,creditsSprite,winSprite;
+    Texture backgroundTexture,accueil_tx,fin_tx,credits_tx,win_tx;
+    string accueil_path, jeu_path, fin_path, credits_path,win_path;
 
 
     float ScaleX;
