@@ -100,7 +100,9 @@ vector<vector<int>> generation_ennemis(int porte, int nbennemis){
 
 
 Perso boss(int porte, Sprite spriteboss, Texture textureboss, Texture texturebosshit, Vector2u WindowSize){
-    int xOrigin, yOrigin;
+    int xOrigin=0;
+    int yOrigin=0;
+
     switch(porte){
         case 0 : xOrigin = 740; yOrigin = 340; break;
         case 1 : xOrigin = 1800; yOrigin = 555; break;
