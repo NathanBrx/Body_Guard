@@ -324,7 +324,7 @@ int main()
     Background background(ressourcesPath+"Accueil.png", ressourcesPath + "Map1.jpg", ressourcesPath + "Game_over.jpg", ressourcesPath + "Credits.jpg", ressourcesPath + "image_fin.png", ScaleX, ScaleY);
 
 
-    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
+    Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 10, 20, PersoSprite_h,PersoSprite_b);
 
     A.SetDelay(sf::milliseconds(500));
 
@@ -631,14 +631,14 @@ int main()
                             int sprite_choisi = rand() % 3 + 1;
                             switch (sprite_choisi){
                             case 1:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy1, spriteEnnemy1));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 10, spriteEnnemy1, spriteEnnemy1));
                                 break;
                             case 2:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 5, spriteEnnemy2, spriteEnnemy1));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0])*WindowSize.x/1920, (nouveaux_ennemis[i][1])*WindowSize.y/1080, 0., 50, 5, 5, 10, spriteEnnemy2, spriteEnnemy1));
                                 ennemisQuiBougent.push_back(ennemies.size() - 1);
                                 break;
                             case 3:
-                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 5, spriteEnnemy3, spriteEnnemy1));
+                                ennemies.push_back(new Perso((nouveaux_ennemis[i][0]*WindowSize.x)/1920, (nouveaux_ennemis[i][1]*WindowSize.y)/1080, 0., 50, 5, 5, 10, spriteEnnemy3, spriteEnnemy1));
                                 
                                 break;
                             }
@@ -647,7 +647,7 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
+                        ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,300,5,10,7, spriteBoss, spriteBoss));
                         ennemy_shoot_time.push_back(Clock());
                         changeTexture.push_back(Clock());
                         musique_jeu.stop();
@@ -1071,7 +1071,7 @@ int main()
 
             for(size_t i=0;i<ADNs.size();i++){
                 if(A.GetHitbox().intersects(ADNs_boundingbox[i])){
-                    pvBonusAnim += 20;
+                    pvBonusAnim += 5;
                     power_up.play();
                     ADNs_boundingbox.erase(ADNs_boundingbox.begin()+i);
                     ADNs.erase(ADNs.begin()+i);
