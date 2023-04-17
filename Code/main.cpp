@@ -36,8 +36,8 @@ int main()
 
     Sprite PersoSprite_h, PersoSprite_b;
 
-    //string texturesPath = "../Textures/"; // Linux
-    string texturesPath = "..\\Textures\\"; // Windows
+    string texturesPath = "../Textures/"; // Linux
+    //string texturesPath = "..\\Textures\\"; // Windows
 
     //Musique
     Music musique_accueil;
@@ -247,7 +247,7 @@ int main()
     spriteEnnemy3.setScale(ScaleX * ScaleEnnemies, ScaleY * ScaleEnnemies);
 
     spriteBoss.setTexture(textureBoss);
-    spriteBoss.setScale(ScaleX/2, ScaleY/2);
+    spriteBoss.setScale(ScaleX/3, ScaleY/3);
 
     PowerUpSprite.setScale(ScaleX,ScaleY);
     PowerUpSprite.setPosition(WindowSize.x/2,WindowSize.y/2);
@@ -326,7 +326,8 @@ int main()
     porte_gauche_sp.setTexture(porte_gauche_tx);
     porte_gauche_sp.setScale(ScaleX, ScaleY);
 
-    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg",texturesPath + "Credits.jpg", ScaleX, ScaleY);
+    Background background(texturesPath+"Accueil.png", texturesPath + "Map1.jpg", texturesPath + "Game_over.jpg", texturesPath + "Credits.jpg", ScaleX, ScaleY);
+
 
     Perso A(window.getSize().x / 2., window.getSize().y / 2., 0., 100, 5, 100, 20, PersoSprite_h,PersoSprite_b);
 
@@ -669,7 +670,7 @@ int main()
                         }
                     }
                     if (mat[background.row][background.col]==2){
-                        ennemies.push_back(new Perso(boss(i, spriteBoss, textureBoss, textureBoss, WindowSize)));
+                        ennemies.push_back(new Perso(1000*WindowSize.x/1920, 500*WindowSize.y/1080 ,0.,200,5,10,7, spriteBoss, spriteBoss));
                 }
                 }
             }
@@ -1119,7 +1120,7 @@ int main()
             }
             }
 
-            if (ennemies.size()==0 && !active_pu){
+            if (ennemies.size()==0 && !active_pu && ADNs.size()==0){
                 background.portesActives = true;
             }
             //HUD vie
