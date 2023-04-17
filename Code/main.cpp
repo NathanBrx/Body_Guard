@@ -123,15 +123,6 @@ int main()
     power_up.setBuffer(power_up_bf);
 
     // Joueur
-    /*
-    loadFile(textureSpriteLeft, texturesPath + "sprite_left.png");
-    loadFile(textureSpriteRight, texturesPath + "sprite_right.png");
-    loadFile(textureSpriteUp, texturesPath + "sprite_up.png");
-    loadFile(textureSpriteDown, texturesPath + "sprite_down.png");
-    loadFile(textureSpriteLeftInv, texturesPath + "sprite_left_inv.png");
-    loadFile(textureSpriteRightInv, texturesPath + "sprite_right_inv.png");
-    loadFile(textureSpriteUpInv, texturesPath + "sprite_up_inv.png");
-    loadFile(textureSpriteDownInv, texturesPath + "sprite_down_inv.png");*/
 
     loadFile(PersoTex_h_b,texturesPath + "Perso_h_b.png");
     loadFile(PersoTex_h_h, texturesPath + "Perso_h_h.png");
@@ -225,9 +216,7 @@ int main()
     // Calcul du ratio
     float ScaleX = (float)WindowSize.x / 1920;
     float ScaleY = (float)WindowSize.y / 1080;
-    /*
-    spriteMain.setTexture(textureSpriteRight);
-    spriteMain.setScale(ScaleX, ScaleY);*/
+
 
     PersoSprite_h.setTexture(PersoTex_h_d);
     PersoSprite_h.setScale(ScaleX*0.1, ScaleY * 0.1);
@@ -343,18 +332,6 @@ int main()
     vector<Projectile_ennemi*> projectiles_ennemi;
     vector<Clock> ennemy_shoot_time;
     vector<Clock> changeTexture;
-
-    /*
-    RectangleShape rectangle3(Vector2f(600, 25));
-    rectangle3.setFillColor(Color::Transparent);
-    rectangle3.setOutlineThickness(5);
-    rectangle3.setOutlineColor(Color(0, 0, 0));
-    rectangle3.setPosition(80, 20);
-
-    int couleurs[3];
-    couleurs[0] = 100;
-    couleurs[1] = 250;
-    couleurs[2] = 50;*/
 
     ennemies.push_back(new Perso(window.getSize().x / 3., window.getSize().y / 2., 0., 50, 5, 5, 5, spriteEnnemy1,PersoSprite_b));
     
@@ -566,15 +543,7 @@ int main()
                     case  Keyboard::Escape: close = true; break;
 
                         // up, down, left and right keys
-/*
-                    case Keyboard::Z: upFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteUpInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteUp); }; A.SetRotation(90.f); break;
-                    case Keyboard::S: downFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteDownInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteDown); }; A.SetRotation(270.f); break;
-                    case Keyboard::Q: leftFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteLeftInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteLeft); }; A.SetRotation(180.f); break;
-                    case Keyboard::D: rightFlag = true; if (invincible) { A.persoSprite.setTexture(textureSpriteRightInv); }
-                                    else { A.persoSprite.setTexture(textureSpriteRight); }; A.SetRotation(0.f); break;*/
+
                     case Keyboard::Z: upFlag = true; A.SetRotation(90.f); break;
                     case Keyboard::S: downFlag = true; A.SetRotation(270.f); break;
                     case Keyboard::Q: leftFlag = true; A.SetRotation(180.f); break;
@@ -1126,7 +1095,7 @@ int main()
                 background.portesActives = true;
             }
             //HUD vie
-            //window.draw(heart);
+
             Vie.setScale((A.Getpv()*ScaleX/A.Getpvmax()), ScaleY);
             if (pvBonusAnim!=0)
             {
@@ -1136,36 +1105,6 @@ int main()
             window.draw(Vie);
             window.draw(BarreVie);
 
-            //window.draw(rectangle3);
-            /*
-            //HUD
-            int pvs = A.Getpv();
-            int pvs_max = A.Getpvmax();
-
-            if (A.Getpv() < A.Getpvmax() * 0.33) {
-                couleurs[0] = 243;
-                couleurs[1] = 22;
-                couleurs[2] = 22;
-            }
-            else {
-                if (A.Getpv() < A.Getpvmax() * 0.67) {
-                    couleurs[0] = 252;
-                    couleurs[1] = 255;
-                    couleurs[2] = 51;
-                }
-                else {
-                    couleurs[0] = 100;
-                    couleurs[1] = 250;
-                    couleurs[2] = 50;
-                }
-            }
-            */
-            /*
-            RectangleShape rectangle2(Vector2f((pvs * 600) / (pvs_max), 25));
-            rectangle2.setFillColor(Color(couleurs[0], couleurs[1], couleurs[2]));
-            rectangle2.setPosition(80, 20);*/
-
-            //window.draw(rectangle2);
             
             //HUD attaque
             window.draw(sword);
@@ -1181,56 +1120,6 @@ int main()
             window.draw(arrows);
             vitesseTir.setString(to_string(A.GetDelay().asMilliseconds()));
             window.draw(vitesseTir);
-
-            //***** Affichage des bordures et des portes *****//
-            /*
-            //Portes
-            
-            std::vector<sf::RectangleShape> rectangles;
-            for (const auto& rect : background.portes) {
-                sf::RectangleShape shape(sf::Vector2f(rect.width, rect.height));
-                shape.setPosition(sf::Vector2f(rect.left, rect.top));
-                shape.setFillColor(sf::Color::Green);
-                rectangles.push_back(shape);
-            }
-            for (const auto& shape : rectangles) {
-                window.draw(shape);
-            }
-            
-
-            
-            //Bordures
-            RectangleShape rectangle;
-            std::vector<sf::RectangleShape> bords;
-            for (size_t i = 0; i < background.borduresPoints.size() - 1; i += 1) {
-                Vector2f bottomLeft = background.borduresPoints[i];
-                Vector2f bottomRight = background.borduresPoints[i + 1];
-                // Calculer la longueur et l'angle du rectangle
-                float length = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                float angle = atan2(bottomRight.y - bottomLeft.y, bottomRight.x - bottomLeft.x);
-
-                // Cr�er le rectangle
-
-                rectangle.setSize(Vector2f(length, 1.f));
-                rectangle.setRotation(angle * 180.f / 3.14159f);
-                rectangle.setOutlineThickness(2);
-                
-                //rectangle.setFillColor(couleur);
-                //rectangle.setOutlineColor(couleur);
-
-                // Positionner le rectangle en utilisant le coin inf�rieur gauche
-                rectangle.setPosition(bottomLeft.x, bottomLeft.y - rectangle.getSize().y);
-
-                double distance = sqrt(pow(bottomRight.x - bottomLeft.x, 2) + pow(bottomRight.y - bottomLeft.y, 2));
-                if (distance < 50) {
-                    bords.push_back(rectangle);
-                }
-
-            }
-            for (const auto& shape : bords) {
-                window.draw(shape);
-            }*/
-
             window.display();
         }
         else if (restart && !close && !credits) {
